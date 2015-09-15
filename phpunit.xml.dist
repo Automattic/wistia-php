@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         colors="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         sintaxCheck="false">
+
+    <logging>
+        <log type="coverage-html"
+             target="./build/coverage/html"
+             charset="UTF-8"
+             highlight="false"/>
+        <log type="coverage-clover"
+             target="./build/coverage/log/coverage.xml"/>
+    </logging>
+
+    <testsuites>
+        <testsuite name="all">
+            <directory suffix=".php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./</directory>
+            <exclude>
+                <directory suffix=".php">./example</directory>
+                <directory suffix=".php">./vendor</directory>
+                <directory suffix=".php">./tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
