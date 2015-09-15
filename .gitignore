@@ -3,3 +3,4 @@ Vagrantfile
 composer.lock
 vagrant
 vendor
+config.php
