@@ -1,5 +1,5 @@
 <?php
-namespace SiRDanieL\Wistia;
+namespace Automattic\Wistia;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\TransferException;

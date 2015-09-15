@@ -1,13 +1,18 @@
 {
-    "name": "SiR-DanieL/wistia-php",
+    "name": "Automattic/wistia-php",
     "description": "PHP wrapper for Wistia API",
     "keywords": ["wistia","php","client","wrapper","video"],
-    "homepage": "http://github.com/SiR-DanieL/wistia-php",
+    "homepage": "http://github.com/Automattic/wistia-php",
     "license": "MIT",
     "authors": [
         {
+            "name": "Automattic",
+            "email": "info@automattic.com",
+            "homepage": "https://automattic.com"
+        },
+        {
             "name": "Nicola Mustone",
-            "email": "mustone.nicola@gmail.com",
+            "email": "nicola@automattic.com",
             "homepage": "https://nicolamustone.com",
             "role": "Developer"
         }
@@ -16,12 +21,20 @@
         "guzzlehttp/guzzle": "^6.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8.*",
-        "squizlabs/php_codesniffer": "2.*"
+        "phpunit/phpunit": "4.8.*"
     },
     "autoload": {
         "psr-4": {
-            "SiRDanieL\\Wistia\\": "src/"
+            "Automattic\\Wistia\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Automattic\\Wistia\\Tests\\": "tests/"
+        },
+        "classmap": [
+            "src/",
+            "tests/"
+        ]
     }
 }

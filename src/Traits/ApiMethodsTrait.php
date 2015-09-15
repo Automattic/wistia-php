@@ -1,5 +1,5 @@
 <?php
-namespace SiRDanieL\Wistia\Traits;
+namespace Automattic\Wistia\Traits;
 
 use BadMethodCallException;
 
