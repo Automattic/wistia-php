@@ -1,0 +1,27 @@
+{
+    "name": "SiR-DanieL/wistia-php",
+    "description": "PHP wrapper for Wistia API",
+    "keywords": ["wistia","php","client","wrapper","video"],
+    "homepage": "http://github.com/SiR-DanieL/wistia-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicola Mustone",
+            "email": "mustone.nicola@gmail.com",
+            "homepage": "https://nicolamustone.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "squizlabs/php_codesniffer": "2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SiRDanieL\\Wistia\\": "src/"
+        }
+    }
+}
