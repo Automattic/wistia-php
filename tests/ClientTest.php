@@ -56,9 +56,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertInternalType( 'object', $media );
 
-        if ( isset( $media->hashed_id ) ) {
-            $this->client->delete_media( $media->hashed_id );
-            $this->client->delete_project( $project->hashedId );
-        }
+        $this->client->delete_project( $project->hashedId );
     }
 }
