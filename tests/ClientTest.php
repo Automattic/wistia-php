@@ -39,4 +39,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     public function test_get_client() {
         $this->assertEquals( $this->client, $this->client->get_client() );
     }
+
+    /**
+     * Test Client::get_token
+     */
+    public function test_get_token() {
+        $this->assertEquals( $this->config['token'], $this->client->get_token() );
+    }
 }
