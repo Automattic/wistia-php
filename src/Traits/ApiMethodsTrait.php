@@ -20,10 +20,10 @@ trait ApiMethodsTrait {
 
         // Project Sharings
         'list_sharings'         => [ 'get', 'projects/%s/sharings' ],
-        'show_sharings'         => [ 'get', 'projects/%s/sharings/%s' ],
-        'create_sharings'       => [ 'post', 'projects/%s/sharings' ],
-        'update_sharings'       => [ 'put', 'projects/%s/sharings/%s' ],
-        'delete_sharings'       => [ 'delete', 'projects/%s/sharings/%s' ],
+        'show_sharing'          => [ 'get', 'projects/%s/sharings/%d' ],
+        'create_sharing'        => [ 'post', 'projects/%s/sharings' ],
+        'update_sharing'        => [ 'put', 'projects/%s/sharings/%d' ],
+        'delete_sharing'        => [ 'delete', 'projects/%s/sharings/%d' ],
 
         // Medias
         'list_medias'           => [ 'get', 'medias' ],
