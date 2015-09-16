@@ -6,7 +6,6 @@ use BadMethodCallException;
 trait ApiMethodsTraitTest {
     /**
      * Test Client::list_projects
-     * @todo Fix it. Creates the project and then breaks the tests
      */
     public function test_list_projects() {
         // Stop here and mark this test as incomplete.
@@ -165,6 +164,117 @@ trait ApiMethodsTraitTest {
 
         $this->assertInternalType( 'object', $sharing );
         $this->assertEquals( $sharing, $sharings[0] );
+
+        $this->client->delete_project( $project->hashedId );
+    }
+
+    /**
+     * Test Client::list_medias
+     */
+    public function test_list_medias() {
+        $project = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $media   = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+        $medias  = $this->client->list_medias( [ 'project_id' => $project->hashedId ] );
+
+        $this->assertInternalType( 'array', $medias );
+        $this->assertCount( 1, $medias );
+        $this->assertInternalType( 'object', $medias[0] );
+        $this->assertEquals( $media->hashed_id, $medias[0]->hashed_id );
+
+        $this->client->delete_project( $project->hashedId );
+    }
+
+    /**
+     * Test Client::show_media
+     */
+    public function test_show_media() {
+        $project      = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $media        = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+        $showed_media = $this->client->show_media( $media->hashed_id );
+
+        $this->assertInternalType( 'object', $showed_media );
+        $this->assertEquals( $media->hashed_id, $showed_media->hashed_id );
+
+        $this->client->delete_project( $project->hashedId );
+    }
+
+    /**
+     * Test Client::update_media
+     */
+    public function test_update_media() {
+        $project       = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $media         = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+        $updated_media = $this->client->update_media( $media->hashed_id, [ 'name' => 'A New Hope' ] );
+
+        $this->assertInternalType( 'object', $updated_media );
+        $this->assertEquals( $media->hashed_id, $updated_media->hashed_id );
+        $this->assertEquals( 'A New Hope', $updated_media->name );
+
+        $this->client->delete_project( $project->hashedId );
+    }
+
+    /**
+     * Test Client::delete_media
+     */
+    public function test_delete_media() {
+        $project       = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $media         = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+        $deleted_media = $this->client->delete_media( $media->hashed_id );
+
+        $this->assertInternalType( 'object', $deleted_media );
+        $this->assertEquals( $media->hashed_id, $deleted_media->hashed_id );
+
+        $this->client->delete_project( $project->hashedId );
+    }
+
+    /**
+     * Test Client::show_account
+     */
+    public function test_show_account() {
+        $account = $this->client->show_account();
+
+        $this->assertInternalType( 'object', $account );
+        $this->assertObjectHasAttribute( 'id', $account );
+        $this->assertObjectHasAttribute( 'name', $account );
+        $this->assertObjectHasAttribute( 'url', $account );
+    }
+
+    /**
+     * Test Client::create_customizations
+     */
+    public function test_create_customizations() {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+
+        $project        = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $media          = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+        $customizations = $this->client->create_customizations( $media->hashed_id, [ 'playerColor' => 'ffffcc' ] );
+
+        $this->assertInternalType( 'object', $customizations );
+        $this->assertObjectHasAttribute( 'playerColor', $customizations );
+        $this->assertEquals( 'ffffcc', $customizations->playerColor );
+
+        $this->client->delete_project( $project->hashedId );
+    }
+
+    /**
+     * Test Client::show_customizations
+     */
+    public function test_show_customizations() {
+        // Stop here and mark this test as incomplete.
+        $this->markTestIncomplete(
+          'This test has not been implemented yet.'
+        );
+
+        $project        = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $media          = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+        $customizations = $this->client->create_customizations( $media->hashed_id, [ 'playerColor' => 'ffffcc' ] );
+        $customizations = $this->client->show_customizations( $media->hashed_id );
+
+        $this->assertInternalType( 'object', $customizations );
+        $this->assertObjectHasAttribute( 'playerColor', $customizations );
 
         $this->client->delete_project( $project->hashedId );
     }
