@@ -86,6 +86,7 @@ class Client {
      * Send a GET request
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function get( $endpoint, $query = [] ) {
         return $this->_make_request( 'GET', $endpoint, $query );
@@ -95,6 +96,7 @@ class Client {
      * Send a POST request
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function post( $endpoint, $query = [] ) {
         return $this->_make_request( 'POST', $endpoint, $query );
@@ -104,6 +106,7 @@ class Client {
      * Send a PUT request
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function put( $endpoint, $query = [] ) {
         return $this->_make_request( 'PUT', $endpoint, $query );
@@ -113,6 +116,7 @@ class Client {
      * Send a DELETE request
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function delete( $endpoint, $query = [] ) {
         return $this->_make_request( 'DELETE', $endpoint, $query );
@@ -180,6 +184,7 @@ class Client {
      * @param  array         $args
      * @return string
      * @access private
+     * @codeCoverageIgnore
      */
     private function _make_request( $type, $endpoint, $query = [] ) {
         $params = [
