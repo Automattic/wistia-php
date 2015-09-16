@@ -70,6 +70,15 @@ class Client {
     }
 
     /**
+     * Get the token
+     *
+     * @return string
+     */
+    public function get_token() {
+        return $this->_token;
+    }
+
+    /**
      * Send a GET request
      *
      * @return string
