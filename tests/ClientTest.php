@@ -46,4 +46,19 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     public function test_get_token() {
         $this->assertEquals( $this->config['token'], $this->client->get_token() );
     }
+
+    /**
+     * Test Client::create_media
+     */
+    public function test_create_media() {
+        $project = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $media   = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+
+        $this->assertInternalType( 'object', $media );
+
+        if ( isset( $media->hashed_id ) ) {
+            $this->client->delete_media( $media->hashed_id );
+            $this->client->delete_project( $project->hashedId );
+        }
+    }
 }

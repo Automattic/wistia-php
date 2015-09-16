@@ -55,9 +55,13 @@ class Client {
         $this->format = $params['format'];
         $this->_token = $params['token'];
 
-        $this->client = new HttpClient([
+        $this->client = new HttpClient( [
             'base_uri' => 'https://api.wistia.com/v1/'
-        ]);
+        ] );
+
+        $this->upload_client = new HttpClient( [
+            'base_uri' => 'https://upload.wistia.com/'
+        ] );
     }
 
     /**
@@ -112,6 +116,60 @@ class Client {
      */
     public function delete( $endpoint, $query = [] ) {
         return $this->_make_request( 'DELETE', $endpoint, $query );
+    }
+
+    /**
+     * Create a new media. Wistia handles upload differently than other methods.
+     * The API endpoint is different and the parameters are completely different.
+     * We need a new Client to handle this kind of requests.
+     *
+     * @param  string $file
+     * @param  array  $query
+     * @return object
+     */
+    public function create_media( $file, $query = [] ) {
+        if ( empty( $file ) || ! file_exists( $file ) ) {
+            throw new WistiaException( 'Client error: A valid file path is required to create a media.' );
+        }
+
+        $params = [
+            'headers' => [
+                'User-Agent'    => 'Wistia PHP Wrapper/' . self::VERSION
+            ],
+            'multipart' => [
+                [
+                    'name' => 'api_password',
+                    'contents' => $this->_token
+                ],
+                [
+                    'name' => 'file',
+                    'contents' => fopen( $file, 'r' )
+                ]
+            ]
+        ];
+
+        if ( ! empty( $query ) ) {
+            foreach( $query as $name => $value ) {
+                $data = [ 'name' => $name, 'contents' => $value ];
+
+                if ( ! in_array( $data, $params['multipart'] ) ) {
+                    array_push( $params['multipart'], $data );
+                }
+            }
+        }
+
+        try {
+            $response = $this->upload_client->request( 'POST', '', $params );
+
+            if ( $response->getStatusCode() === 200 || $response->getStatusCode() === 400 ) {
+                return json_decode( $response->getBody()->getContents() );
+            } else {
+                // Error 401 - API password probably wrong. Returns text/html
+                return $response->getBody()->getContents();
+            }
+        } catch( TransferException $e ) {
+            echo $e->getMessage() . ' - ' . $e->getResponse()->getReasonPhrase();
+        }
     }
 
     /**
