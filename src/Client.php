@@ -20,14 +20,18 @@ class Client {
 
     /**
      * Response format
-     *
      * @var string
      */
     public $format;
 
     /**
+     * The response code of the last request
+     * @var int
+     */
+    public $last_response_code;
+
+    /**
      * API Password
-     *
      * @var    string
      * @access private
      */
@@ -163,7 +167,8 @@ class Client {
         }
 
         try {
-            $response = $this->upload_client->request( 'POST', '', $params );
+            $response                 = $this->upload_client->request( 'POST', '', $params );
+            $this->last_response_code = $response->getStatusCode();
 
             if ( $response->getStatusCode() === 200 || $response->getStatusCode() === 400 ) {
                 return json_decode( $response->getBody()->getContents() );
@@ -200,7 +205,9 @@ class Client {
         }
 
         try {
-            $response = $this->client->request( $type, $endpoint . '.' . $this->format, $params );
+            $response                 = $this->client->request( $type, $endpoint . '.' . $this->format, $params );
+            $this->last_response_code = $response->getStatusCode();
+            
             return json_decode( $response->getBody()->getContents() );
         } catch( TransferException $e ) {
             echo $e->getMessage() . ' - ' . $e->getResponse()->getReasonPhrase();
