@@ -15,6 +15,18 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     public $config;
 
     /**
+     * Test project
+     * @var object
+     */
+    public $project;
+
+    /**
+     * Test media
+     * @var object
+     */
+    public $media;
+
+    /**
      * Setup the Client
      */
     public function setUp() {
@@ -24,6 +36,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         $this->config = $test_config;
         $this->client = new Client( $this->config );
+        $this->project = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $this->media   = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $this->project->hashedId ] );
+    }
+
+    public function tearDown() {
+        $this->client->delete_project( $this->project->hashedId );
     }
 
     /**
@@ -51,11 +69,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
      * Test Client::create_media
      */
     public function test_create_media() {
-        $project = $this->client->create_project( [ 'name' => 'Test Project' ] );
-        $media   = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $project->hashedId ] );
+        $media   = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $this->project->hashedId ] );
 
         $this->assertInternalType( 'object', $media );
-
-        $this->client->delete_project( $project->hashedId );
     }
 }
