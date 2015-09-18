@@ -27,6 +27,18 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
     public $media;
 
     /**
+     * Test video
+     * @var object
+     */
+    public $video;
+
+    /**
+     * Test captions
+     * @var object
+     */
+    public $captions;
+
+    /**
      * Setup the Client
      */
     public function setUp() {
@@ -34,10 +46,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         $this->includes();
 
-        $this->config = $test_config;
-        $this->client = new Client( $this->config );
-        $this->project = $this->client->create_project( [ 'name' => 'Test Project' ] );
-        $this->media   = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $this->project->hashedId ] );
+        $this->config   = $test_config;
+        $this->client   = new Client( $this->config );
+        $this->project  = $this->client->create_project( [ 'name' => 'Test Project' ] );
+        $this->media    = $this->client->create_media( $this->config['dummy-data']['image'], [ 'project_id' => $this->project->hashedId ] );
+        $this->video    = $this->client->create_media( $this->config['dummy-data']['video'], [ 'project_id' => $this->project->hashedId ] );
+        $this->captions = $this->client->create_captions( $this->video->hashed_id, [ 'caption_file' => file_get_contents( $this->config['dummy-data']['captions'] ), 'language' => 'eng' ] );
     }
 
     public function tearDown() {
