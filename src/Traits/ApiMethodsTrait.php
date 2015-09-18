@@ -48,8 +48,6 @@ trait ApiMethodsTrait {
         'create_captions'       => [ 'post', 'medias/%s/captions' ],
         'update_captions'       => [ 'put', 'medias/%s/captions/%s' ],
         'delete_captions'       => [ 'delete', 'medias/%s/captions/%s' ],
-        'purchase_captions'     => [ 'post', 'medias/%s/captions/purchase' ],
-
     ];
 
     abstract public function get_client();
