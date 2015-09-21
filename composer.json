@@ -3,7 +3,7 @@
     "description": "PHP wrapper for Wistia API",
     "keywords": ["wistia","php","client","wrapper","video"],
     "homepage": "http://github.com/Automattic/wistia-php",
-    "license": "MIT",
+    "license": "GPLv3",
     "authors": [
         {
             "name": "Automattic",

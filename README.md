@@ -80,4 +80,10 @@ $ phpunit
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
+Wistia PHP  Copyright (C) 2015 Automattic
+
+This program comes with ABSOLUTELY NO WARRANTY;
+This is free software, and you are welcome to redistribute it
+under certain conditions;
+
+Please see [License File](LICENSE) for more information.
