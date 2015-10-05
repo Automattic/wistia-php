@@ -69,6 +69,13 @@ class Client {
     }
 
     /**
+     * Prevent unserialization
+     */
+    public function __wakeup() {
+        trigger_error( sprintf( 'Unsupported unserialization of %s', __CLASS__ ), E_USER_ERROR );
+    }
+
+    /**
      * Returns the client
      *
      * @return object
@@ -207,7 +214,7 @@ class Client {
         try {
             $response                 = $this->client->request( $type, $endpoint . '.' . $this->format, $params );
             $this->last_response_code = $response->getStatusCode();
-            
+
             return json_decode( $response->getBody()->getContents() );
         } catch( TransferException $e ) {
             echo $e->getMessage() . ' - ' . $e->getResponse()->getReasonPhrase();
