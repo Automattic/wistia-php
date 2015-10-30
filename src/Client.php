@@ -184,7 +184,7 @@ class Client {
                 return $response->getBody()->getContents();
             }
         } catch( TransferException $e ) {
-            echo $e->getMessage() . ' - ' . $e->getResponse()->getReasonPhrase();
+            return $e->getCode();
         }
     }
 
@@ -217,7 +217,7 @@ class Client {
 
             return json_decode( $response->getBody()->getContents() );
         } catch( TransferException $e ) {
-            echo $e->getMessage() . ' - ' . $e->getResponse()->getReasonPhrase();
+            return $e->getCode();
         }
     }
 }
