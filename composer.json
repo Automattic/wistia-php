@@ -1,5 +1,5 @@
 {
-    "name": "Automattic/wistia-php",
+    "name": "automattic/wistia-php",
     "description": "PHP wrapper for Wistia API",
     "keywords": ["wistia","php","client","wrapper","video"],
     "homepage": "http://github.com/Automattic/wistia-php",
