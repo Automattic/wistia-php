@@ -10,7 +10,7 @@ A PHP client for consuming the Wistia API.
 Via Composer
 
 ``` bash
-$ composer require Automattic/wistia-php
+$ composer require automattic/wistia-php
 ```
 
 ## Methods & Properties
