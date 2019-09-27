@@ -207,6 +207,11 @@ class Client {
             ],
         ];
 
+        if ( ! empty( $query ) && ! empty( $query['json'] ) && empty( $params['json'] ) ) {
+            $params['json'] = $query['json'];
+            unset( $query['json'] );
+        }
+
         if ( ! empty( $query ) && empty( $params['query'] ) ) {
             $params['query'] = $query;
         }

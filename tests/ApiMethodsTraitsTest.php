@@ -199,9 +199,9 @@ trait ApiMethodsTraitTest {
      * Test Client::stats_media
      */
     public function test_stats_media() {
-        $stats = $this->client->stats_media( $this->media->hashed_id );
+        $stats = $this->client->stats_media( $this->video->hashed_id );
 
-        $this->assertInternalTupe( 'object', $stats );
+        $this->assertInternalType( 'object', $stats );
         $this->assertObjectHasAttribute( 'stats', $stats );
     }
 
@@ -221,9 +221,12 @@ trait ApiMethodsTraitTest {
      * Test Client::create_customizations
      */
     public function test_create_customizations() {
-        $customizations = $this->client->create_customizations( $this->video->hashed_id, [ 'playerColor' => 'ffffcc' ] );
+        $customizations = $this->client->create_customizations( $this->video->hashed_id, [ 'json' => [ 'playerColor' => 'ffffcc' ] ] );
 
         $this->assertEquals( 201, $this->client->last_response_code );
+        $this->assertInternalType( 'object', $customizations );
+        $this->assertObjectHasAttribute( 'playerColor', $customizations );
+        $this->assertEquals( 'ffffcc', $customizations->playerColor );
     }
 
     /**
@@ -232,10 +235,12 @@ trait ApiMethodsTraitTest {
      * @depends test_create_customizations
      */
     public function test_show_customizations() {
+        $customizations = $this->client->create_customizations( $this->video->hashed_id, [ 'json' => [ 'playerColor' => 'ffffcc' ] ] );
         $customizations = $this->client->show_customizations( $this->video->hashed_id );
 
         $this->assertInternalType( 'object', $customizations );
         $this->assertObjectHasAttribute( 'playerColor', $customizations );
+        $this->assertEquals('ffffcc', $customizations->playerColor);
     }
 
     /**
@@ -244,8 +249,8 @@ trait ApiMethodsTraitTest {
      * @depends test_show_customizations
      */
     public function test_update_customizations() {
-        $customizations = $this->client->show_customizations( $this->video->hashed_id );
-        $customizations = $this->client->update_customizations( $this->video->hashed_id, [ 'playerColor' => 'ccffff' ] );
+        $customizations = $this->client->create_customizations( $this->video->hashed_id, [ 'json' => [ 'playerColor' => 'ffffcc' ] ] );
+        $customizations = $this->client->update_customizations( $this->video->hashed_id, [ 'json' => [ 'playerColor' => 'ccffff' ] ] );
 
         $this->assertInternalType( 'object', $customizations );
         $this->assertObjectHasAttribute( 'playerColor', $customizations );
