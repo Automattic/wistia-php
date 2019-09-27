@@ -199,7 +199,7 @@ trait ApiMethodsTraitTest {
      * Test Client::stats_media
      */
     public function test_stats_media() {
-        $stats = $this->client->stats_media( $this->media->hashed_id );
+        $stats = $this->client->stats_media( $this->video->hashed_id );
 
         $this->assertInternalType( 'object', $stats );
         $this->assertObjectHasAttribute( 'stats', $stats );
