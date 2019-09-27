@@ -201,7 +201,7 @@ trait ApiMethodsTraitTest {
     public function test_stats_media() {
         $stats = $this->client->stats_media( $this->media->hashed_id );
 
-        $this->assertInternalTupe( 'object', $stats );
+        $this->assertInternalType( 'object', $stats );
         $this->assertObjectHasAttribute( 'stats', $stats );
     }
 
