@@ -5,6 +5,8 @@
 
 A PHP client for consuming the Wistia API.
 
+The [rewrite contract reference](docs/rewrite/README.md) records the planned PHP 8.4+ rewrite and endpoint inventory. It is planning documentation, not the currently implemented API described below.
+
 ## Install
 
 Via Composer
