@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add 19 typed media lifecycle, tag, trim and deleted-media operations with nested results, local validation, lazy pagination, job handoff and move partial-error handling. ([#14](https://github.com/Automattic/wistia-php/issues/14))
+
 - Add raw-body SHA-256 webhook verification and verified typed batch parsing, retaining unknown payloads and sanitized local failures; document application-owned routing, processing, deduplication and ordering. ([#13](https://github.com/Automattic/wistia-php/issues/13))
 - Add typed OAuth authorization-URL, code-exchange and explicit refresh helpers with sanitized token/grant failures and application-owned callback/persistence boundaries. ([#12](https://github.com/Automattic/wistia-php/issues/12))
 - Add bounded offset, Data-cursor (including webinar registrations), and Analytics-cursor traversal with lazy/individual-page access, preserved filters/order, and cycle/exhaustion errors. ([#11](https://github.com/Automattic/wistia-php/issues/11))

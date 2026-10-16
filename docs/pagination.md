@@ -1,6 +1,6 @@
 # Pagination and background jobs
 
-These helpers implement bounded remote traversal for PHP applications. They do not implement resource-list endpoints. Construct services directly around the [shared Client](foundation.md); no magic dispatch or legacy compatibility is provided.
+These helpers implement bounded remote traversal for PHP applications. P06's [media services](media.md) supply typed list methods and lazy pagination companions for media, tags and deleted media; other resource-list endpoints remain planned. Construct services directly around the [shared Client](foundation.md); no magic dispatch or legacy compatibility is provided.
 
 ## Pagination reference
 
@@ -54,7 +54,7 @@ The checked [inventory](rewrite/operations.json) pins first-party Markdown and s
 
 ## Optional finite polling
 
-The [job-status service reference](reference/data.md#get_background-job-status-backgroundjobstatusid) describes the only endpoint implemented here. It exposes job identifiers and `queued`, `started`, `finished`, `failed` states immediately. Use `Jobs\BackgroundJobPoller(service, runtime: new SystemPollingRuntime())` with `poll(ShowBackgroundJobStatusRequest, PollingOptions)` for optional repeated **status reads**, never replay of the operation that created a job.
+The [job-status service reference](reference/data.md#get_background-job-status-backgroundjobstatusid) describes P03's status-read endpoint; P06's [media operations](media.md#follow-asynchronous-work) also expose job identifiers for optional polling. It exposes job identifiers and `queued`, `started`, `finished`, `failed` states immediately. Use `Jobs\BackgroundJobPoller(service, runtime: new SystemPollingRuntime())` with `poll(ShowBackgroundJobStatusRequest, PollingOptions)` for optional repeated **status reads**, never replay of the operation that created a job.
 
 `PollingOptions(maxAttempts: 10, intervalSeconds: 1.0)` requires a positive integer attempt count (including the first read) and a finite interval from zero through 86400 seconds. The interval maximum is local policy, not a Wistia requirement or automatic `Retry-After` policy. Attempts are the finite configured bound; there is no additional wall-clock deadline. Each HTTP read retains the client's finite timeouts. The default runtime uses monotonic `hrtime()` and `time_nanosleep()`; tests inject `PollingRuntime::now()`/`wait()` and never sleep.
 
@@ -70,4 +70,4 @@ There is no wait before the first read or after termination. Read errors propaga
 
 Treat identifiers, cursors, records and per-action error text as sensitive application data. Normal debug views omit payloads, but explicitly accessing DTO fields/serializing them can disclose data. Do not log raw payloads, credential-bearing requests or arbitrary caller traces. Shared failures retain sanitized messages, rate-limit metadata and read-only uncertainty semantics; no automatic retries or redirects are introduced.
 
-Offline synthetic contract tests cover wire encoding, shape validation, filters/order, laziness, empty/final pages, cycles, bounds, all job states, partial failures and fake time/waits. Real default Composer/PHPUnit runs on PHP 8.4 and 8.5 under OS-enforced network denial are recorded in delivery evidence. These checks are not live Wistia verification, fresh-install proof, paid-plan entitlement proof, aggregate endpoint coverage or independent acceptance. Other resource endpoints, live credentials and the four P16 Upload contract gaps remain outside this ticket.
+Offline synthetic contract tests cover wire encoding, shape validation, filters/order, laziness, empty/final pages, cycles, bounds, all job states, partial failures and fake time/waits. Real default Composer/PHPUnit runs on PHP 8.4 and 8.5 under OS-enforced network denial are recorded in delivery evidence. These checks are not live Wistia verification, fresh-install proof, paid-plan entitlement proof, aggregate endpoint coverage or independent acceptance. P06's media operations have separate offline coverage; other resource endpoints, live credentials and the four P16 Upload contract gaps remain outside these helpers.
