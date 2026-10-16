@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, and P10's 16 channel/collaborator/episode operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, and P12's nine brand/account-branding operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -3051,3 +3051,367 @@ authorization granting the `update` permission on this webinar can also
 be used.
 
 **Source:** [Create Webinar Registration](https://docs.wistia.com/reference/post_webinars-webinarid-registrations.md), pinned SHA-256 `f3736092966d5204fc26811eba5d54bfe2c563671b362efcd20ac0ea25aaca02`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateWebinarRegistrationTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_brands
+
+**API:** `DataBrandsService::listBrands(Request\Data\ListBrandsRequest): Result\Data\ListBrandsResult`.
+
+**Wire:** `GET /brands`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+Path/query inputs: `page` (query), `per_page` (query), `cursor` (query), `sort_by` (query), `sort_direction` (query).
+
+**Result:** `data` is a list of typed `Brands\Brand` records; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Lists the brands belonging to the account. A brand is a saved set of
+branding options (colors, fonts, logos, and layout) that can be applied to
+media, folders, and channels. The account-level default brand is flagged
+with `is_default`, and styles everything that has no brand of its own.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming a brand (any permission) can also be used; it lists
+the brands the token names.
+
+
+**Source:** [List Brands](https://docs.wistia.com/reference/get_brands.md), pinned SHA-256 `b451bbd61f6fb3f4bdfdf1b5396e9b814655cb3126dc2f94a19c7ce98b26c53e`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListBrandsTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## post_brands
+
+**API:** `DataBrandsService::createBrand(Request\Data\CreateBrandRequest): Result\Data\CreateBrandResult`.
+
+**Wire:** `POST /brands`; success 201 JSON. Bearer token, modern Data host and version `2026-09`.
+
+Request JSON uses the retained `DataCreateBrandBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+
+**Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Creates a brand. A brand is a saved set of branding options (colors, fonts,
+logos, and layout) that can then be applied to media, folders, and
+channels. `name` is required; every other field is optional and left unset
+when omitted.
+
+A new brand isn't applied to anything — it has no effect until you apply
+it to a resource with `POST /brands/{brandId}/apply`.
+
+Accounts whose plan doesn't include multiple brands can only hold one brand.
+
+## Requires api token with one of the following permissions
+```
+All data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `create-brands` permission can also
+be used. The new brand is not covered by the token that created it, so
+follow-up requests need a token whose authorizations name the returned
+hashed id.
+
+
+**Source:** [Create Brand](https://docs.wistia.com/reference/post_brands.md), pinned SHA-256 `31e8467f5f4555cda9297287bfaa4d86dc1818ee9b5260725ab419fdb6dbf4de`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateBrandTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## get_brands-brandid
+
+**API:** `DataBrandsService::showBrand(Request\Data\ShowBrandRequest): Result\Data\ShowBrandResult`.
+
+**Wire:** `GET /brands/{brandId}`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+Path/query inputs: `brandId` (path).
+
+**Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Returns the brand with the given id.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this brand (any permission) can also be used.
+
+
+**Source:** [Show Brand](https://docs.wistia.com/reference/get_brands-brandid.md), pinned SHA-256 `483d71b3dd1c67f0834bbc7c84445dc8a57e5ee5aa2b9bd84ca25427eef42c8b`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowBrandTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## put_brands-brandid
+
+**API:** `DataBrandsService::updateBrand(Request\Data\UpdateBrandRequest): Result\Data\UpdateBrandResult`.
+
+**Wire:** `PUT /brands/{brandId}`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+Path/query inputs: `brandId` (path).
+
+Request JSON uses the retained `DataCreateBrandBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+
+**Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Updates a brand. Only the fields you send are changed; send an explicit
+`null` to unset one. Renaming the account-level default brand is ignored —
+its name is managed by Wistia.
+
+Changes propagate to everything the brand is applied to.
+
+## Requires api token with one of the following permissions
+```
+All data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this brand can also be
+used.
+
+
+**Source:** [Update Brand](https://docs.wistia.com/reference/put_brands-brandid.md), pinned SHA-256 `fcf01a026cbeb9a1465fe6cb02fa9328ef3289972e706e351b55ffdfef00ae19`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateBrandTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## delete_brands-brandid
+
+**API:** `DataBrandsService::deleteBrand(Request\Data\DeleteBrandRequest): Result\Data\DeleteBrandResult`.
+
+**Wire:** `DELETE /brands/{brandId}`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+Path/query inputs: `brandId` (path), `sync_to_customizations` (query).
+
+**Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Deletes a brand. Anything the brand was applied to falls back to the
+account-level default brand, unless `sync_to_customizations` is set, in
+which case the brand's values are written into each item's own
+customizations first so they keep their current look.
+
+The account-level default brand (`is_default: true`) can't be deleted.
+
+## Requires api token with one of the following permissions
+```
+All data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `destroy` permission on this brand can also be
+used.
+
+
+**Source:** [Delete Brand](https://docs.wistia.com/reference/delete_brands-brandid.md), pinned SHA-256 `d1a98d050d745f509596086eaf7f7c34024d543d0834e72ea17e235c67c0ae6e`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteBrandTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## post_brands-brandid-apply
+
+**API:** `DataBrandsService::applyBrand(Request\Data\ApplyBrandRequest): Result\Data\ApplyBrandResult`.
+
+**Wire:** `POST /brands/{brandId}/apply`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+Path/query inputs: `brandId` (path).
+
+Request JSON uses the retained `DataApplyBrandBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+
+**Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Applies a brand to a media, folder, or channel, so that resource is styled
+by the brand's colors, fonts, logos, and layout.
+
+A brand has no effect until it is applied to something. Media inherit from
+their folder, and folders from the account's default brand, so applying a
+brand to a folder styles everything inside it that has no brand of its own.
+
+Applying the account-level default brand (`is_default: true`) is how a
+resource is un-branded: it detaches the resource so it inherits again.
+
+By default this also clears any brand-mapped appearance settings the
+resource had set directly, so the brand is what shows. Pass
+`clear_overrides: false` to leave those in place.
+
+Responds with the brand now in effect on the resource, which is not always
+the one you applied — detaching a media returns the brand it falls back to.
+
+Webinars can't be branded through this endpoint yet.
+
+## Requires api token with one of the following permissions
+```
+All data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope can also be
+used when its authorizations grant the `update` permission on this brand
+and on the media, folder or channel being branded.
+
+
+**Source:** [Apply Brand](https://docs.wistia.com/reference/post_brands-brandid-apply.md), pinned SHA-256 `c2ef586ac2908559893e6ef540ae72bc2438591744392c056ffc3f23d986ddcb`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ApplyBrandTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## getbrandpreload
+
+**API:** `DataAccountService::getBrandPreload(Request\Data\GetBrandPreloadRequest): Result\Data\GetBrandPreloadResult`.
+
+**Wire:** `GET /brand_preload`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+**Result:** `data` is a typed `Brands\BrandPreload` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Retrieves Brandfetch-derived brand info for the current account's contact
+domain, plus a boolean indicating whether the account already has any brand
+kits configured. Used by Glass onboarding to preload the brand kit for new
+signups on business-email domains.
+
+Returns `brandfetch_brand` with nil `primary_color`/`logo`/`domain` for
+free-mail domains, Wistia's own domain, when the Brandfetch feature
+flag is off, or when Brandfetch has no data — the caller silently
+skips the preload in every such case. The object itself is always
+present; only its fields go nil.
+
+## Requires api token with one of the following permissions
+```
+(any scope allowed)
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope can also be
+used, whatever its authorizations name; the preload belongs to the token's
+own account.
+
+
+**Source:** [Get Brand Preload](https://docs.wistia.com/reference/getbrandpreload.md), pinned SHA-256 `9644a002edf87429c3dec820707ee1de20fc1c0e8fc38e164231a0cc6c2926d2`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/GetBrandPreloadTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## updatebrandpreload
+
+**API:** `DataAccountService::updateBrandPreload(Request\Data\UpdateBrandPreloadRequest): Result\Data\UpdateBrandPreloadResult`.
+
+**Wire:** `PUT /brand_preload`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+Request JSON uses the retained `DataUpdateBrandPreloadBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+
+**Result:** `data` is a typed `Brands\BrandPreload` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Persists the account's default page logo (by Bakery hashed_id) and
+default player color. Both fields are optional independently — omit a
+field to leave that account setting untouched. Passing an empty string
+for `selected_logo_hashed_id` clears the logo.
+
+Requires the OAuth contact to be an owner or manager of the account
+(or a Wistia admin) — mirrors the auth check on the underlying
+`updateWtwBrandKitAccountSettings` GraphQL mutation.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `manage-brand-preload` permission can
+also be used.
+
+Deliberately narrower than the mutation: this endpoint does not
+create/update BrandKits or set body font family. Glass's onboarding
+customize step writes only these two fields; broader brand-kit
+editing continues to happen through the WTW web UI + GraphQL.
+
+## Requires api token with one of the following permissions
+```
+(any scope allowed)
+```
+
+
+**Source:** [Update Brand Preload](https://docs.wistia.com/reference/updatebrandpreload.md), pinned SHA-256 `adf53949f3a18ded78186c3d02e04f3911544ee52a769ebbc2f4bc06440c308c`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateBrandPreloadTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## getbrandkitcolors
+
+**API:** `DataAccountService::getBrandKitColors(Request\Data\GetBrandKitColorsRequest): Result\Data\GetBrandKitColorsResult`.
+
+**Wire:** `GET /brand_kit_colors`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
+
+**Result:** `data` is a typed `Brands\BrandKitColors` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
+
+**Restrictions:**
+
+Retrieves the current account's brand colors for the Wistia desktop
+app's background picker.
+
+`colors` lists solid colors: every brand kit's color tokens (the colors
+the web editor offers as "Brand colors"), then each brand's primary and
+page background color when it is solid, default brand first. Values are
+six-digit hex strings, and a repeated color is listed once. Tokens whose
+value isn't a hex color are left out. An account without a brand kit
+gets its player color in place of the kit, which is what its default
+brand kit would hold.
+
+`brand_gradients` lists each brand's primary and page background color
+that is set to a gradient, as color stops sorted by position, default
+brand first. Stops whose color isn't a hex color are left out, and a
+gradient with fewer than two hex stops left isn't listed.
+
+## Requires api token with one of the following permissions
+```
+(any scope allowed)
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope can also be
+used, whatever its authorizations name; the colors belong to the token's
+own account.
+
+
+**Source:** [Get Brand Kit Colors](https://docs.wistia.com/reference/getbrandkitcolors.md), pinned SHA-256 `2eedb5b088eaae9beaf06c7e51e2135aea4bdbc81102899e36e95182ba02c262`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/GetBrandKitColorsTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.

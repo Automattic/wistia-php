@@ -5707,6 +5707,11 @@
     },
     {
       "id": "get_brands",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Brands",
       "title": "List Brands",
@@ -5857,6 +5862,11 @@
     },
     {
       "id": "post_brands",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Brands",
       "title": "Create Brand",
@@ -5938,6 +5948,11 @@
     },
     {
       "id": "get_brands-brandid",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Brands",
       "title": "Show Brand",
@@ -6019,6 +6034,11 @@
     },
     {
       "id": "put_brands-brandid",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Brands",
       "title": "Update Brand",
@@ -6119,6 +6139,11 @@
     },
     {
       "id": "delete_brands-brandid",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Brands",
       "title": "Delete Brand",
@@ -6225,6 +6250,11 @@
     },
     {
       "id": "post_brands-brandid-apply",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Brands",
       "title": "Apply Brand",
@@ -11943,6 +11973,11 @@
     },
     {
       "id": "getbrandpreload",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Account",
       "title": "Get Brand Preload",
@@ -12004,6 +12039,11 @@
     },
     {
       "id": "updatebrandpreload",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Account",
       "title": "Update Brand Preload",
@@ -12093,6 +12133,11 @@
     },
     {
       "id": "getbrandkitcolors",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false,
+        "owner_issue": 20
+      },
       "family": "Data",
       "group": "Account",
       "title": "Get Brand Kit Colors",

@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add nine typed brand and account-branding operations with explicit-null updates, application options, lazy pagination, preload selections, color-picker results and offline contract coverage. ([#20](https://github.com/Automattic/wistia-php/issues/20))
+
 - Add ten typed webinar, collaborator and registration operations with UTC schedule validation, nested updates, filtered pagination and offline contract coverage. ([#19](https://github.com/Automattic/wistia-php/issues/19))
 
 - Add 16 typed channel, collaborator and episode operations with podcast settings, publishing/scheduling, lazy pagination and offline contract coverage. ([#18](https://github.com/Automattic/wistia-php/issues/18))
