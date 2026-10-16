@@ -11758,6 +11758,11 @@
     },
     {
       "id": "getaccountdetails",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Account",
       "title": "Get Current Account",
@@ -11827,6 +11832,11 @@
     },
     {
       "id": "getaccountusage",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Account",
       "title": "Get Account Usage",
@@ -11896,6 +11906,11 @@
     },
     {
       "id": "getcreditbalance",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Account",
       "title": "Get Credit Balance",
@@ -12199,6 +12214,11 @@
     },
     {
       "id": "gettokendetails",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Account",
       "title": "Get Current Token",
@@ -12579,6 +12599,11 @@
     },
     {
       "id": "post_expiring-token",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Expiring Access Tokens",
       "title": "Create Expiring Access Token",
@@ -12740,6 +12765,11 @@
     },
     {
       "id": "get_allowed-domains",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Allowed Domains",
       "title": "List Allowed Domains",
@@ -12891,6 +12921,11 @@
     },
     {
       "id": "post_allowed-domains",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Allowed Domains",
       "title": "Create Allowed Domain",
@@ -12972,6 +13007,11 @@
     },
     {
       "id": "get_allowed-domains-domain",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Allowed Domains",
       "title": "Show Allowed Domain",
@@ -13052,6 +13092,11 @@
     },
     {
       "id": "delete_allowed-domains-domain",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Allowed Domains",
       "title": "Delete Allowed Domain",
@@ -14238,6 +14283,11 @@
     },
     {
       "id": "post_contacts",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Contacts",
       "title": "Invite Contacts",
@@ -14327,6 +14377,11 @@
     },
     {
       "id": "post_contact-dismiss-desktop-install-prompt",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 21,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Contacts",
       "title": "Dismiss Desktop Install Prompt",

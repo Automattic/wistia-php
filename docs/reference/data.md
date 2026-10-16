@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, and P12's nine brand/account-branding operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, P12's nine brand/account-branding operations, and P13's 11 account/access-management operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -3415,3 +3415,336 @@ own account.
 
 
 **Source:** [Get Brand Kit Colors](https://docs.wistia.com/reference/getbrandkitcolors.md), pinned SHA-256 `2eedb5b088eaae9beaf06c7e51e2135aea4bdbc81102899e36e95182ba02c262`. Full schemas and errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/GetBrandKitColorsTest.php`; behavioral edges: `tests/Contract/Data/BrandBehaviorTest.php`. Not marked experimental in the pinned source; no live, plan-entitlement, inheritance or propagation verification is claimed.
+
+
+## getaccountdetails
+
+**API:** `DataAccountService::getCurrentAccount(Request\Data\GetCurrentAccountRequest): Result\Data\GetCurrentAccountResult`.
+
+**Wire:** `GET /account`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+
+**Restrictions from the pinned source:**
+
+Retrieves a summary of the Wistia account including account name, description, URL and counts of records.
+
+### Requires api token with one of the following permissions
+```
+(any scope allowed)
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+[Expiring access tokens](https://docs.wistia.com/reference/post_expiring-token)
+created with authorizations cannot be used: this endpoint responds with a
+403, whatever the authorizations grant.
+
+
+**Source:** [Get Current Account](https://docs.wistia.com/reference/getaccountdetails.md), pinned SHA-256 `7d936d90ee61a3ba645c60df8a3350d4656977a2025f9b12afb6b569b6c757d3`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/GetCurrentAccountTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+
+## getaccountusage
+
+**API:** `DataAccountService::getAccountUsage(Request\Data\GetAccountUsageRequest): Result\Data\GetAccountUsageResult`.
+
+**Wire:** `GET /account_usage`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+
+**Restrictions from the pinned source:**
+
+Retrieves plan, usage, and limit information for the current account.
+
+The response includes plan tier, upload eligibility, and links to billing pages.
+Usage and limit details (media counts, storage, seats, bandwidth) are only visible
+to account owners and managers — other contacts receive `null` for the `limits` field.
+
+### Requires api token with one of the following permissions
+```
+(any scope allowed)
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+[Expiring access tokens](https://docs.wistia.com/reference/post_expiring-token)
+created with authorizations cannot be used: this endpoint responds with a
+403, whatever the authorizations grant.
+
+
+**Source:** [Get Account Usage](https://docs.wistia.com/reference/getaccountusage.md), pinned SHA-256 `3f1d61d33f848294e02d53a97bd160118aa5e8976a74937d93e5d300bd165b1f`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/GetAccountUsageTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+
+## getcreditbalance
+
+**API:** `DataAccountService::getCreditBalance(Request\Data\GetCreditBalanceRequest): Result\Data\GetCreditBalanceResult`.
+
+**Wire:** `GET /credits/balance`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+
+**Restrictions from the pinned source:**
+
+Retrieves the current account's available credit balance and expected next recurring credit grant time.
+
+The balance is a near-real-time hint and can lag one in-flight metered operation. A `402`
+response from an operation is authoritative when deciding whether more credits are required.
+Negative ledger balances are returned as `0` available credits.
+
+`next_grant_at` comes from the account's billing schedule, not an existing grant's expiration.
+It is null when no scheduled grant can be determined. Processing may occur later, and other
+grants may arrive sooner.
+
+### Requires api token with one of the following permissions
+```
+(any scope allowed)
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. The account is always derived
+from the authenticated token; this endpoint does not accept an account identifier.
+
+[Expiring access tokens](https://docs.wistia.com/reference/post_expiring-token)
+created with authorizations cannot be used: this endpoint responds with a
+403, whatever the authorizations grant.
+
+
+**Source:** [Get Credit Balance](https://docs.wistia.com/reference/getcreditbalance.md), pinned SHA-256 `12ab47acbf63a223c0c95816e56fc4549e6d6ea156056c7b96f873536caad052`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/GetCreditBalanceTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+
+## gettokendetails
+
+**API:** `DataAccountService::getCurrentToken(Request\Data\GetCurrentTokenRequest): Result\Data\GetCurrentTokenResult`.
+
+**Wire:** `GET /token`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+
+**Restrictions from the pinned source:**
+
+Retrieves a summary of the token used to make the API request. This endpoint can primarily be used to
+debug permission issues with the API.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+can also be used. The response then describes the expiring token itself,
+its scopes and expiry, not the API token or contact that created it.
+
+
+**Source:** [Get Current Token](https://docs.wistia.com/reference/gettokendetails.md), pinned SHA-256 `e60a58ef651047b122a3c65d3e5ae68ac7472a18d6c88940827e4b7bd12e47f5`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/GetCurrentTokenTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+
+## post_expiring-token
+
+**API:** `DataExpiringAccessTokensService::createExpiringAccessToken(Request\Data\CreateExpiringAccessTokenRequest): Result\Data\CreateExpiringAccessTokenResult`.
+
+**Wire:** `POST /expiring_token`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Experimental:** this API is under development and can change at any time.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataCreateExpiringAccessTokenBodyApplicationJson`.
+
+**Restrictions from the pinned source:**
+
+```
+🚫 Alert
+This API is still under development and can change at any time.
+```
+
+This endpoint is for creating expiring access tokens which can be used for some iframe embeds
+and, when granted the `all:delegate_to_contact_permissions` scope, for REST API requests
+authorized by the token's authorizations.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+
+**Source:** [Create Expiring Access Token](https://docs.wistia.com/reference/post_expiring-token.md), pinned SHA-256 `85d930d76c4e33b009f51a72f678ea27d035b8ac1eb40348fbfe46eae341b544`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateExpiringAccessTokenTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+## get_allowed-domains
+
+**API:** `DataAllowedDomainsService::listAllowedDomains(Request\Data\ListAllowedDomainsRequest): Result\Data\ListAllowedDomainsResult`.
+
+**Wire:** `GET /allowed_domains`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `page` (query), `per_page` (query), `cursor` (query), `sort_by` (query), `sort_direction` (query).
+
+**Restrictions from the pinned source:**
+
+Lists allowed domains belonging to the account.
+
+### Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `manage-allowed-domains` permission can
+also be used. Such a token without that permission receives an empty list.
+
+
+**Source:** [List Allowed Domains](https://docs.wistia.com/reference/get_allowed-domains.md), pinned SHA-256 `5860c6a05a0d6ccc6a7e8fd73ed8b14f9792131d12e1484cd897f1c9515520bd`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListAllowedDomainsTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+## post_allowed-domains
+
+**API:** `DataAllowedDomainsService::createAllowedDomain(Request\Data\CreateAllowedDomainRequest): Result\Data\CreateAllowedDomainResult`.
+
+**Wire:** `POST /allowed_domains`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataCreateAllowedDomainBodyApplicationJson`.
+
+**Restrictions from the pinned source:**
+
+Creates an allowed domain for the account.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `manage-allowed-domains` permission can
+also be used.
+
+
+**Source:** [Create Allowed Domain](https://docs.wistia.com/reference/post_allowed-domains.md), pinned SHA-256 `99b29a39c57e0992038f0130130e92d142526757e3245ea00fa0b324ff3025fc`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateAllowedDomainTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+## get_allowed-domains-domain
+
+**API:** `DataAllowedDomainsService::showAllowedDomain(Request\Data\ShowAllowedDomainRequest): Result\Data\ShowAllowedDomainResult`.
+
+**Wire:** `GET /allowed_domains/{domain}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `domain` (path).
+
+**Restrictions from the pinned source:**
+
+Returns the details of an allowed domain.
+
+### Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `manage-allowed-domains` permission can
+also be used.
+
+
+**Source:** [Show Allowed Domain](https://docs.wistia.com/reference/get_allowed-domains-domain.md), pinned SHA-256 `b138d1f3dc9110b021b8afff48edc8deae119e5eb30e1ad6c88e02e977da2f48`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowAllowedDomainTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+## delete_allowed-domains-domain
+
+**API:** `DataAllowedDomainsService::deleteAllowedDomain(Request\Data\DeleteAllowedDomainRequest): Result\Data\DeleteAllowedDomainResult`.
+
+**Wire:** `DELETE /allowed_domains/{domain}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `domain` (path).
+
+**Restrictions from the pinned source:**
+
+Deletes an allowed domain from the account.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `manage-allowed-domains` permission can
+also be used.
+
+
+**Source:** [Delete Allowed Domain](https://docs.wistia.com/reference/delete_allowed-domains-domain.md), pinned SHA-256 `59d448f586b83162d591225425b49d88bcaa12edda29f8a1316dc2bfe242a1ce`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteAllowedDomainTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+## post_contacts
+
+**API:** `DataContactsService::inviteContacts(Request\Data\InviteContactsRequest): Result\Data\InviteContactsResult`.
+
+**Wire:** `POST /contacts`; success 201 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataInviteContactsBodyApplicationJson`.
+
+**Restrictions from the pinned source:**
+
+Invites one or more people to the account by email. Accepts a
+comma/whitespace/newline-separated list; each entry becomes a new contact
+if one does not already exist for that email.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `manage-team` permission can also be
+used.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+
+**Source:** [Invite Contacts](https://docs.wistia.com/reference/post_contacts.md), pinned SHA-256 `6c358e94d681bd2bcbccfab58213623f61ac9b2eb7e2bec1210cbbdf897de786`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/InviteContactsTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+## post_contact-dismiss-desktop-install-prompt
+
+**API:** `DataContactsService::dismissDesktopInstallPrompt(Request\Data\DismissDesktopInstallPromptRequest): Result\Data\DismissDesktopInstallPromptResult`.
+
+**Wire:** `POST /contact/dismiss_desktop_install_prompt`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+
+**Restrictions from the pinned source:**
+
+Marks the current contact's macOS install-prompt modal as dismissed.
+Called by the SPA when a teammate invited via the Wistia desktop app
+closes the "Wistia is even better on your Mac" modal — the modal
+never shows again for that contact.
+
+Idempotent: a repeat call returns the timestamp of the first dismissal.
+
+[Expiring access tokens](https://docs.wistia.com/reference/post_expiring-token)
+created with authorizations cannot be used: this endpoint responds with a
+403, whatever the authorizations grant.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+
+**Source:** [Dismiss Desktop Install Prompt](https://docs.wistia.com/reference/post_contact-dismiss-desktop-install-prompt.md), pinned SHA-256 `7060271f88f6b1891fe92f65d3e7742efb240ce6e8710aa1ada1cfb5bc64b0cc`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DismissDesktopInstallPromptTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
