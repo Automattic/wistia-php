@@ -8688,6 +8688,10 @@
       "experimental": false,
       "restrictions": "Lists all Channels belonging to an account. This endpoint can also be used to\ndo a batch fetch based off of the hashed id.\n\n## Requires api token with one of the following permissions\n```\nRead all folder and media data\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization naming a channel (any permission) can also be used; it\nlists the channels the token names.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelsService::listChannels",
@@ -8853,6 +8857,10 @@
       "experimental": false,
       "restrictions": "Creates a channel.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `create-channels` permission on the account\ncan also be used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelsService::createChannel",
@@ -8926,6 +8934,10 @@
       "experimental": false,
       "restrictions": "Returns the Channel associated with the hashedId.\n\n## Requires api token with one of the following permissions\n```\nRead all folder and media data\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization naming this channel (any permission) can also be used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelsService::showChannel",
@@ -9007,6 +9019,10 @@
       "experimental": false,
       "restrictions": "Updates a channel.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on this channel can also\nbe used. The `update` permission also allows managing the channel's\nepisodes and collaborators.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelsService::updateChannel",
@@ -9091,6 +9107,10 @@
       "experimental": false,
       "restrictions": "Deletes a channel.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `destroy` permission on this channel can also\nbe used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelsService::deleteChannel",
@@ -9171,6 +9191,10 @@
       "experimental": false,
       "restrictions": "Lists the collaborators (contacts and contact groups) that have been granted access to a channel.\n\nResults are scoped to what the authenticated user is allowed to see: account owners and managers see all collaborators, channel admins see all collaborators on their channels, and everyone else sees only the roles that grant them access.\n\n## Requires api token with one of the following permissions\n```\nRead all data\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on this channel can also\nbe used; a token granted only `show` on the channel lists no\ncollaborators.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelCollaboratorsService::listChannelCollaborators",
@@ -9341,6 +9365,10 @@
       "experimental": false,
       "restrictions": "Invites a collaborator to a channel by specifying their email address and role. Creates a new contact if one doesn't exist with that email.\n\n## Requires api token with one of the following permissions\n```\nRead, update & delete anything\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on this channel can also\nbe used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelCollaboratorsService::createChannelCollaborator",
@@ -9442,6 +9470,10 @@
       "experimental": false,
       "restrictions": "Removes a collaborator's access to a channel.\n\n## Requires api token with one of the following permissions\n```\nRead, update & delete anything\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on this channel can also\nbe used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelCollaboratorsService::deleteChannelCollaborator",
@@ -9542,6 +9574,10 @@
       "experimental": false,
       "restrictions": "Returns the Channel Episode associated with a channel hashed id\nand channel episode hashed id.\n\n## Requires api token with one of the following permissions\n```\nRead all folder and media data\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization naming the episode's channel (any permission) can also be\nused.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::showChannelEpisode",
@@ -9626,6 +9662,10 @@
       "experimental": false,
       "restrictions": "Lists Channel Episodes belonging to the channel passed in the path.\n\n## Requires api token with one of the following permissions\n```\nRead all folder and media data\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization naming a channel (any permission) can also be used; it\nlists the episodes of the channels the token names.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::listChannelEpisodesByChannel",
@@ -9834,6 +9874,10 @@
       "experimental": false,
       "restrictions": "Creates a new channel episode in a channel.\n\n## Requires api token with one of the following permissions\n```\nRead, update & delete anything\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on this channel can also\nbe used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::createChannelEpisode",
@@ -9926,6 +9970,10 @@
       "experimental": false,
       "restrictions": "Lists Channel Episodes belonging to an account. This endpoint can also be used to\ndo a batch fetch based off of the hashed id.\n\n## Requires api token with one of the following permissions\n```\nRead all folder and media data\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization naming a channel (any permission) can also be used; it\nlists the episodes of the channels the token names.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::listChannelEpisodes",
@@ -10133,6 +10181,10 @@
       "experimental": false,
       "restrictions": "Updates an existing channel episode in a channel.\n## Requires api token with one of the following permissions\n```\nRead, update & delete anything\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on the episode's channel\ncan also be used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::updateChannelEpisode",
@@ -10217,6 +10269,10 @@
       "experimental": false,
       "restrictions": "Deletes an existing channel episode in a channel.\n\n## Requires api token with one of the following permissions\n```\nRead, update & delete anything\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on the episode's channel\ncan also be used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::deleteChannelEpisode",
@@ -10297,6 +10353,10 @@
       "experimental": false,
       "restrictions": "Publishes an existing channel episode in a channel.\n## Requires api token with one of the following permissions\n```\nRead, update & delete anything\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on the episode's channel\ncan also be used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::publishChannelEpisode",
@@ -10381,6 +10441,10 @@
       "experimental": false,
       "restrictions": "Un-publishes an existing channel episode in a channel.\n## Requires api token with one of the following permissions\n```\nRead, update & delete anything\n```\n\nTokens with the \"Act with a team member's permissions\" permission\n(`all:delegate_to_contact_permissions` scope) can also be used. Requests\nmade with such a token are authorized using the permissions of the\ncontact assigned to the token.\n\nAn [expiring access token](https://docs.wistia.com/reference/post_expiring-token)\ncreated with the `all:delegate_to_contact_permissions` scope and an\nauthorization granting the `update` permission on the episode's channel\ncan also be used.\n",
       "planned_owner_issue": 18,
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "charge_capable": false,
       "planned": {
         "method": "DataChannelEpisodesService::unPublishChannelEpisode",
