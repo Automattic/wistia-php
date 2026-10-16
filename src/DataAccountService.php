@@ -32,5 +32,32 @@ final readonly class DataAccountService
             '/brand_kit_colors', RequestSafety::ReadOnly, [200], $request->query(), $request->body()),
             new Media\Decoder(D\GetBrandKitColorsResult::class))->result;
     }
+    public function getCurrentAccount(#[\SensitiveParameter] R\GetCurrentAccountRequest $request): D\GetCurrentAccountResult
+    {
+        return $this->client->execute(new Request(ApiFamily::Data, HttpMethod::Get,
+            '/account', RequestSafety::ReadOnly, [200], $request->query(), $request->body()),
+            new Media\Decoder(D\GetCurrentAccountResult::class))->result;
+    }
+
+    public function getAccountUsage(#[\SensitiveParameter] R\GetAccountUsageRequest $request): D\GetAccountUsageResult
+    {
+        return $this->client->execute(new Request(ApiFamily::Data, HttpMethod::Get,
+            '/account_usage', RequestSafety::ReadOnly, [200], $request->query(), $request->body()),
+            new Media\Decoder(D\GetAccountUsageResult::class))->result;
+    }
+
+    public function getCreditBalance(#[\SensitiveParameter] R\GetCreditBalanceRequest $request): D\GetCreditBalanceResult
+    {
+        return $this->client->execute(new Request(ApiFamily::Data, HttpMethod::Get,
+            '/credits/balance', RequestSafety::ReadOnly, [200], $request->query(), $request->body()),
+            new Media\Decoder(D\GetCreditBalanceResult::class))->result;
+    }
+
+    public function getCurrentToken(#[\SensitiveParameter] R\GetCurrentTokenRequest $request): D\GetCurrentTokenResult
+    {
+        return $this->client->execute(new Request(ApiFamily::Data, HttpMethod::Get,
+            '/token', RequestSafety::ReadOnly, [200], $request->query(), $request->body()),
+            new Media\Decoder(D\GetCurrentTokenResult::class))->result;
+    }
     public function __debugInfo(): array { return []; }
 }

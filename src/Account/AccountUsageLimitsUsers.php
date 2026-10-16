@@ -1,0 +1,31 @@
+<?php
+declare(strict_types=1);
+
+namespace Automattic\Wistia\Account;
+
+use Automattic\Wistia\Media\Wire;
+
+final readonly class AccountUsageLimitsUsers
+{
+    public function __construct(
+        #[\SensitiveParameter] public int $billable_count,
+        #[\SensitiveParameter] public int $account_billable_count,
+        #[\SensitiveParameter] public int $viewers_count,
+        #[\SensitiveParameter] public int|null $flexible_limit,
+        #[\SensitiveParameter] public int|null $inflexible_limit,
+        /** @var list<string> */ public array $presentFields,
+    ) {}
+    public static function fromWire(#[\SensitiveParameter] mixed $value): self
+    {
+        Wire::object($value, ['billable_count', 'account_billable_count', 'viewers_count', 'flexible_limit', 'inflexible_limit'], ['billable_count', 'account_billable_count', 'viewers_count', 'flexible_limit', 'inflexible_limit']);
+        return new self(
+            Wire::integer($value->billable_count),
+            Wire::integer($value->account_billable_count),
+            Wire::integer($value->viewers_count),
+            ($value->flexible_limit === null ? null : Wire::integer($value->flexible_limit)),
+            ($value->inflexible_limit === null ? null : Wire::integer($value->inflexible_limit)),
+            array_keys(get_object_vars($value)),
+        );
+    }
+    public function __debugInfo(): array { return []; }
+}

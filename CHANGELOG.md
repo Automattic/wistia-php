@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add 11 typed account and access-management operations with nested usage data, exact credit balances, allowed-domain pagination, invitations and credential-safe experimental expiring tokens, covered by offline contracts. ([#21](https://github.com/Automattic/wistia-php/issues/21))
+
 - Add nine typed brand and account-branding operations with explicit-null updates, application options, lazy pagination, preload selections, color-picker results and offline contract coverage. ([#20](https://github.com/Automattic/wistia-php/issues/20))
 
 - Add ten typed webinar, collaborator and registration operations with UTC schedule validation, nested updates, filtered pagination and offline contract coverage. ([#19](https://github.com/Automattic/wistia-php/issues/19))
