@@ -1,6 +1,6 @@
 # Rewrite contracts (P01)
 
-Reference for implementers and reviewers of [specification #8](https://github.com/Automattic/wistia-php/issues/8) and [P01 / #9](https://github.com/Automattic/wistia-php/issues/9). This is **planning documentation, not the installed library's API**. The root [README](../../README.md) now describes the P02 shared foundation and its explicit endpoint-coverage limitations; the endpoint mappings here remain planned.
+Reference for implementers and reviewers of [specification #8](https://github.com/Automattic/wistia-php/issues/8) and [P01 / #9](https://github.com/Automattic/wistia-php/issues/9). This is a planning inventory, not a list of installed endpoint coverage. The root [README](../../README.md) describes the P02 foundation and P05 [webhook helpers](../webhooks.md); catalog endpoint mappings remain planned in this checkout.
 
 ## Status and sources
 
@@ -8,7 +8,7 @@ Reference for implementers and reviewers of [specification #8](https://github.co
 
 The inventory was reconstructed from the [official catalog](https://docs.wistia.com/llms.txt) and all 167 operation pages, plus nine linked first-party guides. The earlier analysis mentioned by #8 was not available as a separate authoritative inventory; its approved decisions were reused, but its unprovided analysis was not fabricated. Source digests pin fetched Markdown bytes, not an independently verified server implementation. Examples and generated SDK samples were not copied as fixtures. Relevant input/output schema descriptions and constraints were retained; duplicate wire schemas share a source-named definition within the same inventory.
 
-**Delivered by P01:** inventory, this reference, the [ADR](../adr/0001-typed-api-contracts.md), and an offline inventory consistency checker. **Planned only:** every `planned` method, DTO, documentation target and endpoint test target in the inventory; authentication/execution/pagination/polling/OAuth/webhook behavior below. No endpoint service, modern test harness, endpoint contract test, migration guide or Composer change is delivered by P01. **Unverified:** all live behavior; PHP 8.4 execution in this environment; response contracts identified below. Passing inventory checks is not WIS implementation acceptance.
+**Delivered by P01:** inventory, this reference, the [ADR](../adr/0001-typed-api-contracts.md), and an offline inventory consistency checker; P01 delivered no runtime or Composer changes. **Later implementation:** P02 provides the shared foundation and offline harness; P05 implements the [webhook helpers](../webhooks.md) listed below. **Planned:** catalog method/DTO/docs/test targets and other helpers in this checkout. **Unverified:** live behavior and the unresolved source-response contracts below. PHP 8.4/newer-runtime offline execution is recorded in the root README, not claimed as P01 evidence. Passing inventory checks is not WIS implementation acceptance.
 
 ## Operation contracts
 
@@ -83,14 +83,14 @@ The six exclusions are enumerated only in the inventory: text translation, capti
 
 ## OAuth and webhook helper targets
 
-These are separate non-catalog contracts, **planned for #12/P04 and #13/P05**, not extra catalog operations or delivered helpers.
+These are separate non-catalog contracts, not extra catalog operations. P05 implements the webhook row; see the [webhook guide](../webhooks.md). The OAuth rows remain planned for #12/P04 in this checkout.
 
 | Target | Inputs/wire mapping | Result and ownership |
 | --- | --- | --- |
 | `OAuthService::authorizationUrl(AuthorizationRequest)` | `client_id`, configured exact `redirect_uri`, `response_type=code` in query at the app authorize URL. Encode the complete redirect URI, including any consumer correlation query. | Authorization URL value. Consumer owns callback, correlation and denial handling. Do not assume undocumented `state` support or host a route. |
 | `OAuthService::exchangeCode(CodeExchangeRequest)` | POST token URL; documented query keys `client_id`, `client_secret`, `grant_type=authorization_code`, `code`, `redirect_uri`. | `TokenResult`: `access_token:string`, `token_type:string`, `expires_in:int`, `refresh_token:string`, `scope:list<string>` from the technical reference. Never log the credential-bearing URL. |
 | `OAuthService::refresh(RefreshTokenRequest)` | POST token URL; documented query keys `client_id`, `client_secret`, `grant_type=refresh_token`, `refresh_token`. | Same typed token result. Consumer persists returned tokens and owns renewal policy; no hidden storage/automatic refresh promise. |
-| `WebhookVerifier::verify` / `WebhookParser::parse` | Original raw body bytes and `X-Wistia-Signature`; shared configured secret. HMAC **SHA-256 hex** over raw bytes, constant-time comparison, verification before JSON parsing. | Planned verified typed envelope with `hook.uuid` and batched `events` (`uuid`, `type`, `generated_at`, `payload`), preserving unknown event payloads. Consumer owns HTTP routing, deduplication, ordering and processing. |
+| `WebhookVerifier::verify` / `WebhookParser::parse` | Original raw body bytes and `X-Wistia-Signature`; shared configured secret. HMAC **SHA-256 hex** over raw bytes, constant-time comparison, verification before JSON parsing. | Verified typed envelope with `hook.uuid` and batched `events` (`uuid`, `type`, `generated_at`, `payload`), preserving unknown event payloads. Consumer owns HTTP routing, deduplication, ordering and processing. |
 
 Sources: [OAuth technical reference](https://docs.wistia.com/docs/authenticating-with-oauth2.md) and [webhook headers/body](https://docs.wistia.com/docs/webhooks.md). The OAuth guide limits authorization to account owners/managers and says OAuth is not yet available to all accounts; Wistia enablement may be required ("Get Approved"). #12's planned public documentation must carry both prerequisites; this does not authorize contacting Wistia or provisioning an account. The webhook guide describes duplicate/out-of-order and batched delivery; parsing a valid signature does not imply replay prevention. Tests/docs for these helpers are #12/#13 obligations, not inventory-checker coverage.
 
@@ -121,4 +121,4 @@ Default mode checks pinned catalog membership/counts, inclusion/exclusion safety
 
 Planned endpoint tests use controlled HTTP requests/responses without network, on PHP 8.4 and a newer supported runtime. Test applicable auth, paths, version, encoding, result and error/redaction cases, plus pagination, finite polling, local validation and ambiguous-write/no-retry behavior. #10 must isolate default discovery from the destructive legacy suite. Never run the existing PHPUnit suite as this documentation check. Live tests remain separate opt-in, with additional destructive approval and no charge-incurring calls under #8.
 
-P01 alone changed no runtime behavior or dependency declaration. P02 adds the [shared foundation](../foundation.md), Composer modernization and authored offline tests; it does not deliver the endpoint/helper mappings in this inventory. No changelog entry or release-impact label is warranted for P01 alone; the eventual breaking rewrite's 2.0.0 target remains unchanged and does not authorize release.
+P01 alone changed no runtime behavior or dependency declaration. P02 adds the [shared foundation](../foundation.md), Composer modernization and authored offline tests. P05 adds the [webhook helpers](../webhooks.md); catalog endpoint mappings remain planned in this checkout. No changelog entry or release-impact label is warranted for P01 alone; the eventual breaking rewrite's 2.0.0 target remains unchanged and does not authorize release.
