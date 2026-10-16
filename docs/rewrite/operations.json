@@ -10533,6 +10533,10 @@
         "documentation_target": "docs/reference/data.md#get_webinars",
         "contract_test_target": "tests/Contract/Data/ListWebinarsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -10719,6 +10723,10 @@
         "documentation_target": "docs/reference/data.md#post_webinars",
         "contract_test_target": "tests/Contract/Data/CreateWebinarTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [],
         "body_required": true,
@@ -10808,6 +10816,10 @@
         "documentation_target": "docs/reference/data.md#get_webinars-id",
         "contract_test_target": "tests/Contract/Data/ShowWebinarTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -10890,6 +10902,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\UpdateWebinarResult",
         "documentation_target": "docs/reference/data.md#put_webinars-id",
         "contract_test_target": "tests/Contract/Data/UpdateWebinarTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -10986,6 +11002,10 @@
         "documentation_target": "docs/reference/data.md#delete_webinars-id",
         "contract_test_target": "tests/Contract/Data/DeleteWebinarTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -11068,6 +11088,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ListWebinarCollaboratorsResult",
         "documentation_target": "docs/reference/data.md#get_webinars-webinarid-collaborators",
         "contract_test_target": "tests/Contract/Data/ListWebinarCollaboratorsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -11239,6 +11263,10 @@
         "documentation_target": "docs/reference/data.md#post_webinars-webinarid-collaborators",
         "contract_test_target": "tests/Contract/Data/CreateWebinarCollaboratorTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -11340,6 +11368,10 @@
         "documentation_target": "docs/reference/data.md#delete_webinars-webinarid-collaborators-id",
         "contract_test_target": "tests/Contract/Data/DeleteWebinarCollaboratorTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -11439,6 +11471,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ListWebinarRegistrationsResult",
         "documentation_target": "docs/reference/data.md#get_webinars-webinarid-registrations",
         "contract_test_target": "tests/Contract/Data/ListWebinarRegistrationsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -11612,6 +11648,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\CreateWebinarRegistrationResult",
         "documentation_target": "docs/reference/data.md#post_webinars-webinarid-registrations",
         "contract_test_target": "tests/Contract/Data/CreateWebinarRegistrationTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
