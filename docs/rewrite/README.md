@@ -1,6 +1,6 @@
 # Rewrite contracts (P01)
 
-Reference for implementers and reviewers of [specification #8](https://github.com/Automattic/wistia-php/issues/8) and [P01 / #9](https://github.com/Automattic/wistia-php/issues/9). This is **planning documentation, not the installed library's API**. The root [README](../../README.md) still describes the legacy implementation.
+Reference for implementers and reviewers of [specification #8](https://github.com/Automattic/wistia-php/issues/8) and [P01 / #9](https://github.com/Automattic/wistia-php/issues/9). This is **planning documentation, not the installed library's API**. The root [README](../../README.md) now describes the P02 shared foundation and its explicit endpoint-coverage limitations; the endpoint mappings here remain planned.
 
 ## Status and sources
 
@@ -8,7 +8,7 @@ Reference for implementers and reviewers of [specification #8](https://github.co
 
 The inventory was reconstructed from the [official catalog](https://docs.wistia.com/llms.txt) and all 167 operation pages, plus nine linked first-party guides. The earlier analysis mentioned by #8 was not available as a separate authoritative inventory; its approved decisions were reused, but its unprovided analysis was not fabricated. Source digests pin fetched Markdown bytes, not an independently verified server implementation. Examples and generated SDK samples were not copied as fixtures. Relevant input/output schema descriptions and constraints were retained; duplicate wire schemas share a source-named definition within the same inventory.
 
-**Delivered:** inventory, this reference, the [ADR](../adr/0001-typed-api-contracts.md), and an offline inventory consistency checker. **Planned only:** every `planned` method, DTO, documentation target and endpoint test target in the inventory; authentication/execution/pagination/polling/OAuth/webhook behavior below. No endpoint service, modern test harness, endpoint contract test, migration guide or Composer change is delivered by P01. **Unverified:** all live behavior; PHP 8.4 execution in this environment; response contracts identified below. Passing inventory checks is not WIS implementation acceptance.
+**Delivered by P01:** inventory, this reference, the [ADR](../adr/0001-typed-api-contracts.md), and an offline inventory consistency checker. **Planned only:** every `planned` method, DTO, documentation target and endpoint test target in the inventory; authentication/execution/pagination/polling/OAuth/webhook behavior below. No endpoint service, modern test harness, endpoint contract test, migration guide or Composer change is delivered by P01. **Unverified:** all live behavior; PHP 8.4 execution in this environment; response contracts identified below. Passing inventory checks is not WIS implementation acceptance.
 
 ## Operation contracts
 
@@ -121,4 +121,4 @@ Default mode checks pinned catalog membership/counts, inclusion/exclusion safety
 
 Planned endpoint tests use controlled HTTP requests/responses without network, on PHP 8.4 and a newer supported runtime. Test applicable auth, paths, version, encoding, result and error/redaction cases, plus pagination, finite polling, local validation and ambiguous-write/no-retry behavior. #10 must isolate default discovery from the destructive legacy suite. Never run the existing PHPUnit suite as this documentation check. Live tests remain separate opt-in, with additional destructive approval and no charge-incurring calls under #8.
 
-This documentation/internal checker delivery changes no runtime behavior or dependency declaration. No changelog entry or release-impact label is warranted for P01 alone; the eventual breaking rewrite's 2.0.0 target remains unchanged and does not authorize release.
+P01 alone changed no runtime behavior or dependency declaration. P02 adds the [shared foundation](../foundation.md), Composer modernization and authored offline tests; it does not deliver the endpoint/helper mappings in this inventory. No changelog entry or release-impact label is warranted for P01 alone; the eventual breaking rewrite's 2.0.0 target remains unchanged and does not authorize release.

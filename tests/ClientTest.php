@@ -1,6 +1,9 @@
 <?php
 namespace Automattic\Wistia\Tests;
 
+// Guard direct file selection as well as the separate legacy configuration.
+require __DIR__ . '/legacy-guard.php';
+
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\TransferException;
 use Automattic\Wistia\Client;
