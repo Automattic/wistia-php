@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, and P07's 24 customization operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, and P08's 16 captions/accessibility operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -1393,3 +1393,422 @@ created with the `all:delegate_to_contact_permissions` scope and an
 authorization granting the `edit` permission on this media can also be used.
 
 **Source:** [Update Access Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-access.md), pinned SHA-256 `6bd41c4cea29866c786a3f93e68f46bd57a4315a2061439e07268036ba0b9168`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateAccessCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## Captions and accessibility
+
+P08 adds 16 operations. See the [usage guide](../accessibility.md) for caption formats, exact versus fuzzy matches, atomic versioned edits, pagination, existing-order status, permissions and migration. Each method accepts its named request and returns its named result with `status` and typed `data`. Caption create/replace/delete have no source-defined success schema; their results retain status with `data=null`, without asserting a response-body shape. All use Bearer authentication, version `2026-09`, single-attempt shared execution and sanitized errors. None is marked experimental by the pinned sources. Live behavior and plan entitlement remain unverified.
+
+## get_medias-mediahashedid-captions
+
+**API:** `DataCaptionsService::listCaptionsByMedia(Request\Data\ListCaptionsByMediaRequest): Result\Data\ListCaptionsByMediaResult`.
+
+**Wire:** `GET /medias/{mediaHashedId}/captions`; success 200. Path/query inputs: `mediaHashedId` (path).
+
+**Restrictions:**
+
+Lists captions belonging to a specific media.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit-transcripts` permission on this media can
+also be used. A token granted any other permission on the media lists no
+captions.
+
+**Source:** [List Captions by Media](https://docs.wistia.com/reference/get_medias-mediahashedid-captions.md), pinned SHA-256 `f098aabd98d40f44d628b27ccbbaa150c378990de7d38dc1818d480d210eb20e`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ListCaptionsByMediaTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## post_medias-mediahashedid-captions
+
+**API:** `DataCaptionsService::createCaptions(Request\Data\CreateCaptionsRequest): Result\Data\CreateCaptionsResult`.
+
+**Wire:** `POST /medias/{mediaHashedId}/captions`; success 200. JSON body with exact fields: `caption_file`, `language`. Path/query inputs: `mediaHashedId` (path).
+
+**Restrictions:**
+
+Adds captions to a specified media by providing an SRT file or its contents directly.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `create-transcripts` permission on this media can
+also be used.
+
+**Source:** [Create Captions](https://docs.wistia.com/reference/post_medias-mediahashedid-captions.md), pinned SHA-256 `5beedb2026fadf0dafabe6a04e2bcd95de100f9d11c1537150a5bdb69cd1dbc0`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/CreateCaptionsTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_captions
+
+**API:** `DataCaptionsService::listCaptions(Request\Data\ListCaptionsRequest): Result\Data\ListCaptionsResult`.
+
+**Wire:** `GET /captions`; success 200. Path/query inputs: `media_id` (query), `media_ids[]` (query), `languages[]` (query), `include` (query), `page` (query), `per_page` (query), `cursor` (query), `sort_by` (query), `sort_direction` (query).
+
+**Restrictions:**
+
+Lists captions belonging to the account. Results can be narrowed to a specific media
+with `media_id`, or to several media and languages at once with `media_ids[]` and
+`languages[]`. Each caption includes its text, so combining these filters with
+pagination fetches transcripts for many media in a few requests. Pass
+`include=metadata` to omit transcript text when only track and language
+information is needed.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope can also be
+used. It lists only the captions of media it grants the `edit-transcripts`
+permission on; no other permission reaches a media's captions.
+
+**Source:** [List Captions](https://docs.wistia.com/reference/get_captions.md), pinned SHA-256 `f6f61303c034db00ce0b58a39a6351836ab37cd0209b2026ddc4f703637932b0`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ListCaptionsTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## post_caption-matches
+
+**API:** `DataCaptionsService::findCaptionMatches(Request\Data\FindCaptionMatchesRequest): Result\Data\FindCaptionMatchesResult`.
+
+**Wire:** `POST /caption_matches`; success 200. JSON body with exact fields: `media_ids`, `target_text`, `language_code`, `occurrence`, `start_ms`, `end_ms`.
+
+**Restrictions:**
+
+Finds exact text in caption tracks without modifying them. Matching uses the
+same normalization, composite-media boundaries, and time coordinates as the
+targeted caption edit endpoint. Fuzzy alternatives are returned separately
+as suggestions and are never reported as exact matches. A resolved match
+means the wording was located; a later write can still fail authorization,
+version, or edit-boundary checks.
+
+When more than 10 exact matches exist, use the one-based `occurrence`
+parameter to retrieve a specific later match.
+
+Authentication and request validation failures apply to the whole request.
+Missing, inaccessible, or otherwise unreadable media are reported as
+per-media statuses without exposing whether an inaccessible ID exists.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used.
+
+**Source:** [Find Caption Matches](https://docs.wistia.com/reference/post_caption-matches.md), pinned SHA-256 `db40a8cccbf3c083ee03ad8da5c10a95f738f8bea8945588a5d7952ca60db7b0`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/FindCaptionMatchesTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_medias-mediahashedid-captions-languagecode
+
+**API:** `DataCaptionsService::showCaptions(Request\Data\ShowCaptionsRequest): Result\Data\ShowCaptionsResult`.
+
+**Wire:** `GET /medias/{mediaHashedId}/captions/{languageCode}`; success 200. Path/query inputs: `mediaHashedId` (path), `languageCode` (path), `include` (query), `include_speakers` (query).
+
+**Restrictions:**
+
+Returns a media's captions in the specified language.
+Supports multiple formats: JSON (default), SRT, VTT, and TXT.
+Use file extensions (.srt, .vtt, .txt) or Accept headers to specify format.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit-transcripts` permission on this media can
+also be used. For a token granted any other permission on the media the
+captions are not found.
+
+**Source:** [Show Captions](https://docs.wistia.com/reference/get_medias-mediahashedid-captions-languagecode.md), pinned SHA-256 `338a744f538b93b99b897141a65328dd571710dce831fb40dab0d695837c3283`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ShowCaptionsTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## put_medias-mediahashedid-captions-languagecode
+
+**API:** `DataCaptionsService::updateCaptions(Request\Data\UpdateCaptionsRequest): Result\Data\UpdateCaptionsResult`.
+
+**Wire:** `PUT /medias/{mediaHashedId}/captions/{languageCode}`; success 200. JSON body with exact fields: `caption_file`. Path/query inputs: `mediaHashedId` (path), `languageCode` (path).
+
+**Restrictions:**
+
+This method is for replacing the captions on a video or audio media for the specified language.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit-transcripts` permission on this media can
+also be used.
+
+**Source:** [Update Captions](https://docs.wistia.com/reference/put_medias-mediahashedid-captions-languagecode.md), pinned SHA-256 `fb90da73b462a0c98a9f76bad857ec844a263eb8826e4ae68f59bb0784557b00`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/UpdateCaptionsTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## delete_medias-mediahashedid-captions-languagecode
+
+**API:** `DataCaptionsService::deleteCaptions(Request\Data\DeleteCaptionsRequest): Result\Data\DeleteCaptionsResult`.
+
+**Wire:** `DELETE /medias/{mediaHashedId}/captions/{languageCode}`; success 200. Path/query inputs: `mediaHashedId` (path), `languageCode` (path).
+
+**Restrictions:**
+
+Removes the captions file from a media for the specified language.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit-transcripts` permission on this media can
+also be used.
+
+**Source:** [Delete Captions](https://docs.wistia.com/reference/delete_medias-mediahashedid-captions-languagecode.md), pinned SHA-256 `e5c5b61f2012eef1b8b0fd0eee1d46f0b0234870a7c845403c53ae32d4e194ba`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/DeleteCaptionsTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## post_medias-mediahashedid-captions-languagecode-edits
+
+**API:** `DataCaptionsService::editCaptionsText(Request\Data\EditCaptionsTextRequest): Result\Data\EditCaptionsTextResult`.
+
+**Wire:** `POST /medias/{mediaHashedId}/captions/{languageCode}/edits`; success 200. JSON body with exact fields: `edits`, `expected_version`. Path/query inputs: `mediaHashedId` (path), `languageCode` (path).
+
+**Restrictions:**
+
+Applies targeted find-and-replace corrections to a media's transcript for
+the specified language, preserving the timings of unchanged words. The whole
+batch is applied atomically against a specific caption version, or nothing is.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit-transcripts` permission on this media can
+also be used. When the media is a composite whose captions belong to
+another media, the token also needs `edit-transcripts` on that media.
+
+**Source:** [Edit Captions Text](https://docs.wistia.com/reference/post_medias-mediahashedid-captions-languagecode-edits.md), pinned SHA-256 `cbdf4763808af86e21f047908b402379030c157ec263608d8304a66882009fc7`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/EditCaptionsTextTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_speakers
+
+**API:** `DataSpeakersService::listSpeakers(Request\Data\ListSpeakersRequest): Result\Data\ListSpeakersResult`.
+
+**Wire:** `GET /speakers`; success 200. Path/query inputs: `name` (query), `sort_by` (query), `sort_direction` (query), `page` (query), `per_page` (query), `cursor` (query).
+
+**Restrictions:**
+
+Lists reusable speaker profiles belonging to the account.
+
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token. View-only contacts cannot list speaker
+profiles.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `view-speakers` permission can also
+be used.
+
+**Source:** [List Speakers](https://docs.wistia.com/reference/get_speakers.md), pinned SHA-256 `bdc29d132bf54811bf3d02c20050eb34b17840800842d44ed4ae8a099d0eb839`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ListSpeakersTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_medias-mediahashedid-localizations
+
+**API:** `DataLocalizationsService::listLocalizations(Request\Data\ListLocalizationsRequest): Result\Data\ListLocalizationsResult`.
+
+**Wire:** `GET /medias/{mediaHashedId}/localizations`; success 200. Path/query inputs: `mediaHashedId` (path), `include_transcript` (query).
+
+**Restrictions:**
+
+Lists all the localizations for a media.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit-transcripts` permission on the source
+media can also be used. Other media permissions do not reach a media's
+localizations, so a token without `edit-transcripts` lists none.
+
+**Source:** [List Localizations](https://docs.wistia.com/reference/get_medias-mediahashedid-localizations.md), pinned SHA-256 `6848e5c11179c63bb64d3d41828026d1cefdeb2b0faa833fb3b97772d3505676`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ListLocalizationsTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_medias-mediahashedid-localizations-localizationhashedid
+
+**API:** `DataLocalizationsService::showLocalization(Request\Data\ShowLocalizationRequest): Result\Data\ShowLocalizationResult`.
+
+**Wire:** `GET /medias/{mediaHashedId}/localizations/{localizationHashedId}`; success 200. Path/query inputs: `mediaHashedId` (path), `localizationHashedId` (path), `include_transcript` (query).
+
+**Restrictions:**
+
+Obtain detailed information about a localization.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit-transcripts` permission on the source
+media can also be used. Other media permissions do not reach a media's
+localizations, so a token without `edit-transcripts` gets a 404.
+
+**Source:** [Show Localization](https://docs.wistia.com/reference/get_medias-mediahashedid-localizations-localizationhashedid.md), pinned SHA-256 `b8a26d2bf07c1964722cb637ed7cc8d50f93f680d8b7bb49772109a7d0013d6d`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ShowLocalizationTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## delete_medias-mediahashedid-localizations-localizationhashedid
+
+**API:** `DataLocalizationsService::deleteLocalization(Request\Data\DeleteLocalizationRequest): Result\Data\DeleteLocalizationResult`.
+
+**Wire:** `DELETE /medias/{mediaHashedId}/localizations/{localizationHashedId}`; success 200. Path/query inputs: `mediaHashedId` (path), `localizationHashedId` (path).
+
+**Restrictions:**
+
+Deletes a localization.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting both the `update` and the `edit-transcripts`
+permissions on the source media can also be used: `edit-transcripts` finds
+the localization and `update` allows deleting it.
+
+**Source:** [Delete Localization](https://docs.wistia.com/reference/delete_medias-mediahashedid-localizations-localizationhashedid.md), pinned SHA-256 `b6a0e7df666385a66fe9aaa6636b4d1d6b68f4092b4179bca4ae3db0be9a4e79`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/DeleteLocalizationTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_media-extended-audio-descriptions
+
+**API:** `DataExtendedAudioDescriptionsService::listMediaExtendedAudioDescriptions(Request\Data\ListMediaExtendedAudioDescriptionsRequest): Result\Data\ListMediaExtendedAudioDescriptionsResult`.
+
+**Wire:** `GET /media_extended_audio_descriptions`; success 200. Path/query inputs: `page` (query), `per_page` (query), `cursor` (query), `hashed_ids[]` (query), `sort_by` (query), `sort_direction` (query).
+
+**Restrictions:**
+
+Lists all extended audio descriptions belonging to the account. Supports pagination and sorting.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming a media (any permission) can also be used; it lists
+the extended audio descriptions of the media the token names.
+
+**Source:** [List Media Extended Audio Descriptions](https://docs.wistia.com/reference/get_media-extended-audio-descriptions.md), pinned SHA-256 `2b35a68f3ac5876075fd42b050b0c9cbb0b3e12d7afd6385233b93e53f8ff6dd`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ListMediaExtendedAudioDescriptionsTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_media-extended-audio-descriptions-id
+
+**API:** `DataExtendedAudioDescriptionsService::showMediaExtendedAudioDescription(Request\Data\ShowMediaExtendedAudioDescriptionRequest): Result\Data\ShowMediaExtendedAudioDescriptionResult`.
+
+**Wire:** `GET /media_extended_audio_descriptions/{id}`; success 200. Path/query inputs: `id` (path).
+
+**Restrictions:**
+
+Retrieves a single extended audio description by its hashed id, including download links.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming the extended audio description's media (any
+permission) can also be used.
+
+**Source:** [Show Media Extended Audio Description](https://docs.wistia.com/reference/get_media-extended-audio-descriptions-id.md), pinned SHA-256 `ab717900bf2f97c2326ca3c2a3262fb63fe5f9506ba984df66660c6d1574cfb8`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/ShowMediaExtendedAudioDescriptionTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## delete_media-extended-audio-descriptions-id
+
+**API:** `DataExtendedAudioDescriptionsService::deleteMediaExtendedAudioDescription(Request\Data\DeleteMediaExtendedAudioDescriptionRequest): Result\Data\DeleteMediaExtendedAudioDescriptionResult`.
+
+**Wire:** `DELETE /media_extended_audio_descriptions/{id}`; success 200. Path/query inputs: `id` (path).
+
+**Restrictions:**
+
+Deletes an extended audio description by its hashed id.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on the extended audio
+description's media can also be used.
+
+**Source:** [Delete Media Extended Audio Description](https://docs.wistia.com/reference/delete_media-extended-audio-descriptions-id.md), pinned SHA-256 `8564908d564ba370e0dc4d31c2867f435094f44286640c5df45ca04006314b2a`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/DeleteMediaExtendedAudioDescriptionTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+## get_media-extended-audio-descriptions-order-status-id
+
+**API:** `DataExtendedAudioDescriptionsService::getOrderStatus(Request\Data\GetOrderStatusRequest): Result\Data\GetOrderStatusResult`.
+
+**Wire:** `GET /media_extended_audio_descriptions/order_status/{id}`; success 200. Path/query inputs: `id` (path).
+
+**Restrictions:**
+
+Returns the current status of an extended audio description order. Use the order id returned
+from the order endpoint to poll for status updates.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming the order's media (any permission) can also be
+used.
+
+**Source:** [Get Order Status](https://docs.wistia.com/reference/get_media-extended-audio-descriptions-order-status-id.md), pinned SHA-256 `020fa38e86fed55c47f9d30712472fe4cb3eddc669a730eec5098692aaf7812c`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/GetOrderStatusTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.

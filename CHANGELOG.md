@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add 16 typed caption, speaker, existing-localization and audio-description operations with text formats, atomic versioned edits, lazy pagination and offline contract coverage; purchases and generation remain excluded. ([#16](https://github.com/Automattic/wistia-php/issues/16))
+
 - Add 24 typed media customization operations with nested inputs/results, replacement and partial-update/null semantics, and offline contract coverage. ([#15](https://github.com/Automattic/wistia-php/issues/15))
 
 - Add 19 typed media lifecycle, tag, trim and deleted-media operations with nested results, local validation, lazy pagination, job handoff and move partial-error handling. ([#14](https://github.com/Automattic/wistia-php/issues/14))

@@ -3726,6 +3726,10 @@
         "documentation_target": "docs/reference/data.md#get_medias-mediahashedid-captions",
         "contract_test_target": "tests/Contract/Data/ListCaptionsByMediaTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -3800,6 +3804,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\CreateCaptionsResult",
         "documentation_target": "docs/reference/data.md#post_medias-mediahashedid-captions",
         "contract_test_target": "tests/Contract/Data/CreateCaptionsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -3888,6 +3896,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ListCaptionsResult",
         "documentation_target": "docs/reference/data.md#get_captions",
         "contract_test_target": "tests/Contract/Data/ListCaptionsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -4093,6 +4105,10 @@
         "documentation_target": "docs/reference/data.md#post_caption-matches",
         "contract_test_target": "tests/Contract/Data/FindCaptionMatchesTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [],
         "body_required": true,
@@ -4188,6 +4204,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ShowCaptionsResult",
         "documentation_target": "docs/reference/data.md#get_medias-mediahashedid-captions-languagecode",
         "contract_test_target": "tests/Contract/Data/ShowCaptionsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -4344,6 +4364,10 @@
         "documentation_target": "docs/reference/data.md#put_medias-mediahashedid-captions-languagecode",
         "contract_test_target": "tests/Contract/Data/UpdateCaptionsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -4432,6 +4456,10 @@
         "documentation_target": "docs/reference/data.md#delete_medias-mediahashedid-captions-languagecode",
         "contract_test_target": "tests/Contract/Data/DeleteCaptionsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -4512,6 +4540,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\EditCaptionsTextResult",
         "documentation_target": "docs/reference/data.md#post_medias-mediahashedid-captions-languagecode-edits",
         "contract_test_target": "tests/Contract/Data/EditCaptionsTextTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -4638,6 +4670,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ListSpeakersResult",
         "documentation_target": "docs/reference/data.md#get_speakers",
         "contract_test_target": "tests/Contract/Data/ListSpeakersTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -4807,6 +4843,10 @@
         "documentation_target": "docs/reference/data.md#get_medias-mediahashedid-localizations",
         "contract_test_target": "tests/Contract/Data/ListLocalizationsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -4921,6 +4961,10 @@
         "documentation_target": "docs/reference/data.md#get_medias-mediahashedid-localizations-localizationhashedid",
         "contract_test_target": "tests/Contract/Data/ShowLocalizationTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -5021,6 +5065,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\DeleteLocalizationResult",
         "documentation_target": "docs/reference/data.md#delete_medias-mediahashedid-localizations-localizationhashedid",
         "contract_test_target": "tests/Contract/Data/DeleteLocalizationTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -5225,6 +5273,10 @@
         "documentation_target": "docs/reference/data.md#get_media-extended-audio-descriptions",
         "contract_test_target": "tests/Contract/Data/ListMediaExtendedAudioDescriptionsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -5390,6 +5442,10 @@
         "documentation_target": "docs/reference/data.md#get_media-extended-audio-descriptions-id",
         "contract_test_target": "tests/Contract/Data/ShowMediaExtendedAudioDescriptionTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -5469,6 +5525,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\DeleteMediaExtendedAudioDescriptionResult",
         "documentation_target": "docs/reference/data.md#delete_media-extended-audio-descriptions-id",
         "contract_test_target": "tests/Contract/Data/DeleteMediaExtendedAudioDescriptionTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -5580,6 +5640,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\GetOrderStatusResult",
         "documentation_target": "docs/reference/data.md#get_media-extended-audio-descriptions-order-status-id",
         "contract_test_target": "tests/Contract/Data/GetOrderStatusTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
