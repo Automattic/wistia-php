@@ -328,7 +328,11 @@
       "pagination": "offset-or-data-cursor",
       "discrepancies": [
         "media-cursor-sort"
-      ]
+      ],
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_medias-mediahashedid",
@@ -433,7 +437,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "put_medias-mediahashedid",
@@ -534,7 +542,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "delete_medias-mediahashedid",
@@ -623,7 +635,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "post_medias-mediahashedid-copy",
@@ -741,7 +757,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "put_medias-mediahashedid-swap",
@@ -843,7 +863,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_medias-mediahashedid-stats",
@@ -940,7 +964,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "post_medias-mediahashedid-translate",
@@ -1061,7 +1089,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "put_medias-archive",
@@ -1143,7 +1175,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "put_medias-move",
@@ -1241,7 +1277,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "put_medias-restore",
@@ -1331,7 +1371,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "put_medias-copy",
@@ -1413,7 +1457,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_medias-mediaid-customizations",
@@ -5047,7 +5095,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_media-extended-audio-descriptions",
@@ -6260,7 +6312,11 @@
           }
         }
       },
-      "pagination": "offset-or-data-cursor"
+      "pagination": "offset-or-data-cursor",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "post_tags",
@@ -6349,7 +6405,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "delete_tags-name",
@@ -6428,7 +6488,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "post_taggings-bulk-create",
@@ -6510,7 +6574,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_folders",
@@ -12846,7 +12914,11 @@
           }
         }
       },
-      "pagination": "offset-or-data-cursor"
+      "pagination": "offset-or-data-cursor",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "post_deleted-media-restore",
@@ -12928,7 +13000,11 @@
         }
       },
       "pagination": "none-documented",
-      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries."
+      "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_review-bundles",
