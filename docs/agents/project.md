@@ -4,7 +4,7 @@
 
 Wistia PHP is a framework-independent PHP client distributed as `automattic/wistia-php` through Composer. It serves PHP applications integrating with Wistia. Usage scale is not established.
 
-This is a library undergoing a breaking revival. P02 replaces the legacy magic client with shared configuration/execution/encoding/decoding/error primitives, declaring PHP `^8.4` with `ext-curl`, Guzzle `^8.2` and PHPUnit `^12.5`. P04 adds [OAuth helpers](../oauth.md) for authorization URLs, explicit code exchange and refresh. Resource endpoint services and other helpers remain planned in this checkout. Read [composer.json](../../composer.json), [src/Client.php](../../src/Client.php), and [README.md](../../README.md) for the actual foundation and its limitations. Historical live PHPUnit 4.8 tests remain preserved outside default discovery.
+This is a library undergoing a breaking revival. P02 replaces the legacy magic client with shared configuration/execution/encoding/decoding/error primitives, declaring PHP `^8.4` with `ext-curl`, Guzzle `^8.2` and PHPUnit `^12.5`. P03 adds generic pagination adapters and the typed background-job-status operation with finite optional polling; P04 adds [OAuth helpers](../oauth.md) for authorization URLs, explicit code exchange and refresh. Other endpoint services and webhook helpers remain planned. Read [composer.json](../../composer.json), [src/Client.php](../../src/Client.php), and [README.md](../../README.md) for the actual foundation and its limitations. Historical live PHPUnit 4.8 tests remain preserved outside default discovery.
 
 The agreed direction is a breaking rewrite for PHP 8.4+ and the supported server-side Wistia APIs, targeting 2.0.0. The approved specification is [#8](https://github.com/Automattic/wistia-php/issues/8); the [inventory](../rewrite/README.md) distinguishes planned endpoints from implemented foundation/helper coverage. The foundation alone does not satisfy whole-library acceptance or authorize release.
 
@@ -19,7 +19,7 @@ Organization members retain repository admin access. External contributions are 
 - Preserve package identity, existing license/copyright, and published history unless a separately approved change says otherwise.
 - Consumers own their application hosting and integration; no platform-specific architecture is required.
 - API credentials, uploads, media metadata, and webhook payloads may contain sensitive information. Keep credentials out of chat, logs, fixtures, and commits.
-- Historical legacy tests can create/delete projects and upload media; their separately gated configuration must never be treated as a credential-free unit check. Default discovery now selects only authored offline foundation and helper tests.
+- Historical legacy tests can create/delete projects and upload media; their separately gated configuration must never be treated as a credential-free unit check. Default discovery selects only authored offline foundation, helper and contract tests.
 - No Wistia test account or credentials have been supplied for this setup. Live API behavior is unverified.
 - API changes, ambiguous write failures, account-plan restrictions, and charge-incurring operations require explicit contracts and meaningful checks during rewrite planning. Setup establishes none of those endpoint contracts.
 - External automation is not fully known. Inspect affected integrations before changing branch, label, release, or API conventions.

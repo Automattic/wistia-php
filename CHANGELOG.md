@@ -5,6 +5,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 ## Unreleased
 
 - Add typed OAuth authorization-URL, code-exchange and explicit refresh helpers with sanitized token/grant failures and application-owned callback/persistence boundaries. ([#12](https://github.com/Automattic/wistia-php/issues/12))
+- Add bounded offset, Data-cursor (including webinar registrations), and Analytics-cursor traversal with lazy/individual-page access, preserved filters/order, and cycle/exhaustion errors. ([#11](https://github.com/Automattic/wistia-php/issues/11))
+- Add typed background-job status reads and finite optional polling that exposes failed/partial bulk outcomes; stopping local polling never cancels remote work. Offline Contract tests join default discovery without enabling legacy tests. ([#11](https://github.com/Automattic/wistia-php/issues/11))
 - **Breaking:** Replace the legacy magic client with the typed shared execution/configuration foundation; require PHP `^8.4`, Guzzle `^8.2` and PHPUnit `^12.5`, with no compatibility layer. ([#10](https://github.com/Automattic/wistia-php/issues/10))
 - **Breaking:** Require `ext-curl` (including injected-transport installations) to preserve finite native connect/total timeouts and prevent low-level replay. The default uses fresh HTTP/1.1 connections and nonrewindable streamed bodies, rejects Guzzle recovery redispatch, and disables environment proxies and authentication/Expect negotiation.
 - Reject timeout values outside the portable inclusive `0.001`–`2147483.647` second range at configuration construction; discard rate-limit integers that exceed native `PHP_INT_MAX` while retaining the ten-digit header cap. Offline redaction tests now enable argument capture in their own bootstrap.
