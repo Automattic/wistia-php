@@ -1,6 +1,9 @@
 <?php
 namespace Automattic\Wistia\Tests;
 
+// Guard direct file selection as well as the separate legacy configuration.
+require __DIR__ . '/legacy-guard.php';
+
 use BadMethodCallException;
 
 trait ApiMethodsTraitTest {

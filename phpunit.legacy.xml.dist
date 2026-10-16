@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/legacy-bootstrap.php">
+    <testsuites><testsuite name="legacy-live-destructive">
+        <file>tests/ClientTest.php</file>
+    </testsuite></testsuites>
+</phpunit>

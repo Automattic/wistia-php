@@ -1,225 +1,62 @@
 <?php
+declare(strict_types=1);
+
 namespace Automattic\Wistia;
 
-use GuzzleHttp\Client as HttpClient;
-use GuzzleHttp\Exception\TransferException;
+use Automattic\Wistia\Exception\{ApiException, AuthenticationException, DecodeException, PermissionException, RateLimitException, TransportException};
+use Automattic\Wistia\Http\{ApiFamily, GuzzleTransport, RateLimitInfo, Request, Response, ResponseDecoder, Transport, TransportRequest};
 
-class Client {
-    use Traits\ApiMethodsTrait;
+/** Shared execution foundation. Endpoint services are delivered by subsequent tickets. */
+final class Client
+{
+    private Transport $transport;
 
-    /**
-     * Wrapper version
-     */
-    const VERSION = '1.0.0';
+    public function __construct(
+        #[\SensitiveParameter] private readonly Configuration $configuration,
+        #[\SensitiveParameter] ?Transport $transport = null,
+    ) {
+        $this->transport = $transport ?? new GuzzleTransport();
+    }
 
-    /**
-     * The HTTP client
-     * @var object
-     */
-    public $client;
-
-    /**
-     * Response format
-     * @var string
-     */
-    public $format;
-
-    /**
-     * The response code of the last request
-     * @var int
-     */
-    public $last_response_code;
-
-    /**
-     * API Password
-     * @var    string
-     * @access private
-     */
-    private $_token;
-
-    /**
-     * Init the HTTP Client
-     *
-     * @param array $params
-     */
-    public function __construct( $params ) {
-        /**
-         * Default params to pass to the Client
-         */
-        $defaults = [
-            'format' => 'json'
-        ];
-
-        $params = array_merge( $defaults, $params );
-
-        if ( ! isset( $params['token'] ) ) {
-            throw new WistiaException( 'Client error: 401 - Token is required', 401 );
+    public function execute(#[\SensitiveParameter] Request $request, #[\SensitiveParameter] ResponseDecoder $decoder): Response
+    {
+        $headers = [];
+        if ($request->family !== ApiFamily::OAuth) {
+            $headers['Authorization'] = $this->configuration->authorization();
         }
-
-        $this->format = $params['format'];
-        $this->_token = $params['token'];
-
-        $this->client = new HttpClient( [
-            'base_uri' => 'https://api.wistia.com/v1/'
-        ] );
-
-        $this->upload_client = new HttpClient( [
-            'base_uri' => 'https://upload.wistia.com/'
-        ] );
-    }
-
-    /**
-     * Prevent unserialization
-     */
-    public function __wakeup() {
-        trigger_error( sprintf( 'Unsupported unserialization of %s', __CLASS__ ), E_USER_ERROR );
-    }
-
-    /**
-     * Returns the client
-     *
-     * @return object
-     */
-    public function get_client() {
-        return $this;
-    }
-
-    /**
-     * Get the token
-     *
-     * @return string
-     */
-    public function get_token() {
-        return $this->_token;
-    }
-
-    /**
-     * Send a GET request
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function get( $endpoint, $query = [] ) {
-        return $this->_make_request( 'GET', $endpoint, $query );
-    }
-
-    /**
-     * Send a POST request
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function post( $endpoint, $query = [] ) {
-        return $this->_make_request( 'POST', $endpoint, $query );
-    }
-
-    /**
-     * Send a PUT request
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function put( $endpoint, $query = [] ) {
-        return $this->_make_request( 'PUT', $endpoint, $query );
-    }
-
-    /**
-     * Send a DELETE request
-     *
-     * @return string
-     * @codeCoverageIgnore
-     */
-    public function delete( $endpoint, $query = [] ) {
-        return $this->_make_request( 'DELETE', $endpoint, $query );
-    }
-
-    /**
-     * Create a new media. Wistia handles upload differently than other methods.
-     * The API endpoint is different and the parameters are completely different.
-     * We need a new Client to handle this kind of requests.
-     *
-     * @param  string $file
-     * @param  array  $query
-     * @return object
-     */
-    public function create_media( $file, $query = [] ) {
-        if ( empty( $file ) || ! file_exists( $file ) ) {
-            throw new WistiaException( 'Client error: A valid file path is required to create a media.' );
+        if ($request->family->usesVersion()) {
+            $headers['X-Wistia-API-Version'] = Configuration::API_VERSION;
         }
-
-        $params = [
-            'headers' => [
-                'User-Agent'    => 'Wistia PHP Wrapper/' . self::VERSION
-            ],
-            'multipart' => [
-                [
-                    'name' => 'api_password',
-                    'contents' => $this->_token
-                ],
-                [
-                    'name' => 'file',
-                    'contents' => fopen( $file, 'r' )
-                ]
-            ]
-        ];
-
-        if ( ! empty( $query ) ) {
-            foreach( $query as $name => $value ) {
-                $data = [ 'name' => $name, 'contents' => $value ];
-
-                if ( ! in_array( $data, $params['multipart'] ) ) {
-                    array_push( $params['multipart'], $data );
-                }
-            }
-        }
-
+        if ($request->body !== null) { $headers['Content-Type'] = $request->body->contentType; }
+        $query = $request->query->encode();
+        $url = $request->family->baseUri() . $request->path . ($query !== '' ? '?' . $query : '');
         try {
-            $response                 = $this->upload_client->request( 'POST', '', $params );
-            $this->last_response_code = $response->getStatusCode();
-
-            if ( $response->getStatusCode() === 200 || $response->getStatusCode() === 400 ) {
-                return json_decode( $response->getBody()->getContents() );
-            } else {
-                // Error 401 - API password probably wrong. Returns text/html
-                return $response->getBody()->getContents();
-            }
-        } catch( TransferException $e ) {
-            return $e->getCode();
+            $response = $this->transport->send(new TransportRequest($request->method->value, $url, $headers,
+                $request->body?->contents(), $this->configuration->timeout, $this->configuration->connectTimeout));
+        } catch (\Throwable) {
+            throw TransportException::create(uncertain: $request->mayChangeRemoteState());
         }
-    }
-
-    /**
-     * Make a request
-     *
-     * @param  string        $type
-     * @param  string        $endpoint
-     * @param  array         $args
-     * @return string
-     * @access private
-     * @codeCoverageIgnore
-     */
-    private function _make_request( $type, $endpoint, $query = [] ) {
-        $params = [
-            'headers' => [
-                'Authorization' => 'Basic ' . base64_encode( 'api:' . $this->_token ),
-                'Accept'        => 'application/' . $this->format,
-                'User-Agent'    => 'Wistia PHP Wrapper/' . self::VERSION
-            ],
-        ];
-
-        if ( ! empty( $query ) && empty( $params['query'] ) ) {
-            $params['query'] = $query;
+        $rate = RateLimitInfo::fromResponse($response);
+        if ($response->status < 200 || $response->status >= 300) {
+            $error = match ($response->status) {
+                401 => AuthenticationException::class,
+                403 => PermissionException::class,
+                429 => RateLimitException::class,
+                default => ApiException::class,
+            };
+            throw $error::create($response->status, $rate,
+                $request->mayChangeRemoteState() && ($response->status === 408 || $response->status >= 500 || ($response->status >= 300 && $response->status < 400)));
         }
-
+        if (!in_array($response->status, $request->successStatuses, true)) {
+            throw DecodeException::create($response->status, $rate, $request->mayChangeRemoteState());
+        }
         try {
-            $response                 = $this->client->request( $type, $endpoint . '.' . $this->format, $params );
-            $this->last_response_code = $response->getStatusCode();
-
-            return json_decode( $response->getBody()->getContents() );
-        } catch( TransferException $e ) {
-            return $e->getCode();
+            return new Response($decoder->decode($response), $response->status, $rate);
+        } catch (\Throwable) {
+            throw DecodeException::create($response->status, $rate, $request->mayChangeRemoteState());
         }
     }
+
+    public function __debugInfo(): array { return []; }
+    public function __serialize(): array { throw new \LogicException('Clients cannot be serialized.'); }
 }
-
-class WistiaException extends \Exception {}

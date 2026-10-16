@@ -3,82 +3,57 @@
 [![Latest Version](https://img.shields.io/github/release/Automattic/wistia-php.svg?style=flat-square)](https://github.com/Automattic/wistia-php/releases)
 [![Software License](https://img.shields.io/badge/license-GPLv2-brightgreen.svg?style=flat-square)](LICENSE)
 
-A PHP client for consuming the Wistia API.
+A framework-independent PHP client for Wistia, undergoing a breaking rewrite.
 
-The [rewrite contract reference](docs/rewrite/README.md) records the planned PHP 8.4+ rewrite and endpoint inventory. It is planning documentation, not the currently implemented API described below.
+## Current development scope
 
-## Install
+**P02 provides the shared client/configuration, HTTP execution, encoding, decoding and failure foundation only.** No resource services, uploads, pagination, job polling, OAuth helpers or webhook helpers are delivered yet. Do not treat the [planned endpoint inventory](docs/rewrite/README.md) as installed endpoint coverage. This development branch is not a complete replacement for the published 1.x package.
 
-Via Composer
+Requirements: PHP `^8.4` with `ext-curl`, Guzzle `^8.2`; development tests use PHPUnit `^12.5`. Package identity remains `automattic/wistia-php`, namespace `Automattic\Wistia`. Composer distribution is retained; no 2.0.0 release has been published by this change.
 
-``` bash
-$ composer require automattic/wistia-php
+## Configuration
+
+After installing the package in an appropriately provisioned application:
+
+```php
+use Automattic\Wistia\Client;
+use Automattic\Wistia\Configuration;
+
+$token = getenv('WISTIA_API_TOKEN'); // Application-owned secret management.
+if ($token === false || $token === '') {
+    throw new RuntimeException('Configure WISTIA_API_TOKEN in your application.');
+}
+$client = new Client(new Configuration(token: $token, timeout: 30.0, connectTimeout: 10.0));
 ```
 
-## Methods & Properties
+Both timeout fields accept finite seconds in the inclusive range `0.001`–`2147483.647` (portable signed 32-bit milliseconds); invalid values are rejected at construction, before transport. Defaults remain 30 total and 10 connect seconds. Construction performs no HTTP request. Credentials are attached only as Bearer headers for Data, Stats, Analytics and Upload. Modern families use `https://api.wistia.com/modern` and pinned `X-Wistia-API-Version: 2026-09`; Upload and OAuth have separate hosts/contracts and no version header. Tokenless configuration is available for future OAuth helper use, not unauthenticated modern API calls.
 
-|Method|Parameters|
-|---|---|
-|`get_client`|`N/A`|
-|`get_token`|`N/A`|
-|`list_projects`|`N/A`|
-|`show_project`|`(string) $project_hashed_id`|
-|`create_project`|`(array) $project_data`|
-|`update_project`|`(string) $project_hashed_id`, `(array) $project_data`|
-|`delete_project`|`(string) $project_hashed_id`|
-|`copy_project`|`(string) $project_hashed_id`|
-|`list_sharings`|`(string) $project_hashed_id`|
-|`show_sharing`|`(string) $project_hashed_id`, `(int) $sharing_id`|
-|`create_sharing`|`(string) $project_hashed_id`|
-|`update_sharing`|`(string) $project_hashed_id`, `(int) $sharing_id`, `(array) $sharing_data`|
-|`delete_sharing`|`(string) $project_hashed_id`, `(int) $sharing_id`|
-|`list_medias`|`N/A`|
-|`show_media`|`(string) $media_hashed_id`|
-|`create_media`|`(string) $file_path`, `(array) $media_data`|
-|`update_media`|`(string) $media_hashed_id`, `(array) $media_data`|
-|`delete_media`|`(string) $media_hashed_id`|
-|`copy_media`|`(string) $media_hashed_id`|
-|`stats_media`|`(string) $media_hashed_id`|
-|`show_account`|`N/A`|
-|`show_customizations`|`(string) $media_hashed_id`|
-|`create_customizations`|`(string) $media_hashed_id`, `(array) $customizations_data`|
-|`update_customizations`|`(string) $media_hashed_id`, `(array) $customizations_data`|
-|`delete_customizations`|`(string) $media_hashed_id`|
-|`list_captions`|`(string) $media_hashed_id`|
-|`show_captions`|`(string) $media_hashed_id`, `(string) $language_code`|
-|`create_captions`|`(string) $media_hashed_id`, `(array) $captions_data`|
-|`update_captions`|`(string) $media_hashed_id`, `(array) $captions_data`|
-|`delete_captions`|`(string) $media_hashed_id`, `(string) $language_code`|
+See [foundation contracts](docs/foundation.md) for transport injection, exact-name encoding, result/decoder boundaries, and safe error handling. Applications own OAuth persistence/callbacks and webhook infrastructure; those helpers are future work.
 
-|Properties|Type|
-|---|---|
-|`$client`|`object`|
-|`$format`|`string`|
-|`$last_response_code`|`int`|
+## Breaking migration status
 
-## Constructor
+The legacy array constructor, magic endpoint methods, `get_client()`, `get_token()`, public transport/format/last-response fields, raw decoded-object/error-code returns and XML mode are removed. There is no compatibility layer. Configure `Configuration` instead; future endpoint services will use named request/result DTOs. Old calls such as `list_projects()` are **not yet replaced** on this branch: their replacements remain planned work, not usable examples.
 
-When instantiating the library, you need to pass an array of parameters to the constructor.
+Failures now use typed exceptions under `Automattic\Wistia\Exception`. Check `remoteOutcomeUncertain` before deciding how to reconcile a state-changing operation; do not blindly replay an upload or share-link request. Requests are sent once, with redirects disabled. The default uses dedicated HTTP/1.1 cURL connections, nonrewindable streamed bodies and no environment proxies or authentication negotiation to prevent native replay. Injected transports must preserve these constraints. No live API or paid-plan behavior is verified by this foundation change.
 
-The array must include the index `token` which contains your Wistia token.
-Optionally the array can include the format of the responses, the value can be `json` (default), or `xml`. If it does not exist, `json` will be used.
+## Tests and safety
 
-## Tests
+In an environment with the declared development dependencies already available:
 
-To run PHPUnit tests on this library, copy the file `tests/config.sample.php`, rename it to `config.php` and fill in the requested details.
-
-Then open the terminal and navigate to the root of the library and use this command:
-
-```
-$ phpunit
+```sh
+composer test
+# Equivalent default offline discovery:
+vendor/bin/phpunit
 ```
 
-*Note: Tests may fail if you run them too many times consecutively. There's a limit of 1000 requests/hour from Wistia, also the upload of dummy data may fail due to the internet connection problems and this will cause the tests to fail too.*
+Both discover only `tests/Offline`, load no legacy credential configuration and use controlled transports, Guzzle MockHandler and synthetic native cURL completion, not real HTTP. These are foundation tests, not endpoint contract or live verification. The offline default Composer suite passed on PHP 8.4.26 and 8.5.10 with Guzzle 8.2.0 / PHPUnit 12.5.39 under OS-enforced network denial (107 tests, 800 assertions per run), with caller `zend.exception_ignore_args` set to both 0 and 1. The test-owned bootstrap enables argument capture for strong redaction assertions; no application/global PHP configuration change is required. PHP 8.4 plus a newer supported runtime and externally network-denied execution remain required verification gates; syntax checks alone do not satisfy them.
+
+The historical live/destructive tests remain in `tests/ClientTest.php` and `tests/ApiMethodsTraitsTest.php` for provenance, excluded from default discovery. The separately named `phpunit.legacy.xml.dist` bootstrap refuses execution unless **both** `WISTIA_ENABLE_LEGACY_LIVE_TESTS=1` and `WISTIA_APPROVE_DESTRUCTIVE_TESTS=1` are set. These flags are technical gates, not permission. The legacy tests also require the original 1.x client/PHPUnit environment and are **not compatible with this rewrite**. Do not run them on this branch or supply credentials as a local check; do not exercise charge-incurring operations.
 
 ## Credits
 
 - [Automattic](https://github.com/Automattic)
-- [Nicola Mustone](https://github.com/SiR-DanieL)
+- [Nicola Mustone](https://nicolamustone.com)
 
 ## License
 
