@@ -7,7 +7,7 @@ A framework-independent PHP client for Wistia, undergoing a breaking rewrite.
 
 ## Current development scope
 
-**P02 provides the shared client/configuration, HTTP execution, encoding, decoding and failure foundation only.** No resource services, uploads, pagination, job polling, OAuth helpers or webhook helpers are delivered yet. Do not treat the [planned endpoint inventory](docs/rewrite/README.md) as installed endpoint coverage. This development branch is not a complete replacement for the published 1.x package.
+**P02 provides the shared client/configuration, HTTP execution, encoding, decoding and failure foundation.** P04 adds [OAuth helpers](docs/oauth.md) for authorization URLs, explicit code exchange and refresh. Applications own callbacks, correlation, secure persistence and renewal policy. Resource services, uploads, pagination, job polling and webhook helpers remain planned in this checkout. Do not treat the [planned endpoint inventory](docs/rewrite/README.md) as installed endpoint coverage. This development branch is not a complete replacement for the published 1.x package.
 
 Requirements: PHP `^8.4` with `ext-curl`, Guzzle `^8.2`; development tests use PHPUnit `^12.5`. Package identity remains `automattic/wistia-php`, namespace `Automattic\Wistia`. Composer distribution is retained; no 2.0.0 release has been published by this change.
 
@@ -26,9 +26,9 @@ if ($token === false || $token === '') {
 $client = new Client(new Configuration(token: $token, timeout: 30.0, connectTimeout: 10.0));
 ```
 
-Both timeout fields accept finite seconds in the inclusive range `0.001`–`2147483.647` (portable signed 32-bit milliseconds); invalid values are rejected at construction, before transport. Defaults remain 30 total and 10 connect seconds. Construction performs no HTTP request. Credentials are attached only as Bearer headers for Data, Stats, Analytics and Upload. Modern families use `https://api.wistia.com/modern` and pinned `X-Wistia-API-Version: 2026-09`; Upload and OAuth have separate hosts/contracts and no version header. Tokenless configuration is available for future OAuth helper use, not unauthenticated modern API calls.
+Both timeout fields accept finite seconds in the inclusive range `0.001`–`2147483.647` (portable signed 32-bit milliseconds); invalid values are rejected at construction, before transport. Defaults remain 30 total and 10 connect seconds. Construction performs no HTTP request. Credentials are attached only as Bearer headers for Data, Stats, Analytics and Upload. Modern families use `https://api.wistia.com/modern` and pinned `X-Wistia-API-Version: 2026-09`; Upload and OAuth have separate hosts/contracts and no version header. Tokenless configuration supports the OAuth helpers, not unauthenticated modern API calls.
 
-See [foundation contracts](docs/foundation.md) for transport injection, exact-name encoding, result/decoder boundaries, and safe error handling. Applications own OAuth persistence/callbacks and webhook infrastructure; those helpers are future work.
+See [foundation contracts](docs/foundation.md) for transport injection, exact-name encoding, result/decoder boundaries, and safe error handling. Applications own OAuth callbacks, correlation and secure token persistence. Webhook helpers and routing remain future work in this checkout.
 
 ## Breaking migration status
 
@@ -46,7 +46,7 @@ composer test
 vendor/bin/phpunit
 ```
 
-Both discover only `tests/Offline`, load no legacy credential configuration and use controlled transports, Guzzle MockHandler and synthetic native cURL completion, not real HTTP. These are foundation tests, not endpoint contract or live verification. The offline default Composer suite passed on PHP 8.4.26 and 8.5.10 with Guzzle 8.2.0 / PHPUnit 12.5.39 under OS-enforced network denial (107 tests, 800 assertions per run), with caller `zend.exception_ignore_args` set to both 0 and 1. The test-owned bootstrap enables argument capture for strong redaction assertions; no application/global PHP configuration change is required. PHP 8.4 plus a newer supported runtime and externally network-denied execution remain required verification gates; syntax checks alone do not satisfy them.
+Both discover only `tests/Offline`, load no legacy credential configuration and use controlled transports, Guzzle MockHandler and synthetic native cURL completion, not real HTTP. They include foundation and OAuth helper contracts, not live verification. Current default Composer and strict PHPUnit suites passed on PHP 8.4.26 and 8.5.10 with Guzzle 8.2.0 / PHPUnit 12.5.39 under OS-enforced network denial (163 tests, 3593 assertions per run). The test-owned bootstrap enables argument capture for strong redaction assertions; no application/global PHP configuration change is required. PHP 8.4 plus a newer supported runtime and externally network-denied execution remain required verification gates; syntax checks alone do not satisfy them.
 
 The historical live/destructive tests remain in `tests/ClientTest.php` and `tests/ApiMethodsTraitsTest.php` for provenance, excluded from default discovery. The separately named `phpunit.legacy.xml.dist` bootstrap refuses execution unless **both** `WISTIA_ENABLE_LEGACY_LIVE_TESTS=1` and `WISTIA_APPROVE_DESTRUCTIVE_TESTS=1` are set. These flags are technical gates, not permission. The legacy tests also require the original 1.x client/PHPUnit environment and are **not compatible with this rewrite**. Do not run them on this branch or supply credentials as a local check; do not exercise charge-incurring operations.
 

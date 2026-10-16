@@ -4,7 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
-- **Breaking:** Replace the legacy magic client with the typed shared execution/configuration foundation; require PHP `^8.4`, Guzzle `^8.2` and PHPUnit `^12.5`, with no compatibility layer or endpoint services delivered yet. ([#10](https://github.com/Automattic/wistia-php/issues/10))
+- Add typed OAuth authorization-URL, code-exchange and explicit refresh helpers with sanitized token/grant failures and application-owned callback/persistence boundaries. ([#12](https://github.com/Automattic/wistia-php/issues/12))
+- **Breaking:** Replace the legacy magic client with the typed shared execution/configuration foundation; require PHP `^8.4`, Guzzle `^8.2` and PHPUnit `^12.5`, with no compatibility layer. ([#10](https://github.com/Automattic/wistia-php/issues/10))
 - **Breaking:** Require `ext-curl` (including injected-transport installations) to preserve finite native connect/total timeouts and prevent low-level replay. The default uses fresh HTTP/1.1 connections and nonrewindable streamed bodies, rejects Guzzle recovery redispatch, and disables environment proxies and authentication/Expect negotiation.
 - Reject timeout values outside the portable inclusive `0.001`–`2147483.647` second range at configuration construction; discard rate-limit integers that exceed native `PHP_INT_MAX` while retaining the ten-digit header cap. Offline redaction tests now enable argument capture in their own bootstrap.
 - Add exact-name JSON/form/query primitives, sanitized typed failures with rate-limit information, single-attempt safe transport defaults, and isolated offline test discovery. ([#10](https://github.com/Automattic/wistia-php/issues/10))
