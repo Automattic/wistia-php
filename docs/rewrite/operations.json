@@ -1465,6 +1465,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Customizations",
@@ -1545,6 +1549,10 @@
     },
     {
       "id": "post_medias-mediaid-customizations",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Create Customizations",
@@ -1629,6 +1637,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Customizations",
@@ -1721,6 +1733,10 @@
     },
     {
       "id": "delete_medias-mediaid-customizations",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Delete Customizations",
@@ -1804,6 +1820,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-appearance",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Appearance Customizations",
@@ -1884,6 +1904,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-appearance",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Appearance Customizations",
@@ -1984,6 +2008,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-playback",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Playback Customizations",
@@ -2064,6 +2092,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-playback",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Playback Customizations",
@@ -2164,6 +2196,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-thumbnail",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Thumbnail Customizations",
@@ -2244,6 +2280,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-thumbnail",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Thumbnail Customizations",
@@ -2344,6 +2384,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-accessibility",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Accessibility Customizations",
@@ -2424,6 +2468,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-accessibility",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Accessibility Customizations",
@@ -2524,6 +2572,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-chapters",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Chapters Customizations",
@@ -2604,6 +2656,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-chapters",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Chapters Customizations",
@@ -2704,6 +2760,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-engagement",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Engagement Customizations",
@@ -2784,6 +2844,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-engagement",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Engagement Customizations",
@@ -2884,6 +2948,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-related-media",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Related Media Customizations",
@@ -2964,6 +3032,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-related-media",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Related Media Customizations",
@@ -3064,6 +3136,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-sharing",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Sharing Customizations",
@@ -3144,6 +3220,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-sharing",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Sharing Customizations",
@@ -3244,6 +3324,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-lead-capture",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Lead Capture Customizations",
@@ -3324,6 +3408,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-lead-capture",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Lead Capture Customizations",
@@ -3424,6 +3512,10 @@
     },
     {
       "id": "get_medias-mediaid-customizations-access",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Show Access Customizations",
@@ -3504,6 +3596,10 @@
     },
     {
       "id": "put_medias-mediaid-customizations-access",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Customizations",
       "title": "Update Access Customizations",
@@ -17834,6 +17930,32 @@
       "result_contract": "No localization-specific status/body schema is documented. Result type is a name target only, not a settled shape; authoritative clarification is required before implementation fixtures/decoder finalization. Do not assume the Data localization-generation response.",
       "restrictions": "Supplied-audio import only; no POST Data localization generation. Guide example explicitly uses upload-v2.wistia.com while general upload prose uses upload.wistia.com; host discrepancy must not be hidden.",
       "live_verified": false
+    }
+  ],
+  "contract_resolutions": [
+    {
+      "id": "customizations-image-cta-alt-text",
+      "authority": "Maintainer explicitly approved the image-CTA interpretation during #15 delivery: optional string altText, with explicit-null clearing for partial updates.",
+      "source_conflict": "The retained ctaType narrative says image allows altText, but the closed postRoll-v1 request property schemas omit altText. Original source schemas and digests remain unchanged.",
+      "sources": [
+        "https://docs.wistia.com/reference/post_medias-mediaid-customizations.md",
+        "https://docs.wistia.com/reference/put_medias-mediaid-customizations.md",
+        "https://docs.wistia.com/reference/put_medias-mediaid-customizations-engagement.md"
+      ],
+      "operations": [
+        "post_medias-mediaid-customizations",
+        "put_medias-mediaid-customizations",
+        "put_medias-mediaid-customizations-engagement"
+      ],
+      "request_property_path": "plugin.postRoll-v1.altText",
+      "php_property": "altText",
+      "type": "string",
+      "required": false,
+      "replacement_allows_null": false,
+      "partial_update_allows_null_reset": true,
+      "response_handling": "Preserved in postRoll-v1 additionalFields. The closed broad response explicitly allows this approved string field without accepting unrelated unknown fields; engagement responses already allow additional fields. No upstream response-schema correction is asserted.",
+      "live_verified": false,
+      "contract_test_target": "tests/Offline/CustomizationInputValidationTest.php"
     }
   ],
   "contract_gaps": [

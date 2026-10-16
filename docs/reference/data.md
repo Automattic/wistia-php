@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation and P06's 19 media lifecycle, tags, trims and deleted-media operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, and P07's 24 customization operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -721,3 +721,675 @@ restored, and `folder_id` also requires the `upload` permission on that
 folder.
 
 **Source/evidence:** [Restore Deleted Media](https://docs.wistia.com/reference/post_deleted-media-restore.md), pinned SHA-256 `50703aa8674f48761e191d7009e3dfadcc73e69fe61d82e504cc04fdcbc89ccc` in the inventory. Not marked experimental in the checked source. Synthetic offline contract: `tests/Contract/Data/RestoreDeletedMediaTest.php` (shared cases/assertions in `MediaCases`/`MediaOperationContract`, plus `tests/Offline/MediaLifecycleTest.php`). No live or plan-entitlement verification.
+
+## Customization operation conventions
+
+The [usage guide](../customizations.md#nested-input-and-results) documents sharing-list replacement/download coupling, narrative-derived option validation, gradient pairs, and the maintainer-approved image-CTA `altText` interpretation. The inventory preserves the upstream narrative/closed-schema discrepancy; this is not live-verified behavior.
+
+P07 implements the following 24 operations. See [media customizations](../customizations.md) for runnable usage, replacement versus partial-update/null semantics, nested input/result records, provider rules and migration. Every method accepts its named request with a nonempty raw `mediaId` encoded once as a path segment. All use Bearer authentication and the `2026-09` version, no query or pagination. Bodies use JSON and exact wire names; results expose `status` and typed `data`, except schema-less deletion which exposes only `status`. Shared sanitized failures, rate-limit information and single-attempt uncertain-write handling apply. These methods are not marked experimental by the pinned sources; all live and plan/provider behavior remains unverified.
+
+## get_medias-mediaid-customizations
+
+**API:** `DataCustomizationsService::showCustomizations(Request\Data\ShowCustomizationsRequest): Result\Data\ShowCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches explicitly defined customizations for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations.md), pinned SHA-256 `5ac9886985d90b8302cdca991c8acbb6b01f129d900b3ae1e158d679ebe6dc19`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## post_medias-mediaid-customizations
+
+**API:** `DataCustomizationsService::createCustomizations(Request\Data\CreateCustomizationsRequest): Result\Data\CreateCustomizationsResult`.
+
+**Wire:** `POST /medias/{mediaId}/customizations`; success 201. Supply a `Customizations\CreateCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Set customizations for a video. Replaces the customizations explicitly set for this video.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Create Customizations](https://docs.wistia.com/reference/post_medias-mediaid-customizations.md), pinned SHA-256 `2f93abdd2324824d52eea672b40b5e1a00a9a32f21ab5de22ab28b1464b3c842`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/CreateCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations
+
+**API:** `DataCustomizationsService::updateCustomizations(Request\Data\UpdateCustomizationsRequest): Result\Data\UpdateCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations`; success 200. Supply a `Customizations\UpdateCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Allows for partial updates on a video’s customizations. If a value is null, then that key will be deleted from the saved customizations. If it is not null, that value will be set.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations.md), pinned SHA-256 `6e343bb30c39f609b3cbe9c87091869104581cc020cac872b864d0f7da7ef252`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## delete_medias-mediaid-customizations
+
+**API:** `DataCustomizationsService::deleteCustomizations(Request\Data\DeleteCustomizationsRequest): Result\Data\DeleteCustomizationsResult`.
+
+**Wire:** `DELETE /medias/{mediaId}/customizations`; success 200. No request body. No response schema is documented; response bytes are not interpreted as JSON.
+
+**Restrictions:**
+
+Deletes all explicit customizations for a video, making it act as if it has never been customized.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Delete Customizations](https://docs.wistia.com/reference/delete_medias-mediaid-customizations.md), pinned SHA-256 `80d5dfe76d687e82c0a7f0d515d7394a948433f2b3b4004309c2fe34607242fe`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/DeleteCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-appearance
+
+**API:** `DataCustomizationsService::showAppearanceCustomizations(Request\Data\ShowAppearanceCustomizationsRequest): Result\Data\ShowAppearanceCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/appearance`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set appearance customizations (player color, gradient,
+rounded corners, control contrast, and customer logo) for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Appearance Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-appearance.md), pinned SHA-256 `0b48aedbfc0b6ca6aa947dbe5dc3c80bf7b92ad00445b5dc14061e8ddb11a52e`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowAppearanceCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-appearance
+
+**API:** `DataCustomizationsService::updateAppearanceCustomizations(Request\Data\UpdateAppearanceCustomizationsRequest): Result\Data\UpdateAppearanceCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/appearance`; success 200. Supply a `Customizations\UpdateAppearanceCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's appearance customizations. Only the
+fields supplied are changed; sending a field as null deletes it (reverting to
+the default).
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Appearance Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-appearance.md), pinned SHA-256 `19f07479f3aaab07a5bb04b2dd0b8dbe2e1393e70d1bb644632716f1e86e8e97`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateAppearanceCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-playback
+
+**API:** `DataCustomizationsService::showPlaybackCustomizations(Request\Data\ShowPlaybackCustomizationsRequest): Result\Data\ShowPlaybackCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/playback`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set playback customizations (autoplay, mute, controls
+visibility, player control buttons, end behavior, looping, quality bounds, and
+embed/runtime flags) for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Playback Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-playback.md), pinned SHA-256 `f86fd10aca174560b9ad442674e3aafdf6e3d1f610eba339d1ba2360cddae370`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowPlaybackCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-playback
+
+**API:** `DataCustomizationsService::updatePlaybackCustomizations(Request\Data\UpdatePlaybackCustomizationsRequest): Result\Data\UpdatePlaybackCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/playback`; success 200. Supply a `Customizations\UpdatePlaybackCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's playback customizations. Only the
+fields supplied are changed; sending a field as null deletes it (reverting to
+the default).
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Playback Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-playback.md), pinned SHA-256 `cc8aa2a8c689eebd4203259d968fbd9dab3d7fe7d970a0f7f9b6ea090c31e37a`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdatePlaybackCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-thumbnail
+
+**API:** `DataCustomizationsService::showThumbnailCustomizations(Request\Data\ShowThumbnailCustomizationsRequest): Result\Data\ShowThumbnailCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/thumbnail`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set thumbnail customizations (still image URL, alt
+text, fit strategy, and the looping video thumbnail / text-overlay plugins)
+for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Thumbnail Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-thumbnail.md), pinned SHA-256 `652664ccc58eed2ed0b61c2f1c03cb6da108801b71afd5ff05ae78a6e2a28405`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowThumbnailCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-thumbnail
+
+**API:** `DataCustomizationsService::updateThumbnailCustomizations(Request\Data\UpdateThumbnailCustomizationsRequest): Result\Data\UpdateThumbnailCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/thumbnail`; success 200. Supply a `Customizations\UpdateThumbnailCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's thumbnail customizations. Only the
+fields supplied are changed; sending a field as null deletes it (reverting to
+the default).
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Thumbnail Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-thumbnail.md), pinned SHA-256 `2dd1a2ab081243d5f778e5b66b15014d34858a6c3ccf2178ee4609b9aae3637c`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateThumbnailCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-accessibility
+
+**API:** `DataCustomizationsService::showAccessibilityCustomizations(Request\Data\ShowAccessibilityCustomizationsRequest): Result\Data\ShowAccessibilityCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/accessibility`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set accessibility customizations (caption display and
+styling, transcript display, and audio description) for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Accessibility Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-accessibility.md), pinned SHA-256 `46ac246b9c66f2c3bb14dd26e8487832201a0a9117d743a3ba09efd02f9dea39`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowAccessibilityCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-accessibility
+
+**API:** `DataCustomizationsService::updateAccessibilityCustomizations(Request\Data\UpdateAccessibilityCustomizationsRequest): Result\Data\UpdateAccessibilityCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/accessibility`; success 200. Supply a `Customizations\UpdateAccessibilityCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's accessibility customizations. Only the
+fields supplied are changed; sending a field as null deletes it (reverting to
+the default).
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Accessibility Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-accessibility.md), pinned SHA-256 `af68b5b1d503daa50f8b4d6ede14765e3d5aae864290e181f7e8d8701b2ec9f7`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateAccessibilityCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-chapters
+
+**API:** `DataCustomizationsService::showChaptersCustomizations(Request\Data\ShowChaptersCustomizationsRequest): Result\Data\ShowChaptersCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/chapters`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set chapter customizations (the chapter list and its
+visibility) for the media.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Chapters Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-chapters.md), pinned SHA-256 `27c726d86705209e5971cebb1ec953becfd183590a7fe46b9634e2566035ce63`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowChaptersCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-chapters
+
+**API:** `DataCustomizationsService::updateChaptersCustomizations(Request\Data\UpdateChaptersCustomizationsRequest): Result\Data\UpdateChaptersCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/chapters`; success 200. Supply a `Customizations\UpdateChaptersCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a media's chapter customizations. Only the fields
+supplied are changed; sending a field as null deletes it.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Chapters Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-chapters.md), pinned SHA-256 `5456d573c7497e8783cf064e18ac57773f09e8884583fd2d81af1342b8733c57`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateChaptersCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-engagement
+
+**API:** `DataCustomizationsService::showEngagementCustomizations(Request\Data\ShowEngagementCustomizationsRequest): Result\Data\ShowEngagementCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/engagement`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set engagement customizations (the end/pause Call To
+Action and timed annotation links) for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Engagement Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-engagement.md), pinned SHA-256 `0926a2569f26d7faff2cbaa6a37ec5a7e516758cbf98b540c416eda130317197`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowEngagementCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-engagement
+
+**API:** `DataCustomizationsService::updateEngagementCustomizations(Request\Data\UpdateEngagementCustomizationsRequest): Result\Data\UpdateEngagementCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/engagement`; success 200. Supply a `Customizations\UpdateEngagementCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's engagement customizations. Only the
+fields supplied are changed; sending a field as null deletes it (reverting to
+the default).
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Engagement Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-engagement.md), pinned SHA-256 `69e7913e50c81f9d47ea4b5ffeff3cf99f4c06b6661ef53d29eb41ceb4774afa`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateEngagementCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-related-media
+
+**API:** `DataCustomizationsService::showRelatedMediaCustomizations(Request\Data\ShowRelatedMediaCustomizationsRequest): Result\Data\ShowRelatedMediaCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/related_media`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set related-media ("discover more") customizations
+(which videos to recommend, when to show them, label and button text) for
+the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Related Media Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-related-media.md), pinned SHA-256 `5aec6c354c7680d2d1668f624ecf95db0d6078c12435b6b7bdccf7c1d1f50e8d`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowRelatedMediaCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-related-media
+
+**API:** `DataCustomizationsService::updateRelatedMediaCustomizations(Request\Data\UpdateRelatedMediaCustomizationsRequest): Result\Data\UpdateRelatedMediaCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/related_media`; success 200. Supply a `Customizations\UpdateRelatedMediaCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's related-media customizations. Only the
+fields supplied are changed; sending a field as null deletes it (reverting to
+the default).
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Related Media Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-related-media.md), pinned SHA-256 `243e7fadee35b6ac1b329de8b08549c9a42998901ab66bb0a12579a8d2367cba`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateRelatedMediaCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-sharing
+
+**API:** `DataCustomizationsService::showSharingCustomizations(Request\Data\ShowSharingCustomizationsRequest): Result\Data\ShowSharingCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/sharing`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set sharing customizations (the social/embed/download
+share bar: enabled channels, tweet text, download type, and page URL/title)
+for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Sharing Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-sharing.md), pinned SHA-256 `a63d1fd4d89ded697ec72df10c75956fffec4bb88bf1e1c5ff51857de6ff69e7`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowSharingCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-sharing
+
+**API:** `DataCustomizationsService::updateSharingCustomizations(Request\Data\UpdateSharingCustomizationsRequest): Result\Data\UpdateSharingCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/sharing`; success 200. Supply a `Customizations\UpdateSharingCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's sharing customizations. Only the fields
+supplied are changed; sending a field as null deletes it (reverting to the
+default).
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Sharing Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-sharing.md), pinned SHA-256 `4f8e7102811e98869e3c8db1aae45543238444080e58dc9f86658fd19d60520a`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateSharingCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-lead-capture
+
+**API:** `DataCustomizationsService::showLeadCaptureCustomizations(Request\Data\ShowLeadCaptureCustomizationsRequest): Result\Data\ShowLeadCaptureCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/lead_capture`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set lead-capture plugins (Turnstile, Wistia Form, and
+HubSpot/Marketo/Pardot form embeds) for the video.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Lead Capture Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-lead-capture.md), pinned SHA-256 `6db77049661c9825e72dd7c9ef0771449ce82948dcc3309094bf339514154733`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowLeadCaptureCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-lead-capture
+
+**API:** `DataCustomizationsService::updateLeadCaptureCustomizations(Request\Data\UpdateLeadCaptureCustomizationsRequest): Result\Data\UpdateLeadCaptureCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/lead_capture`; success 200. Supply a `Customizations\UpdateLeadCaptureCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Configures a single lead-capture provider for the video, mapping it to the
+appropriate underlying plugin. Only the selected provider is changed.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Lead Capture Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-lead-capture.md), pinned SHA-256 `aae7382b4f0f60eff2d714510da037aef1a68f901fd4a9d0726cc8b148960906`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateLeadCaptureCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## get_medias-mediaid-customizations-access
+
+**API:** `DataCustomizationsService::showAccessCustomizations(Request\Data\ShowAccessCustomizationsRequest): Result\Data\ShowAccessCustomizationsResult`.
+
+**Wire:** `GET /medias/{mediaId}/customizations/access`; success 200. No request body. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Fetches the explicitly-set password-protection settings for the video,
+including the stored password.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this media can also be used; any permission granted on
+the media allows reading its customizations.
+
+**Source:** [Show Access Customizations](https://docs.wistia.com/reference/get_medias-mediaid-customizations-access.md), pinned SHA-256 `c2b308ea31b86db2feb1533b483d277a7d2472453c67a296fb57f5f1297d34aa`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/ShowAccessCustomizationsTest.php`; synthetic coverage is not live verification.
+
+## put_medias-mediaid-customizations-access
+
+**API:** `DataCustomizationsService::updateAccessCustomizations(Request\Data\UpdateAccessCustomizationsRequest): Result\Data\UpdateAccessCustomizationsResult`.
+
+**Wire:** `PUT /medias/{mediaId}/customizations/access`; success 200. Supply a `Customizations\UpdateAccessCustomizationsInput` as the request's `customizations` argument. Its public nested records preserve the source schema fields. Successful JSON is decoded into typed nested customization records. String-valued flags/numbers remain strings; omitted fields are tracked with `presentFields`.
+
+**Restrictions:**
+
+Applies a partial update to a video's password-protection settings. Only the
+fields supplied are changed; sending a field as null deletes it.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `edit` permission on this media can also be used.
+
+**Source:** [Update Access Customizations](https://docs.wistia.com/reference/put_medias-mediaid-customizations-access.md), pinned SHA-256 `6bd41c4cea29866c786a3f93e68f46bd57a4315a2061439e07268036ba0b9168`. See the [inventory](../rewrite/operations.json) for the retained field schemas and documented error statuses. Offline contract target: `tests/Contract/Data/UpdateAccessCustomizationsTest.php`; synthetic coverage is not live verification.

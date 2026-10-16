@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add 24 typed media customization operations with nested inputs/results, replacement and partial-update/null semantics, and offline contract coverage. ([#15](https://github.com/Automattic/wistia-php/issues/15))
+
 - Add 19 typed media lifecycle, tag, trim and deleted-media operations with nested results, local validation, lazy pagination, job handoff and move partial-error handling. ([#14](https://github.com/Automattic/wistia-php/issues/14))
 
 - Add raw-body SHA-256 webhook verification and verified typed batch parsing, retaining unknown payloads and sanitized local failures; document application-owned routing, processing, deduplication and ordering. ([#13](https://github.com/Automattic/wistia-php/issues/13))

@@ -1,0 +1,101 @@
+<?php
+declare(strict_types=1);
+
+namespace Automattic\Wistia\Customizations;
+
+/** Typed wire record; values remain strings where documented. */
+final readonly class ShowPlaybackCustomizationsData
+{
+    public function __construct(
+        #[\SensitiveParameter] public string|null $autoPlay,
+        #[\SensitiveParameter] public string|null $silentAutoPlay,
+        #[\SensitiveParameter] public string|null $muted,
+        #[\SensitiveParameter] public string|null $volume,
+        #[\SensitiveParameter] public string|null $controlsVisibleOnLoad,
+        #[\SensitiveParameter] public string|null $playButton,
+        #[\SensitiveParameter] public string|null $smallPlayButton,
+        #[\SensitiveParameter] public string|null $playbar,
+        #[\SensitiveParameter] public string|null $volumeControl,
+        #[\SensitiveParameter] public string|null $fullscreenButton,
+        #[\SensitiveParameter] public string|null $settingsControl,
+        #[\SensitiveParameter] public string|null $playbackRateControl,
+        #[\SensitiveParameter] public string|null $qualityControl,
+        #[\SensitiveParameter] public string|null $qualityMin,
+        #[\SensitiveParameter] public string|null $qualityMax,
+        #[\SensitiveParameter] public string|null $videoQuality,
+        #[\SensitiveParameter] public string|null $hls,
+        #[\SensitiveParameter] public string|null $endVideoBehavior,
+        #[\SensitiveParameter] public string|null $playsinline,
+        #[\SensitiveParameter] public string|null $playlistLoop,
+        #[\SensitiveParameter] public string|null $playlistLinks,
+        #[\SensitiveParameter] public string|null $playPauseNotifier,
+        #[\SensitiveParameter] public string|null $playSuspendedOffScreen,
+        #[\SensitiveParameter] public string|null $resumable,
+        #[\SensitiveParameter] public string|null $preload,
+        #[\SensitiveParameter] public string|null $time,
+        #[\SensitiveParameter] public string|null $keyMoments,
+        #[\SensitiveParameter] public string|null $fullscreenOnRotateToLandscape,
+        #[\SensitiveParameter] public string|null $fakeFullScreen,
+        #[\SensitiveParameter] public string|ShowPlaybackCustomizationsDataVideoFoam2|null $videoFoam,
+        #[\SensitiveParameter] public string|null $wmode,
+        #[\SensitiveParameter] public string|null $bpbTime,
+        #[\SensitiveParameter] public string|null $spherical,
+        #[\SensitiveParameter] public string|\stdClass|null $clickForSound,
+        #[\SensitiveParameter] public string|null $seo,
+        #[\SensitiveParameter] public string|null $doNotTrack,
+        #[\SensitiveParameter] public string|null $copyLinkAndThumbnailEnabled,
+        #[\SensitiveParameter] public string|null $email,
+        #[\SensitiveParameter] public string|null $googleAnalytics,
+        public array $presentFields,
+        /** Extensible source-defined properties only. */
+        #[\SensitiveParameter] public \stdClass $additionalFields,
+    ) {}
+    public static function fromWire(#[\SensitiveParameter] mixed $value): self
+    {
+        Shape::check($value, ['unevaluatedProperties' => false, 'type' => 'object', 'properties' => ['autoPlay' => ['type' => 'string'], 'silentAutoPlay' => ['type' => 'string'], 'muted' => ['type' => 'string'], 'volume' => ['type' => 'string'], 'controlsVisibleOnLoad' => ['type' => 'string'], 'playButton' => ['type' => 'string'], 'smallPlayButton' => ['type' => 'string'], 'playbar' => ['type' => 'string'], 'volumeControl' => ['type' => 'string'], 'fullscreenButton' => ['type' => 'string'], 'settingsControl' => ['type' => 'string'], 'playbackRateControl' => ['type' => 'string'], 'qualityControl' => ['type' => 'string'], 'qualityMin' => ['type' => 'string'], 'qualityMax' => ['type' => 'string'], 'videoQuality' => ['type' => 'string'], 'hls' => ['type' => 'string'], 'endVideoBehavior' => ['type' => 'string'], 'playsinline' => ['type' => 'string'], 'playlistLoop' => ['type' => 'string'], 'playlistLinks' => ['type' => 'string'], 'playPauseNotifier' => ['type' => 'string'], 'playSuspendedOffScreen' => ['type' => 'string'], 'resumable' => ['type' => 'string'], 'preload' => ['type' => 'string'], 'time' => ['type' => 'string'], 'keyMoments' => ['type' => 'string'], 'fullscreenOnRotateToLandscape' => ['type' => 'string'], 'fakeFullScreen' => ['type' => 'string'], 'videoFoam' => ['unevaluatedProperties' => false, 'anyOf' => [['type' => 'string'], ['type' => 'object', 'unevaluatedProperties' => false, 'properties' => ['minWidth' => ['type' => 'string'], 'maxWidth' => ['type' => 'string'], 'minHeight' => ['type' => 'string'], 'maxHeight' => ['type' => 'string']]]]], 'wmode' => ['type' => 'string'], 'bpbTime' => ['type' => 'string'], 'spherical' => ['type' => 'string'], 'clickForSound' => ['unevaluatedProperties' => false, 'oneOf' => [['type' => 'string'], ['type' => 'object', 'unevaluatedProperties' => true]]], 'seo' => ['type' => 'string'], 'doNotTrack' => ['type' => 'string'], 'copyLinkAndThumbnailEnabled' => ['type' => 'string'], 'email' => ['type' => 'string'], 'googleAnalytics' => ['type' => 'string']]]);
+        return new self(
+            property_exists($value, 'autoPlay') ? $value->{'autoPlay'} : null,
+            property_exists($value, 'silentAutoPlay') ? $value->{'silentAutoPlay'} : null,
+            property_exists($value, 'muted') ? $value->{'muted'} : null,
+            property_exists($value, 'volume') ? $value->{'volume'} : null,
+            property_exists($value, 'controlsVisibleOnLoad') ? $value->{'controlsVisibleOnLoad'} : null,
+            property_exists($value, 'playButton') ? $value->{'playButton'} : null,
+            property_exists($value, 'smallPlayButton') ? $value->{'smallPlayButton'} : null,
+            property_exists($value, 'playbar') ? $value->{'playbar'} : null,
+            property_exists($value, 'volumeControl') ? $value->{'volumeControl'} : null,
+            property_exists($value, 'fullscreenButton') ? $value->{'fullscreenButton'} : null,
+            property_exists($value, 'settingsControl') ? $value->{'settingsControl'} : null,
+            property_exists($value, 'playbackRateControl') ? $value->{'playbackRateControl'} : null,
+            property_exists($value, 'qualityControl') ? $value->{'qualityControl'} : null,
+            property_exists($value, 'qualityMin') ? $value->{'qualityMin'} : null,
+            property_exists($value, 'qualityMax') ? $value->{'qualityMax'} : null,
+            property_exists($value, 'videoQuality') ? $value->{'videoQuality'} : null,
+            property_exists($value, 'hls') ? $value->{'hls'} : null,
+            property_exists($value, 'endVideoBehavior') ? $value->{'endVideoBehavior'} : null,
+            property_exists($value, 'playsinline') ? $value->{'playsinline'} : null,
+            property_exists($value, 'playlistLoop') ? $value->{'playlistLoop'} : null,
+            property_exists($value, 'playlistLinks') ? $value->{'playlistLinks'} : null,
+            property_exists($value, 'playPauseNotifier') ? $value->{'playPauseNotifier'} : null,
+            property_exists($value, 'playSuspendedOffScreen') ? $value->{'playSuspendedOffScreen'} : null,
+            property_exists($value, 'resumable') ? $value->{'resumable'} : null,
+            property_exists($value, 'preload') ? $value->{'preload'} : null,
+            property_exists($value, 'time') ? $value->{'time'} : null,
+            property_exists($value, 'keyMoments') ? $value->{'keyMoments'} : null,
+            property_exists($value, 'fullscreenOnRotateToLandscape') ? $value->{'fullscreenOnRotateToLandscape'} : null,
+            property_exists($value, 'fakeFullScreen') ? $value->{'fakeFullScreen'} : null,
+            property_exists($value, 'videoFoam') ? ($value->{'videoFoam'} instanceof \stdClass ? ShowPlaybackCustomizationsDataVideoFoam2::fromWire($value->{'videoFoam'}) : $value->{'videoFoam'}) : null,
+            property_exists($value, 'wmode') ? $value->{'wmode'} : null,
+            property_exists($value, 'bpbTime') ? $value->{'bpbTime'} : null,
+            property_exists($value, 'spherical') ? $value->{'spherical'} : null,
+            property_exists($value, 'clickForSound') ? $value->{'clickForSound'} : null,
+            property_exists($value, 'seo') ? $value->{'seo'} : null,
+            property_exists($value, 'doNotTrack') ? $value->{'doNotTrack'} : null,
+            property_exists($value, 'copyLinkAndThumbnailEnabled') ? $value->{'copyLinkAndThumbnailEnabled'} : null,
+            property_exists($value, 'email') ? $value->{'email'} : null,
+            property_exists($value, 'googleAnalytics') ? $value->{'googleAnalytics'} : null,
+            array_keys(get_object_vars($value)),
+            (object) array_diff_key(get_object_vars($value), array_flip(['autoPlay', 'silentAutoPlay', 'muted', 'volume', 'controlsVisibleOnLoad', 'playButton', 'smallPlayButton', 'playbar', 'volumeControl', 'fullscreenButton', 'settingsControl', 'playbackRateControl', 'qualityControl', 'qualityMin', 'qualityMax', 'videoQuality', 'hls', 'endVideoBehavior', 'playsinline', 'playlistLoop', 'playlistLinks', 'playPauseNotifier', 'playSuspendedOffScreen', 'resumable', 'preload', 'time', 'keyMoments', 'fullscreenOnRotateToLandscape', 'fakeFullScreen', 'videoFoam', 'wmode', 'bpbTime', 'spherical', 'clickForSound', 'seo', 'doNotTrack', 'copyLinkAndThumbnailEnabled', 'email', 'googleAnalytics'])),
+        );
+    }
+    public function __debugInfo(): array { return []; }
+}
