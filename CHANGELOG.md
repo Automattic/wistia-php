@@ -4,6 +4,7 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add raw-body SHA-256 webhook verification and verified typed batch parsing, retaining unknown payloads and sanitized local failures; document application-owned routing, processing, deduplication and ordering. ([#13](https://github.com/Automattic/wistia-php/issues/13))
 - Add typed OAuth authorization-URL, code-exchange and explicit refresh helpers with sanitized token/grant failures and application-owned callback/persistence boundaries. ([#12](https://github.com/Automattic/wistia-php/issues/12))
 - Add bounded offset, Data-cursor (including webinar registrations), and Analytics-cursor traversal with lazy/individual-page access, preserved filters/order, and cycle/exhaustion errors. ([#11](https://github.com/Automattic/wistia-php/issues/11))
 - Add typed background-job status reads and finite optional polling that exposes failed/partial bulk outcomes; stopping local polling never cancels remote work. Offline Contract tests join default discovery without enabling legacy tests. ([#11](https://github.com/Automattic/wistia-php/issues/11))
