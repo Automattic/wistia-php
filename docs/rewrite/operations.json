@@ -6742,6 +6742,11 @@
     },
     {
       "id": "get_folders",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folders",
       "title": "List Folders",
@@ -6906,6 +6911,11 @@
     },
     {
       "id": "post_folders",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folders",
       "title": "Create Folder",
@@ -6979,6 +6989,11 @@
     },
     {
       "id": "get_folders-id",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folders",
       "title": "Show Folder",
@@ -7060,6 +7075,11 @@
     },
     {
       "id": "put_folders-id",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folders",
       "title": "Update Folder",
@@ -7153,6 +7173,11 @@
     },
     {
       "id": "delete_folders-id",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folders",
       "title": "Delete Folder",
@@ -7242,6 +7267,11 @@
     },
     {
       "id": "post_folders-id-copy",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folders",
       "title": "Copy Folder",
@@ -7327,6 +7357,11 @@
     },
     {
       "id": "get_folders-folderid-sharings",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folder Sharings",
       "title": "List Folder Sharings",
@@ -7504,6 +7539,11 @@
     },
     {
       "id": "post_folders-folderid-sharings",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folder Sharings",
       "title": "Create Folder Sharing",
@@ -7605,6 +7645,11 @@
     },
     {
       "id": "get_folders-folderid-sharings-sharingid",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folder Sharings",
       "title": "Show Folder Sharing",
@@ -7696,6 +7741,11 @@
     },
     {
       "id": "put_folders-folderid-sharings-sharingid",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folder Sharings",
       "title": "Update Folder Sharing",
@@ -7798,6 +7848,11 @@
     },
     {
       "id": "delete_folders-folderid-sharings-sharingid",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Folder Sharings",
       "title": "Delete Folder Sharing",
@@ -7897,6 +7952,11 @@
     },
     {
       "id": "get_folders-folderid-subfolders",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Subfolders",
       "title": "List Subfolders",
@@ -8083,6 +8143,11 @@
     },
     {
       "id": "post_folders-folderid-subfolders",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Subfolders",
       "title": "Create Subfolder",
@@ -8183,6 +8248,11 @@
     },
     {
       "id": "get_folders-folderid-subfolders-subfolderid",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Subfolders",
       "title": "Show Subfolder",
@@ -8284,6 +8354,11 @@
     },
     {
       "id": "put_folders-folderid-subfolders-subfolderid",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Subfolders",
       "title": "Update Subfolder",
@@ -8386,6 +8461,11 @@
     },
     {
       "id": "delete_folders-folderid-subfolders-subfolderid",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Subfolders",
       "title": "Delete Subfolder",
@@ -8484,6 +8564,11 @@
     },
     {
       "id": "delete_folders-folderid-subfolders-bulk-delete",
+      "delivery": {
+        "status": "implemented-offline",
+        "issue": 17,
+        "live_verified": false
+      },
       "family": "Data",
       "group": "Subfolders",
       "title": "Bulk Delete Subfolders",

@@ -1812,3 +1812,488 @@ authorization naming the order's media (any permission) can also be
 used.
 
 **Source:** [Get Order Status](https://docs.wistia.com/reference/get_media-extended-audio-descriptions-order-status-id.md), pinned SHA-256 `020fa38e86fed55c47f9d30712472fe4cb3eddc669a730eec5098692aaf7812c`. See the [inventory](../rewrite/operations.json) for exact schemas, limits and error statuses. Offline contract: `tests/Contract/Data/GetOrderStatusTest.php`; behavioral edge cases: `tests/Contract/Data/AccessibilityBehaviorTest.php`.
+
+
+## Folders, sharing and subfolders
+
+P09 implements the following 17 operations with typed nested results and offline synthetic contracts. See the [usage guide](../folders.md) for inputs, pagination, job handoff and safety restrictions. No live verification is claimed.
+
+## get_folders
+
+**API:** `DataFoldersService::listFolders(Request\Data\ListFoldersRequest): Result\Data\ListFoldersResult`.
+
+**Wire:** `GET /folders`; success 200; Bearer authentication and API version `2026-09`. Supports offset or nested record-cursor pagination, with filters and sorting preserved.
+
+**Restrictions:**
+
+Lists folders (previously called projects) belonging to the account.
+My Library folders are not included.
+
+For tokens scoped to a specific user (`all:delegate_to_contact_permissions`),
+results are limited to folders that user can see in their content library:
+folders shared with them directly, through a contact group, or with the
+whole account (owners and managers see every folder). Public (unlocked)
+folders the user has no sharing on remain viewable by link but are not
+listed.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope can also be
+used. Results are limited to the folders its authorizations name (any
+permission granted on a folder qualifies it), filtered as they would be
+for the contact the token was created for.
+
+**Source:** [List Folders](https://docs.wistia.com/reference/get_folders.md), pinned SHA-256 `98a840809dc0156d03bf707eb5a97223d5beac9c60b97aaf398c67935b197dd6`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListFoldersTest.php`; synthetic coverage is not live verification.
+
+## post_folders
+
+**API:** `DataFoldersService::createFolder(Request\Data\CreateFolderRequest): Result\Data\CreateFolderResult`.
+
+**Wire:** `POST /folders`; success 201; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Creates a new folder (previously called project). If the folder is created successfully the Location HTTP header will point to the new folder.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `create-folders` permission can also
+be used. The folder's creator is the contact behind the token (the account
+owner for a token minted from an account-level token); `adminEmail` selects
+the folder's administrator (defaults to the account owner). `personalLibrary`
+creates the folder inside the My Library of the contact behind the token.
+The new folder is not covered by the token that created it, so follow-up
+requests need a token whose authorizations name the returned hashed id.
+
+**Source:** [Create Folder](https://docs.wistia.com/reference/post_folders.md), pinned SHA-256 `b1a6d94516fb04fc68e51340d508bad46c646428e35e04379068509b20173463`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateFolderTest.php`; synthetic coverage is not live verification.
+
+## get_folders-id
+
+**API:** `DataFoldersService::showFolder(Request\Data\ShowFolderRequest): Result\Data\ShowFolderResult`.
+
+**Wire:** `GET /folders/{id}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Retrieves a single folder (previously called project).
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization for this folder can also be used; any permission granted on a
+folder allows showing it.
+
+**Source:** [Show Folder](https://docs.wistia.com/reference/get_folders-id.md), pinned SHA-256 `42dfaba4f7c82865051de57ba582af3024cd729652ec6aa91bfd24a1f7ed7168`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowFolderTest.php`; synthetic coverage is not live verification.
+
+## put_folders-id
+
+**API:** `DataFoldersService::updateFolder(Request\Data\UpdateFolderRequest): Result\Data\UpdateFolderResult`.
+
+**Wire:** `PUT /folders/{id}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Updates a folder (previously called project)
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this folder can also be
+used. The `update` permission also allows creating, renaming and deleting
+the folder's subfolders and using the folder as the destination when
+moving or bulk-copying media the token may update.
+
+**Source:** [Update Folder](https://docs.wistia.com/reference/put_folders-id.md), pinned SHA-256 `32077c582364d6192551e2dde483bbe407aacb9350985bb613b66e529f208982`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateFolderTest.php`; synthetic coverage is not live verification.
+
+## delete_folders-id
+
+**API:** `DataFoldersService::deleteFolder(Request\Data\DeleteFolderRequest): Result\Data\DeleteFolderResult`.
+
+**Wire:** `DELETE /folders/{id}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Deletes a folder (previously called project) and the media inside it.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `destroy` permission on this folder can also be
+used.
+
+**Source:** [Delete Folder](https://docs.wistia.com/reference/delete_folders-id.md), pinned SHA-256 `7775c4334d6437a3bb12d6e70b5a2b5e449f36820ce0edaf5fe8b39d7c821391`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteFolderTest.php`; synthetic coverage is not live verification.
+
+## post_folders-id-copy
+
+**API:** `DataFoldersService::copyFolder(Request\Data\CopyFolderRequest): Result\Data\CopyFolderResult`.
+
+**Wire:** `POST /folders/{id}/copy`; success 202; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+This copies a folder (previously called project) and all its media and subfolders asynchronously in a background job.
+
+This method does not copy the folder’s sharing information (i.e. users that could see the old folder will not automatically be able to see the new one).
+
+For the request you can specify the owner of a new folder by passing an optional parameter. The person you specify must be a Manager in the account.
+
+The body of the response will contain an object representing the background job that was created.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+**Source:** [Copy Folder](https://docs.wistia.com/reference/post_folders-id-copy.md), pinned SHA-256 `aba2c59f8062245fffe873fb20e02d2d719fcc7734c12376e91c8bd5b8c37ff7`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CopyFolderTest.php`; synthetic coverage is not live verification.
+
+## get_folders-folderid-sharings
+
+**API:** `DataFolderSharingsService::listFolderSharings(Request\Data\ListFolderSharingsRequest): Result\Data\ListFolderSharingsResult`.
+
+**Wire:** `GET /folders/{folderId}/sharings`; success 200; Bearer authentication and API version `2026-09`. Supports offset or nested record-cursor pagination, with filters and sorting preserved.
+
+**Restrictions:**
+
+Lists the sharings of contacts and contact groups on a folder.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this folder (any permission) can also be used; it
+lists the folder's sharings.
+
+**Source:** [List Folder Sharings](https://docs.wistia.com/reference/get_folders-folderid-sharings.md), pinned SHA-256 `faecaad4061a85fc3d36df12ccf5407f451cdbd6b3e5abf7f40a2cd98118fe0d`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListFolderSharingsTest.php`; synthetic coverage is not live verification.
+
+## post_folders-folderid-sharings
+
+**API:** `DataFolderSharingsService::createFolderSharing(Request\Data\CreateFolderSharingRequest): Result\Data\CreateFolderSharingResult`.
+
+**Wire:** `POST /folders/{folderId}/sharings`; success 201; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Creates a new sharing object for a folder by specifying the email of the person to share with and other optional parameters.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `share` permission on this folder can also
+be used.
+
+**Source:** [Create Folder Sharing](https://docs.wistia.com/reference/post_folders-folderid-sharings.md), pinned SHA-256 `2a4e6d80a9a57af5e2004663c4beabba82906a024691fde6bc9ad59c1b1d288d`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateFolderSharingTest.php`; synthetic coverage is not live verification.
+
+## get_folders-folderid-sharings-sharingid
+
+**API:** `DataFolderSharingsService::showFolderSharing(Request\Data\ShowFolderSharingRequest): Result\Data\ShowFolderSharingResult`.
+
+**Wire:** `GET /folders/{folderId}/sharings/{sharingId}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Retrieves the details of a specific sharing object for a given folder.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this folder (any permission) can also be used.
+
+**Source:** [Show Folder Sharing](https://docs.wistia.com/reference/get_folders-folderid-sharings-sharingid.md), pinned SHA-256 `bc295d14c8feb76101523943bcc55b59e1a43b71eb7e593d6270d3b647a74d72`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowFolderSharingTest.php`; synthetic coverage is not live verification.
+
+## put_folders-folderid-sharings-sharingid
+
+**API:** `DataFolderSharingsService::updateFolderSharing(Request\Data\UpdateFolderSharingRequest): Result\Data\UpdateFolderSharingResult`.
+
+**Wire:** `PUT /folders/{folderId}/sharings/{sharingId}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Updates a sharing on a folder.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this folder can also
+be used.
+
+**Source:** [Update Folder Sharing](https://docs.wistia.com/reference/put_folders-folderid-sharings-sharingid.md), pinned SHA-256 `cce80ecaed603d93523dd9416e2f5a6b3abe3f61988509f766b300c596616b8a`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateFolderSharingTest.php`; synthetic coverage is not live verification.
+
+## delete_folders-folderid-sharings-sharingid
+
+**API:** `DataFolderSharingsService::deleteFolderSharing(Request\Data\DeleteFolderSharingRequest): Result\Data\DeleteFolderSharingResult`.
+
+**Wire:** `DELETE /folders/{folderId}/sharings/{sharingId}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Deletes a sharing on a folder.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this folder can also
+be used.
+
+**Source:** [Delete Folder Sharing](https://docs.wistia.com/reference/delete_folders-folderid-sharings-sharingid.md), pinned SHA-256 `95ac057931e7dcafff06a7cd2a5a75b23e4e156c4740d9ecd670c8c58d63f30d`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteFolderSharingTest.php`; synthetic coverage is not live verification.
+
+## get_folders-folderid-subfolders
+
+**API:** `DataSubfoldersService::listSubfolders(Request\Data\ListSubfoldersRequest): Result\Data\ListSubfoldersResult`.
+
+**Wire:** `GET /folders/{folderId}/subfolders`; success 200; Bearer authentication and API version `2026-09`. Supports offset or nested record-cursor pagination, with filters and sorting preserved.
+
+**Restrictions:**
+
+Lists subfolders in a specific folder.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this folder (any permission) can also be used; it
+lists the folder's subfolders.
+
+**Source:** [List Subfolders](https://docs.wistia.com/reference/get_folders-folderid-subfolders.md), pinned SHA-256 `40f58db2f98239e4d96594e47d9b8b6d98826f5f3a457b3cb0861720a8fb98ca`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListSubfoldersTest.php`; synthetic coverage is not live verification.
+
+## post_folders-folderid-subfolders
+
+**API:** `DataSubfoldersService::createSubfolder(Request\Data\CreateSubfolderRequest): Result\Data\CreateSubfolderResult`.
+
+**Wire:** `POST /folders/{folderId}/subfolders`; success 201; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Creates a new subfolder within a folder. The subfolder will be created with the next available position.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this folder can also
+be used.
+
+**Source:** [Create Subfolder](https://docs.wistia.com/reference/post_folders-folderid-subfolders.md), pinned SHA-256 `8b77cf4dbd5adedea40caa1cd8e8969b30ee6f3653b6610733e5d7a02c1218d2`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateSubfolderTest.php`; synthetic coverage is not live verification.
+
+## get_folders-folderid-subfolders-subfolderid
+
+**API:** `DataSubfoldersService::showSubfolder(Request\Data\ShowSubfolderRequest): Result\Data\ShowSubfolderResult`.
+
+**Wire:** `GET /folders/{folderId}/subfolders/{subfolderId}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Retrieves detailed information about a specific subfolder, including all media contained within it.
+
+## Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this folder (any permission) can also be used. The
+embedded media are limited to those the token's authorizations name.
+
+**Source:** [Show Subfolder](https://docs.wistia.com/reference/get_folders-folderid-subfolders-subfolderid.md), pinned SHA-256 `cb4f5390685b6b12c95dd04945df79ba5e89cd40113122998c9e9dade77d3a71`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowSubfolderTest.php`; synthetic coverage is not live verification.
+
+## put_folders-folderid-subfolders-subfolderid
+
+**API:** `DataSubfoldersService::updateSubfolder(Request\Data\UpdateSubfolderRequest): Result\Data\UpdateSubfolderResult`.
+
+**Wire:** `PUT /folders/{folderId}/subfolders/{subfolderId}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Updates a subfolder's name and/or description.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this folder can also
+be used.
+
+**Source:** [Update Subfolder](https://docs.wistia.com/reference/put_folders-folderid-subfolders-subfolderid.md), pinned SHA-256 `403331269675c5a494d439e9803f7e038a58bd94f81a9c6595ee26f4d4fb0c85`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateSubfolderTest.php`; synthetic coverage is not live verification.
+
+## delete_folders-folderid-subfolders-subfolderid
+
+**API:** `DataSubfoldersService::deleteSubfolder(Request\Data\DeleteSubfolderRequest): Result\Data\DeleteSubfolderResult`.
+
+**Wire:** `DELETE /folders/{folderId}/subfolders/{subfolderId}`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Deletes one subfolder and moves its media to the folder's root level. The subfolder is soft-deleted and is no longer accessible via the API. To delete multiple subfolders and their media, use the Bulk Delete Subfolders endpoint.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this folder can also
+be used.
+
+**Source:** [Delete Subfolder](https://docs.wistia.com/reference/delete_folders-folderid-subfolders-subfolderid.md), pinned SHA-256 `4cbbe57067801bf82bcc06bb4cd46822d23594fd8c7cdfcd6496f628830eecd9`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteSubfolderTest.php`; synthetic coverage is not live verification.
+
+## delete_folders-folderid-subfolders-bulk-delete
+
+**API:** `DataSubfoldersService::bulkDeleteSubfolders(Request\Data\BulkDeleteSubfoldersRequest): Result\Data\BulkDeleteSubfoldersResult`.
+
+**Wire:** `DELETE /folders/{folderId}/subfolders/bulk_delete`; success 200; Bearer authentication and API version `2026-09`. No pagination is documented for this operation.
+
+**Restrictions:**
+
+Deletes multiple subfolders asynchronously. Their media is also soft-deleted and can be restored from the trash by an account owner or manager until it is purged. To keep the media, use the Delete Subfolder endpoint, which moves it to the folder's root level.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this folder can also
+be used.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on the folder can also be
+used.
+
+**Source:** [Bulk Delete Subfolders](https://docs.wistia.com/reference/delete_folders-folderid-subfolders-bulk-delete.md), pinned SHA-256 `4f0c7f4bee803583c4720863365ffa02748466972989ab5490594ae07b720130`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/BulkDeleteSubfoldersTest.php`; synthetic coverage is not live verification.

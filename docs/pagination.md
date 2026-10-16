@@ -1,6 +1,6 @@
 # Pagination and background jobs
 
-These helpers implement bounded remote traversal for PHP applications. P06's [media services](media.md) supply typed list methods and lazy pagination companions for media, tags and deleted media; other resource-list endpoints remain planned. Construct services directly around the [shared Client](foundation.md); no magic dispatch or legacy compatibility is provided.
+These helpers implement bounded remote traversal for PHP applications. P06's [media services](media.md) supply typed list methods and lazy pagination companions for media, tags and deleted media; P09's [folder services](folders.md) add lazy pagination companions for folders, folder sharings and subfolders. Other unmarked resource-list endpoints remain planned. Construct services directly around the [shared Client](foundation.md); no magic dispatch or legacy compatibility is provided.
 
 ## Pagination reference
 

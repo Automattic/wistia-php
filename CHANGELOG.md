@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add 17 typed folder, sharing and subfolder operations with nested results, lazy pagination, asynchronous copy/bulk-delete job handoff and offline contract coverage. ([#17](https://github.com/Automattic/wistia-php/issues/17))
+
 - Add 16 typed caption, speaker, existing-localization and audio-description operations with text formats, atomic versioned edits, lazy pagination and offline contract coverage; purchases and generation remain excluded. ([#16](https://github.com/Automattic/wistia-php/issues/16))
 
 - Add 24 typed media customization operations with nested inputs/results, replacement and partial-update/null semantics, and offline contract coverage. ([#15](https://github.com/Automattic/wistia-php/issues/15))
