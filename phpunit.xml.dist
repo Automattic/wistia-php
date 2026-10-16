@@ -4,6 +4,9 @@
         <testsuite name="offline">
             <directory suffix="Test.php">tests/Offline</directory>
         </testsuite>
+        <testsuite name="contract">
+            <directory suffix="Test.php">tests/Contract</directory>
+        </testsuite>
     </testsuites>
     <source><include><directory suffix=".php">src</directory></include></source>
 </phpunit>

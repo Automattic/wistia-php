@@ -1,5 +1,5 @@
 {
-  "status": "P01 planned downstream contracts; no endpoint implementation or endpoint tests delivered",
+  "status": "P01 contract inventory; explicit per-operation delivery markers identify implemented offline coverage, other targets remain planned",
   "provenance": {
     "catalog_url": "https://docs.wistia.com/llms.txt",
     "checked_on": "2026-10-15",
@@ -12223,6 +12223,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ShowBackgroundJobStatusResult",
         "documentation_target": "docs/reference/data.md#get_background-job-status-backgroundjobstatusid",
         "contract_test_target": "tests/Contract/Data/ShowBackgroundJobStatusTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
