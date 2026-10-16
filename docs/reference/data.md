@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, and P08's 16 captions/accessibility operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, and P10's 16 channel/collaborator/episode operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -2297,3 +2297,468 @@ authorization granting the `update` permission on the folder can also be
 used.
 
 **Source:** [Bulk Delete Subfolders](https://docs.wistia.com/reference/delete_folders-folderid-subfolders-bulk-delete.md), pinned SHA-256 `4f0c7f4bee803583c4720863365ffa02748466972989ab5490594ae07b720130`. Full request/response schemas and error statuses remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/BulkDeleteSubfoldersTest.php`; synthetic coverage is not live verification.
+
+## Channels, collaborators and episodes
+
+P10 implements these 16 operations offline. See the [channel guide](../channels.md) for inputs/results, scheduling, null semantics, pagination and safety. All requests use the modern Data host and version `2026-09`; all success bodies are JSON. No live access or plan entitlement is verified.
+
+## get_channels
+
+**API:** `DataChannelsService::listChannels(Request\Data\ListChannelsRequest): Result\Data\ListChannelsResult`.
+
+**Wire:** `GET /channels`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: list<Channels\Channel>` and `status`.
+
+**Inputs:** `cursor` (query/path, optional), `page` (query/path, optional), `per_page` (query/path, optional), `sort_by` (query/path, optional), `sort_direction` (query/path, optional), `hashed_ids[]` (query/path, optional).
+
+Individual pages and `paginateChannels` support offset/nested Data cursors; preserve parent IDs, filters, sorting and direction. See the channel guide for endpoint-specific cursor-sort restrictions.
+
+**Restrictions:**
+
+Lists all Channels belonging to an account. This endpoint can also be used to
+do a batch fetch based off of the hashed id.
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming a channel (any permission) can also be used; it
+lists the channels the token names.
+
+
+**Source:** [List Channels](https://docs.wistia.com/reference/get_channels.md), pinned SHA-256 `9bcb2b430b828ca5fb45e58e808c8b59511ddba2e30bb93dc91c99af56ca9dea`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListChannelsTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## post_channels
+
+**API:** `DataChannelsService::createChannel(Request\Data\CreateChannelRequest): Result\Data\CreateChannelResult`.
+
+**Wire:** `POST /channels`; success **201**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\Channel` and `status`.
+
+**Inputs:** `name` (JSON body, optional), `description` (JSON body, optional), `auto_publish_enabled` (JSON body, optional), `podcast_enabled` (JSON body, optional), `custom_url` (JSON body, optional), `podcast_settings` (JSON body, optional).
+
+**Restrictions:**
+
+Creates a channel.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `create-channels` permission on the account
+can also be used.
+
+
+**Source:** [Create Channel](https://docs.wistia.com/reference/post_channels.md), pinned SHA-256 `5b317f0b7859b1de56d6daf8ab20b8d956601d8c3483f51f3360a1a034b4a903`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateChannelTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_channels-channelhashedid
+
+**API:** `DataChannelsService::showChannel(Request\Data\ShowChannelRequest): Result\Data\ShowChannelResult`.
+
+**Wire:** `GET /channels/{channelHashedId}`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\Channel` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required).
+
+**Restrictions:**
+
+Returns the Channel associated with the hashedId.
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this channel (any permission) can also be used.
+
+
+**Source:** [Show Channel](https://docs.wistia.com/reference/get_channels-channelhashedid.md), pinned SHA-256 `eea851333f53c9f8bb7dd173cf62250d0ec7cbbb871859a108e7bd66ab4abf6a`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowChannelTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## put_channels-channelhashedid
+
+**API:** `DataChannelsService::updateChannel(Request\Data\UpdateChannelRequest): Result\Data\UpdateChannelResult`.
+
+**Wire:** `PUT /channels/{channelHashedId}`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\Channel` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required), `name` (JSON body, optional), `description` (JSON body, optional), `auto_publish_enabled` (JSON body, optional), `podcast_enabled` (JSON body, optional), `custom_url` (JSON body, optional), `podcast_settings` (JSON body, optional).
+
+**Restrictions:**
+
+Updates a channel.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this channel can also
+be used. The `update` permission also allows managing the channel's
+episodes and collaborators.
+
+
+**Source:** [Update Channel](https://docs.wistia.com/reference/put_channels-channelhashedid.md), pinned SHA-256 `06d5e1d1d9a8ed4844aa18a9c2a527744e28ad9ee8224041b3f4160015b507b6`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateChannelTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## delete_channels-channelhashedid
+
+**API:** `DataChannelsService::deleteChannel(Request\Data\DeleteChannelRequest): Result\Data\DeleteChannelResult`.
+
+**Wire:** `DELETE /channels/{channelHashedId}`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\Channel` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required).
+
+**Restrictions:**
+
+Deletes a channel.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `destroy` permission on this channel can also
+be used.
+
+
+**Source:** [Delete Channel](https://docs.wistia.com/reference/delete_channels-channelhashedid.md), pinned SHA-256 `119ad3220ab04168cc64e9f1d5bb9608bfd79bf25d0bb46cd395696417083d50`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteChannelTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_channels-channelhashedid-collaborators
+
+**API:** `DataChannelCollaboratorsService::listChannelCollaborators(Request\Data\ListChannelCollaboratorsRequest): Result\Data\ListChannelCollaboratorsResult`.
+
+**Wire:** `GET /channels/{channelHashedId}/collaborators`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: list<Channels\ChannelCollaborator>` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required), `page` (query/path, optional), `per_page` (query/path, optional), `cursor` (query/path, optional), `sort_by` (query/path, optional), `sort_direction` (query/path, optional).
+
+Individual pages and `paginateChannelCollaborators` support offset/nested Data cursors; preserve parent IDs, filters, sorting and direction. See the channel guide for endpoint-specific cursor-sort restrictions.
+
+**Restrictions:**
+
+Lists the collaborators (contacts and contact groups) that have been granted access to a channel.
+
+Results are scoped to what the authenticated user is allowed to see: account owners and managers see all collaborators, channel admins see all collaborators on their channels, and everyone else sees only the roles that grant them access.
+
+### Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this channel can also
+be used; a token granted only `show` on the channel lists no
+collaborators.
+
+
+**Source:** [List Channel Collaborators](https://docs.wistia.com/reference/get_channels-channelhashedid-collaborators.md), pinned SHA-256 `6afb3a6d4d9f0dc246b82646fdfec081215071967228bdcecbb57793fb235170`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListChannelCollaboratorsTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## post_channels-channelhashedid-collaborators
+
+**API:** `DataChannelCollaboratorsService::createChannelCollaborator(Request\Data\CreateChannelCollaboratorRequest): Result\Data\CreateChannelCollaboratorResult`.
+
+**Wire:** `POST /channels/{channelHashedId}/collaborators`; success **201**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelCollaborator` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required), `email` (JSON body, required), `role` (JSON body, required).
+
+**Restrictions:**
+
+Invites a collaborator to a channel by specifying their email address and role. Creates a new contact if one doesn't exist with that email.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this channel can also
+be used.
+
+
+**Source:** [Create Channel Collaborator](https://docs.wistia.com/reference/post_channels-channelhashedid-collaborators.md), pinned SHA-256 `bbdbd6197f8a6a4b0fb78d11d08a8ea782719993ed1856d5399b082ad7bb826e`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateChannelCollaboratorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## delete_channels-channelhashedid-collaborators-id
+
+**API:** `DataChannelCollaboratorsService::deleteChannelCollaborator(Request\Data\DeleteChannelCollaboratorRequest): Result\Data\DeleteChannelCollaboratorResult`.
+
+**Wire:** `DELETE /channels/{channelHashedId}/collaborators/{id}`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelCollaborator` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required), `id` (query/path, required).
+
+**Restrictions:**
+
+Removes a collaborator's access to a channel.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this channel can also
+be used.
+
+
+**Source:** [Delete Channel Collaborator](https://docs.wistia.com/reference/delete_channels-channelhashedid-collaborators-id.md), pinned SHA-256 `39f61497d446377e45530bf3406ce2e85b2a6d186bbbc1e8006c6da4236c1681`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteChannelCollaboratorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_channels-channelhashedid-channel-episodes-channelepisodeid
+
+**API:** `DataChannelEpisodesService::showChannelEpisode(Request\Data\ShowChannelEpisodeRequest): Result\Data\ShowChannelEpisodeResult`.
+
+**Wire:** `GET /channels/{channelHashedId}/channel_episodes/{channelEpisodeId}`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelEpisode` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required), `channelEpisodeId` (query/path, required).
+
+**Restrictions:**
+
+Returns the Channel Episode associated with a channel hashed id
+and channel episode hashed id.
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming the episode's channel (any permission) can also be
+used.
+
+
+**Source:** [Show Channel Episode](https://docs.wistia.com/reference/get_channels-channelhashedid-channel-episodes-channelepisodeid.md), pinned SHA-256 `fcec866fe7d86310994bf2b48c4511c2312d3a75c9adb799115ac378e7213950`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowChannelEpisodeTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_channels-channelhashedid-channel-episodes
+
+**API:** `DataChannelEpisodesService::listChannelEpisodesByChannel(Request\Data\ListChannelEpisodesByChannelRequest): Result\Data\ListChannelEpisodesByChannelResult`.
+
+**Wire:** `GET /channels/{channelHashedId}/channel_episodes`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: list<Channels\ChannelEpisode>` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required), `sort_by` (query/path, optional), `sort_direction` (query/path, optional), `page` (query/path, optional), `per_page` (query/path, optional), `cursor` (query/path, optional), `media_id[]` (query/path, optional), `hashed_ids[]` (query/path, optional), `published` (query/path, optional), `title` (query/path, optional).
+
+Individual pages and `paginateChannelEpisodesByChannel` support offset/nested Data cursors; preserve parent IDs, filters, sorting and direction. See the channel guide for endpoint-specific cursor-sort restrictions.
+
+**Restrictions:**
+
+Lists Channel Episodes belonging to the channel passed in the path.
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming a channel (any permission) can also be used; it
+lists the episodes of the channels the token names.
+
+
+**Source:** [List Channel Episodes by Channel](https://docs.wistia.com/reference/get_channels-channelhashedid-channel-episodes.md), pinned SHA-256 `3dc6577361084aed2583b8d995be115cbae02f39b5fa08e36a045908466a0aec`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListChannelEpisodesByChannelTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## post_channels-channelhashedid-channel-episodes
+
+**API:** `DataChannelEpisodesService::createChannelEpisode(Request\Data\CreateChannelEpisodeRequest): Result\Data\CreateChannelEpisodeResult`.
+
+**Wire:** `POST /channels/{channelHashedId}/channel_episodes`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelEpisode` and `status`.
+
+**Inputs:** `channelHashedId` (query/path, required), `media_id` (JSON body, optional), `title` (JSON body, optional), `description` (JSON body, optional), `summary` (JSON body, optional), `publish_status` (JSON body, optional), `publish_at` (JSON body, optional), `podcast_settings` (JSON body, optional).
+
+**Restrictions:**
+
+Creates a new channel episode in a channel.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this channel can also
+be used.
+
+
+**Source:** [Create Channel Episode](https://docs.wistia.com/reference/post_channels-channelhashedid-channel-episodes.md), pinned SHA-256 `3893b766b5a1671052d721788da1e5a00bd95b7cbaa777947fc2fe5a64780926`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateChannelEpisodeTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_channel-episodes
+
+**API:** `DataChannelEpisodesService::listChannelEpisodes(Request\Data\ListChannelEpisodesRequest): Result\Data\ListChannelEpisodesResult`.
+
+**Wire:** `GET /channel_episodes`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: list<Channels\ChannelEpisode>` and `status`.
+
+**Inputs:** `channel_id` (query/path, optional), `sort_by` (query/path, optional), `sort_direction` (query/path, optional), `page` (query/path, optional), `per_page` (query/path, optional), `cursor` (query/path, optional), `media_id[]` (query/path, optional), `hashed_ids[]` (query/path, optional), `published` (query/path, optional), `title` (query/path, optional).
+
+Individual pages and `paginateChannelEpisodes` support offset/nested Data cursors; preserve parent IDs, filters, sorting and direction. See the channel guide for endpoint-specific cursor-sort restrictions.
+
+**Restrictions:**
+
+Lists Channel Episodes belonging to an account. This endpoint can also be used to
+do a batch fetch based off of the hashed id.
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming a channel (any permission) can also be used; it
+lists the episodes of the channels the token names.
+
+
+**Source:** [List Channel Episodes](https://docs.wistia.com/reference/get_channel-episodes.md), pinned SHA-256 `7d0f457f53c2ae80fc3dc78bc9a6214474c756f423d801e2153c138e3d5e9d8e`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListChannelEpisodesTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## put_channel-episodes-channelepisodehashedid
+
+**API:** `DataChannelEpisodesService::updateChannelEpisode(Request\Data\UpdateChannelEpisodeRequest): Result\Data\UpdateChannelEpisodeResult`.
+
+**Wire:** `PUT /channel_episodes/{channelEpisodeHashedId}`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelEpisode` and `status`.
+
+**Inputs:** `channelEpisodeHashedId` (query/path, required), `description` (JSON body, optional), `title` (JSON body, optional), `media_hashed_id` (JSON body, optional), `live_stream_event_hashed_id` (JSON body, optional), `summary` (JSON body, optional), `publish_status` (JSON body, optional), `publish_at` (JSON body, optional), `episode_notes` (JSON body, optional), `podcast_settings` (JSON body, optional).
+
+**Restrictions:**
+
+Updates an existing channel episode in a channel.
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on the episode's channel
+can also be used.
+
+
+**Source:** [Update Channel Episode](https://docs.wistia.com/reference/put_channel-episodes-channelepisodehashedid.md), pinned SHA-256 `6b8fb5fcd094ddd34c144c045e89b89c910d75e1bcb89dfd726fe8763e56bec8`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateChannelEpisodeTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## delete_channel-episodes-channelepisodehashedid
+
+**API:** `DataChannelEpisodesService::deleteChannelEpisode(Request\Data\DeleteChannelEpisodeRequest): Result\Data\DeleteChannelEpisodeResult`.
+
+**Wire:** `DELETE /channel_episodes/{channelEpisodeHashedId}`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelEpisode` and `status`.
+
+**Inputs:** `channelEpisodeHashedId` (query/path, required).
+
+**Restrictions:**
+
+Deletes an existing channel episode in a channel.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on the episode's channel
+can also be used.
+
+
+**Source:** [Delete Channel Episode](https://docs.wistia.com/reference/delete_channel-episodes-channelepisodehashedid.md), pinned SHA-256 `246c19f960d40bf1c1683a86ba194e3dcdf67ffbaf05324043128c9fe282f455`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteChannelEpisodeTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## put_channel-episodes-channelepisodehashedid-publish
+
+**API:** `DataChannelEpisodesService::publishChannelEpisode(Request\Data\PublishChannelEpisodeRequest): Result\Data\PublishChannelEpisodeResult`.
+
+**Wire:** `PUT /channel_episodes/{channelEpisodeHashedId}/publish`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelEpisode` and `status`.
+
+**Inputs:** `channelEpisodeHashedId` (query/path, required), `publish_at` (JSON body, optional).
+
+**Restrictions:**
+
+Publishes an existing channel episode in a channel.
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on the episode's channel
+can also be used.
+
+
+**Source:** [Publish Channel Episode](https://docs.wistia.com/reference/put_channel-episodes-channelepisodehashedid-publish.md), pinned SHA-256 `9ac1b259ed210ec518261c9f4a79d39d9f96c6bab5091e5a44815f9c25753cd7`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/PublishChannelEpisodeTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## put_channel-episodes-channelepisodehashedid-unpublish
+
+**API:** `DataChannelEpisodesService::unPublishChannelEpisode(Request\Data\UnPublishChannelEpisodeRequest): Result\Data\UnPublishChannelEpisodeResult`.
+
+**Wire:** `PUT /channel_episodes/{channelEpisodeHashedId}/unpublish`; success **200**; Bearer authentication and pinned version `2026-09`. Returns `data: Channels\ChannelEpisode` and `status`.
+
+**Inputs:** `channelEpisodeHashedId` (query/path, required).
+
+**Restrictions:**
+
+Un-publishes an existing channel episode in a channel.
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on the episode's channel
+can also be used.
+
+
+**Source:** [Un-publish Channel Episode](https://docs.wistia.com/reference/put_channel-episodes-channelepisodehashedid-unpublish.md), pinned SHA-256 `41488451394f6bc327537bc88f363fe7848d4f952054c7661035b278551f8189`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UnPublishChannelEpisodeTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
