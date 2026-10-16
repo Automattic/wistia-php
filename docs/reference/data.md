@@ -2762,3 +2762,292 @@ can also be used.
 
 
 **Source:** [Un-publish Channel Episode](https://docs.wistia.com/reference/put_channel-episodes-channelepisodehashedid-unpublish.md), pinned SHA-256 `41488451394f6bc327537bc88f363fe7848d4f952054c7661035b278551f8189`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UnPublishChannelEpisodeTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+
+# Webinars, collaborators and registrations
+
+P11 implements these ten operations with typed requests/results and synthetic offline contracts. See the [webinar guide](../webinars.md) for usage, scheduling, nested updates, pagination, permissions and migration. Live API and paid-plan behavior remain unverified.
+
+## get_webinars
+
+**API:** `DataWebinarsService::listWebinars(Request\Data\ListWebinarsRequest): Result\Data\ListWebinarsResult`.
+
+**Wire:** `GET /webinars`; success 200. Path/query inputs: `page` (query), `per_page` (query), `cursor` (query), `sort_by` (query), `sort_direction` (query), `hashed_ids[]` (query), `started` (query).
+
+**Restrictions:**
+
+Lists webinars belonging to the account. This endpoint can also be used to
+do a batch fetch based off of the hashed id.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming a webinar (any permission) can also be used; it
+lists the webinars the token names.
+
+**Source:** [List Webinars](https://docs.wistia.com/reference/get_webinars.md), pinned SHA-256 `57290e54134ed35b17d0ad3079ffa332033c709033399f998fcb4f1dc614a577`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListWebinarsTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## post_webinars
+
+**API:** `DataWebinarsService::createWebinar(Request\Data\CreateWebinarRequest): Result\Data\CreateWebinarResult`.
+
+**Wire:** `POST /webinars`; success 201. JSON body fields: `title`, `description`, `scheduled_for`, `event_duration`, `time_zone`, `folder_id`.
+
+**Restrictions:**
+
+Creates a new webinar.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+`account` authorization granting the `create-webinars` permission can also
+be used. The new webinar is not covered by the token that created it, so
+follow-up requests need a token whose authorizations name the returned
+hashed id.
+
+**Source:** [Create Webinar](https://docs.wistia.com/reference/post_webinars.md), pinned SHA-256 `8648d6dfbaeafd66f7e03fc85ad3f4292a7afa0ceacdaa9619e8899786ebf998`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateWebinarTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_webinars-id
+
+**API:** `DataWebinarsService::showWebinar(Request\Data\ShowWebinarRequest): Result\Data\ShowWebinarResult`.
+
+**Wire:** `GET /webinars/{id}`; success 200. Path/query inputs: `id` (path).
+
+**Restrictions:**
+
+Returns the webinar associated with the hashed id.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this webinar (any permission) can also be used.
+
+**Source:** [Show Webinar](https://docs.wistia.com/reference/get_webinars-id.md), pinned SHA-256 `3f279d5edaca530abc8166a301e161062d6fb94ee43d971bb561de5397186a26`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowWebinarTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## put_webinars-id
+
+**API:** `DataWebinarsService::updateWebinar(Request\Data\UpdateWebinarRequest): Result\Data\UpdateWebinarResult`.
+
+**Wire:** `PUT /webinars/{id}`; success 200. JSON body fields: `webinar`. Path/query inputs: `id` (path).
+
+**Restrictions:**
+
+Updates an existing webinar.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this webinar can also
+be used. The `update` permission also allows registering attendees and
+managing the webinar's collaborators.
+
+**Source:** [Update Webinar](https://docs.wistia.com/reference/put_webinars-id.md), pinned SHA-256 `3943b9bdabab65c857e296453f5819645ae475572d31e1285a4b929d8a5ac58b`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateWebinarTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## delete_webinars-id
+
+**API:** `DataWebinarsService::deleteWebinar(Request\Data\DeleteWebinarRequest): Result\Data\DeleteWebinarResult`.
+
+**Wire:** `DELETE /webinars/{id}`; success 200. Path/query inputs: `id` (path).
+
+**Restrictions:**
+
+Deletes an existing webinar.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `destroy` permission on this webinar can also
+be used.
+
+**Source:** [Delete Webinar](https://docs.wistia.com/reference/delete_webinars-id.md), pinned SHA-256 `9999ac4b57be1663a3f54deb453308066a61baa3eaa14eac07cfa73b663e647d`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteWebinarTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_webinars-webinarid-collaborators
+
+**API:** `DataWebinarCollaboratorsService::listWebinarCollaborators(Request\Data\ListWebinarCollaboratorsRequest): Result\Data\ListWebinarCollaboratorsResult`.
+
+**Wire:** `GET /webinars/{webinarId}/collaborators`; success 200. Path/query inputs: `webinarId` (path), `page` (query), `per_page` (query), `cursor` (query), `sort_by` (query), `sort_direction` (query).
+
+**Restrictions:**
+
+Lists the collaborators (contacts and contact groups) that have been granted producer access to a webinar.
+
+Results are scoped to what the authenticated user is allowed to see: account owners, managers, and the webinar's producers see all collaborators; everyone else sees an empty list.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this webinar can also
+be used; a token granted only `show` on the webinar lists no
+collaborators.
+
+**Source:** [List Webinar Collaborators](https://docs.wistia.com/reference/get_webinars-webinarid-collaborators.md), pinned SHA-256 `b46f6742b909fd427c86bb4089b5cfac4444044a4b490b88b42bad0135137c56`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListWebinarCollaboratorsTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## post_webinars-webinarid-collaborators
+
+**API:** `DataWebinarCollaboratorsService::createWebinarCollaborator(Request\Data\CreateWebinarCollaboratorRequest): Result\Data\CreateWebinarCollaboratorResult`.
+
+**Wire:** `POST /webinars/{webinarId}/collaborators`; success 201. JSON body fields: `email`. Path/query inputs: `webinarId` (path).
+
+**Restrictions:**
+
+Invites a collaborator (producer) to a webinar by specifying their email address. Creates a new contact if one doesn't exist with that email. Note that viewers cannot be webinar collaborators.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this webinar can also
+be used.
+
+**Source:** [Create Webinar Collaborator](https://docs.wistia.com/reference/post_webinars-webinarid-collaborators.md), pinned SHA-256 `1ca7e881eaf581c7c7e5f50ac91f088b7f68abdc470eb9b55957c05d233d5f55`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateWebinarCollaboratorTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## delete_webinars-webinarid-collaborators-id
+
+**API:** `DataWebinarCollaboratorsService::deleteWebinarCollaborator(Request\Data\DeleteWebinarCollaboratorRequest): Result\Data\DeleteWebinarCollaboratorResult`.
+
+**Wire:** `DELETE /webinars/{webinarId}/collaborators/{id}`; success 200. Path/query inputs: `webinarId` (path), `id` (path).
+
+**Restrictions:**
+
+Removes a collaborator's producer access to a webinar.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this webinar can also
+be used.
+
+**Source:** [Delete Webinar Collaborator](https://docs.wistia.com/reference/delete_webinars-webinarid-collaborators-id.md), pinned SHA-256 `2e222a323c3c115668821eb1351249da3f58aee589638b10c2eddb06f4007452`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteWebinarCollaboratorTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## get_webinars-webinarid-registrations
+
+**API:** `DataWebinarRegistrationsService::listWebinarRegistrations(Request\Data\ListWebinarRegistrationsRequest): Result\Data\ListWebinarRegistrationsResult`.
+
+**Wire:** `GET /webinars/{webinarId}/registrations`; success 200. Path/query inputs: `webinarId` (path), `per_page` (query), `cursor` (query), `sort_direction` (query), `attendance` (query), `restriction` (query), `emails[]` (query).
+
+**Restrictions:**
+
+Retrieve a paginated list of registrations for a webinar. Returns contact
+information, attendance status, engagement metrics, and attribution data
+for each registrant.
+
+Pagination uses cursor-based pagination with a `page_info` object in the
+response rather than per-record cursors. Use `page_info.end_cursor` as
+the `cursor` parameter to fetch the next page.
+
+## Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming this webinar (any permission) can also be used; it
+lists the webinar's registrations.
+
+**Source:** [List Webinar Registrations](https://docs.wistia.com/reference/get_webinars-webinarid-registrations.md), pinned SHA-256 `6a79299d5806e79c4e6ed15cd82c7be94563bfe490321d6005e2b0120b522595`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListWebinarRegistrationsTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
+
+## post_webinars-webinarid-registrations
+
+**API:** `DataWebinarRegistrationsService::createWebinarRegistration(Request\Data\CreateWebinarRegistrationRequest): Result\Data\CreateWebinarRegistrationResult`.
+
+**Wire:** `POST /webinars/{webinarId}/registrations`; success 201. JSON body fields: `email`, `first_name`, `last_name`. Path/query inputs: `webinarId` (path).
+
+**Restrictions:**
+
+Register a person for a webinar by providing their email, first name, and last name.
+
+This endpoint generates a unique visitor key and returns a personalized webinar URL for the registrant.
+
+## Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this webinar can also
+be used.
+
+**Source:** [Create Webinar Registration](https://docs.wistia.com/reference/post_webinars-webinarid-registrations.md), pinned SHA-256 `f3736092966d5204fc26811eba5d54bfe2c563671b362efcd20ac0ea25aaca02`. Full schemas and status-specific errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateWebinarRegistrationTest.php`; behavioral edges: `tests/Contract/Data/WebinarBehaviorTest.php`. Not marked experimental in the pinned source; this is not a stability or live-verification claim.
