@@ -10,7 +10,7 @@ final readonly class TransportRequest
         public string $method,
         #[\SensitiveParameter] public string $url,
         #[\SensitiveParameter] public array $headers,
-        #[\SensitiveParameter] public ?string $body,
+        #[\SensitiveParameter] public string|\Psr\Http\Message\StreamInterface|null $body,
         public float $timeout,
         public float $connectTimeout,
     ) {}

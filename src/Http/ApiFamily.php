@@ -9,6 +9,7 @@ enum ApiFamily
     case Stats;
     case Analytics;
     case Upload;
+    case UploadLocalization;
     case OAuth;
 
     public function baseUri(): string
@@ -16,12 +17,13 @@ enum ApiFamily
         return match ($this) {
             self::Data, self::Stats, self::Analytics => 'https://api.wistia.com/modern',
             self::Upload => 'https://upload.wistia.com',
+            self::UploadLocalization => 'https://upload-v2.wistia.com',
             self::OAuth => 'https://api.wistia.com/oauth',
         };
     }
 
     public function usesVersion(): bool
     {
-        return match ($this) { self::Upload, self::OAuth => false, default => true };
+        return match ($this) { self::Upload, self::UploadLocalization, self::OAuth => false, default => true };
     }
 }

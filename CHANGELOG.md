@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add five typed upload/import workflows with streamed local files, signed-URL-safe encoding and operation-specific acceptance results; S3 copy remains pending response-contract confirmation. ([#24](https://github.com/Automattic/wistia-php/issues/24))
+
 - Add five typed webinar Analytics operations for aggregate metrics, registration series, traffic, audience pagination and engagement histograms, with local validation and offline contract coverage. ([#28](https://github.com/Automattic/wistia-php/issues/28))
 
 - Add seven typed media Analytics operations for aggregate metrics, timeseries, embed locations, traffic, languages and cursor-paginated form conversions, with local validation and offline contract coverage. ([#27](https://github.com/Automattic/wistia-php/issues/27))

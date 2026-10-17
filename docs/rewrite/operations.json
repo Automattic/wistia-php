@@ -18113,12 +18113,21 @@
         "upload-file",
         "import-url"
       ],
+      "delivery": {"status": "implemented-offline", "live_verified": false},
       "discrepancies": [
         "upload-auth",
         "upload-error-shapes"
       ]
     }
   ],
+  "upload_implementation_decision": {
+    "date": "2026-10-17",
+    "authority": "Maintainer approved proceeding with the non-S3 workflows after separately authorized live probes, leaving S3 unconfirmed pending human support.",
+    "evidence": "docs/rewrite/upload-evidence.md",
+    "source_gaps_retained": true,
+    "whole_ticket_complete": false,
+    "interpretation": "implementation_contract fields govern the approved observed thumbnail/localization implementation; original result_contract text retains P01 source gaps rather than claiming upstream correction."
+  },
   "upload_workflows": [
     {
       "id": "upload-file",
@@ -18175,6 +18184,8 @@
       },
       "result_contract": "200 application/json upload media object: id:int, name:string, type:string, created/updated:date-time string, duration:number, hashed_id:string, progress:number[0,1], thumbnail:{url:string,width:int,height:int}. Full schema and errors: catalog post_. Response does not imply processing completion.",
       "restrictions": "Validate missing/unreadable file before sending. name max 255. Upload permission; processing may continue after success. No replay after ambiguous failure.",
+      "delivery": {"status": "implemented-offline", "live_verified": false},
+      "live_probe": {"date": "2026-10-17", "implementation": "standalone Python, not PHP service", "status": 200, "content_type": "application/json;charset=utf-8", "body": "Upload media object"},
       "live_verified": false
     },
     {
@@ -18237,6 +18248,7 @@
       },
       "result_contract": "200 application/json upload media object: id:int, name:string, type:string, created/updated:date-time string, duration:number, hashed_id:string, progress:number[0,1], thumbnail:{url:string,width:int,height:int}. Full schema and errors: catalog post_. Response does not imply processing completion.",
       "restrictions": "Remote reachability/expiry/format remains remote validation. Grants should remain valid for hours; eventual processing is not guaranteed by request success.",
+      "delivery": {"status": "implemented-offline", "live_verified": false},
       "live_verified": false
     },
     {
@@ -18279,6 +18291,9 @@
       },
       "result_contract": "Undocumented response status/body. Result type is a name target only, not a settled shape; authoritative clarification is required before implementation fixtures/decoder finalization.",
       "restrictions": "Upload permission; only images. Bearer in header. Example uses media_id query.",
+      "implementation_contract": "Maintainer-approved live observation: 201 with zero-byte body despite application/json;charset=utf-8; UploadThumbnailFileResult exposes acceptance status, not Media.",
+      "delivery": {"status": "implemented-offline", "live_verified": false},
+      "live_probe": {"date": "2026-10-17", "implementation": "standalone Python, not PHP service", "status": 201, "content_type": "application/json;charset=utf-8", "body_bytes": 0, "media_id_location": "multipart; PHP uses the also-documented query form"},
       "live_verified": false
     },
     {
@@ -18321,6 +18336,10 @@
       },
       "result_contract": "Undocumented response status/body. Result type is a name target only, not a settled shape; authoritative clarification is required before implementation fixtures/decoder finalization.",
       "restrictions": "Guide says POST but URL example omits POST and capitalizes URL. Record discrepancy; do not infer GET/uppercase URL as canonical.",
+      "implementation_request_encoding": "POST with media_id in query and lowercase url in application/x-www-form-urlencoded body, preserving the complete signed source URL.",
+      "implementation_contract": "Maintainer-approved live observation: 201 with zero-byte body despite application/json;charset=utf-8; ImportThumbnailUrlResult exposes acceptance status, not Media.",
+      "delivery": {"status": "implemented-offline", "live_verified": false},
+      "live_probe": {"date": "2026-10-17", "implementation": "standalone Python, not PHP service", "status": 201, "content_type": "application/json;charset=utf-8", "body_bytes": 0},
       "live_verified": false
     },
     {
@@ -18440,6 +18459,9 @@
       },
       "result_contract": "No localization-specific status/body schema is documented. Result type is a name target only, not a settled shape; authoritative clarification is required before implementation fixtures/decoder finalization. Do not assume the Data localization-generation response.",
       "restrictions": "Supplied-audio import only; no POST Data localization generation. Guide example explicitly uses upload-v2.wistia.com while general upload prose uses upload.wistia.com; host discrepancy must not be hidden.",
+      "implementation_contract": "Maintainer-approved live observation: upload-v2.wistia.com accepts supplied-audio form import; 201 with zero-byte body despite application/json;charset=utf-8. ImportLocalizationAudioResult exposes acceptance status, not completed processing. Other host untested; no fallback.",
+      "delivery": {"status": "implemented-offline", "live_verified": false},
+      "live_probe": {"date": "2026-10-17", "implementation": "standalone Python, not PHP service", "status": 201, "content_type": "application/json;charset=utf-8", "body_bytes": 0},
       "live_verified": false
     }
   ],
@@ -18477,7 +18499,7 @@
         "thumbnail-url"
       ],
       "source": "https://docs.wistia.com/reference/update-thumbnails-via-upload-api.md",
-      "unresolved": "No response status/body schema; thumbnail URL example also conflicts with POST/lowercase url prose.",
+      "unresolved": "Upstream documentation still omits the response and retains the conflicting URL example. Maintainer approved implementation from the recorded live 201 empty-body and POST/lowercase-url observations; no upstream correction or final whole-ticket acceptance is claimed.",
       "affected_owner_issue": 24
     },
     {
@@ -18495,7 +18517,7 @@
         "localization-import-url"
       ],
       "source": "https://docs.wistia.com/reference/getting-started-with-the-upload-api-1.md",
-      "unresolved": "No localization-specific response status/body schema; example uses upload-v2 host while general prose uses upload host.",
+      "unresolved": "Upstream documentation still omits the localization response and has conflicting general host prose. Maintainer approved implementation from the recorded upload-v2 201 empty-body observation; other host and processing completion remain untested.",
       "affected_owner_issue": 24
     }
   ],
