@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add five typed webinar Analytics operations for aggregate metrics, registration series, traffic, audience pagination and engagement histograms, with local validation and offline contract coverage. ([#28](https://github.com/Automattic/wistia-php/issues/28))
+
 - Add seven typed media Analytics operations for aggregate metrics, timeseries, embed locations, traffic, languages and cursor-paginated form conversions, with local validation and offline contract coverage. ([#27](https://github.com/Automattic/wistia-php/issues/27))
 
 - Add five typed account Analytics operations for aggregate metrics, timeseries, content rankings, embed domains and media lookup by embed URL, with local validation and offline contract coverage. ([#26](https://github.com/Automattic/wistia-php/issues/26))

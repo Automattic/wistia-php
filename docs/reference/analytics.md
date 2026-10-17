@@ -1,6 +1,6 @@
-# Account and media Analytics reference
+# Analytics reference
 
-Five account Analytics operations are implemented for [#26](https://github.com/Automattic/wistia-php/issues/26), and seven media operations for [#27](https://github.com/Automattic/wistia-php/issues/27). Webinar Analytics remains planned. These are offline-tested contracts, not live-verified account access.
+Five account Analytics operations are implemented for [#26](https://github.com/Automattic/wistia-php/issues/26), and seven media operations for [#27](https://github.com/Automattic/wistia-php/issues/27). Five webinar operations are implemented for [#28](https://github.com/Automattic/wistia-php/issues/28). These are offline-tested contracts, not live-verified account access.
 
 ## Usage
 
@@ -160,8 +160,70 @@ Conversion names, email, custom answers and cursors are sensitive. Request/resul
 
 Suffix `/languages`. Optional `per_page`: 1–100 (default 100). `data` is `list<Analytics\MediaLanguage>` with `language`, `plays`, `percent_of_total_plays` and `captions_support`. Wistia sorts by plays descending. Language describes the viewer's browser (ISO 639-1); caption availability is a boolean, not a localization purchase or translation request.
 
+## Webinar Analytics usage
+
+Construct `AnalyticsWebinarService` around the configured `Client`. Request/result types use the same Analytics namespaces. All five operations use GET at `https://api.wistia.com/modern/analytics/webinars/{webinarId}`, Bearer authentication and pinned version `2026-09`. The hashed ID is encoded as one path segment; these are Analytics reads, not Data registration writes.
+
+```php
+use Automattic\Wistia\AnalyticsWebinarService;
+use Automattic\Wistia\Request\Analytics\ShowWebinarAnalyticsRequest;
+use Automattic\Wistia\Request\Analytics\ShowWebinarAudienceRequest;
+
+$webinars = new AnalyticsWebinarService($client);
+$summary = $webinars->showWebinarAnalytics(new ShowWebinarAnalyticsRequest(
+    webinarId: 'webinar-hashed-id', include_post_event: true,
+    post_event_start_date: '2026-01-01', post_event_end_date: '2026-02-01',
+));
+echo $summary->data->registrations;
+foreach ($webinars->paginateWebinarAudience(
+    new ShowWebinarAudienceRequest('webinar-hashed-id', per_page: 25), maxPages: 10,
+)->items() as $attendee) {
+    // Typed attendee record; apply your application's personal-data policy.
+}
+```
+
+Permissions are **Read detailed stats** or suitable delegated contact permissions. Expiring delegated tokens require `view-stats` on this webinar. Account/plan entitlement remains remote: HTTP 403 means the valid token's account lacks feature access; no particular free/paid plan entitlement is asserted. Aggregate analytics and histograms document HTTP 409 until the event reaches a terminal state. HTTP 404 indicates missing/inaccessible webinar; 503 indicates temporarily unavailable analytics. These conditions use shared sanitized exceptions, with no retry or local event-state guess. No live webinar/account access is verified.
+
+All results expose `status` and typed `data`. Optional omitted properties map to null with `presentFields` recording supplied keys. Explicit null is accepted only where the source allows it. Zero counts, fractional metrics, null histogram slots and empty lists are retained; unknown fields, invalid nested shapes, wrong types and non-finite numbers fail decoding. Wire names and timestamp strings remain unchanged. Watch time, event duration and chat positions are **seconds**, without Stats-unit conversion.
+
+### get_analytics-webinars-webinarid
+
+[`showWebinarAnalytics(ShowWebinarAnalyticsRequest): ShowWebinarAnalyticsResult`](https://docs.wistia.com/reference/get_analytics-webinars-webinarid.md)
+
+No suffix. Optional `include_post_event` (server default false), `post_event_start_date` and `post_event_end_date`. Dates use strict calendar YYYY-MM-DD, inclusive start/exclusive end; when both are supplied end must follow start. No account/media two-year cap is imposed. Dates are only used remotely when post-event data is enabled; the library validates and sends supplied dates without silently enabling the flag or rejecting dates with an omitted/false flag. Null options are omitted; explicit false is sent as `false`.
+
+`data` is `Analytics\WebinarAnalytics`: registration/import/on-demand counts, attendance, engagement, watch time, chat/Q&A, impressions/plays, event time and nullable `poll_questions`. Each `WebinarPollQuestion` has `id`, `poll_id`, `text`, `response_count` and nullable typed `options`. Each `WebinarPollOption` retains `id`, `text`, `count` and numeric `percent` without converting percentage units.
+
+### get_analytics-webinars-webinarid-registration
+
+[`showWebinarRegistrationTimeseries(ShowWebinarRegistrationTimeseriesRequest): ShowWebinarRegistrationTimeseriesResult`](https://docs.wistia.com/reference/get_analytics-webinars-webinarid-registration.md)
+
+Suffix `/registration` (singular). Required `granularity`: daily, weekly or monthly. Optional post-event flag/dates follow the aggregate rules above. `data` is a list of `WebinarRegistrationBucket` records: timestamp, registrations, impressions, on-demand registrations/impressions and completion/on-demand completion rates. There is no local timezone conversion or bucket filling.
+
+### get_analytics-webinars-webinarid-traffic
+
+[`showWebinarTrafficBreakdown(ShowWebinarTrafficBreakdownRequest): ShowWebinarTrafficBreakdownResult`](https://docs.wistia.com/reference/get_analytics-webinars-webinarid-traffic.md)
+
+Suffix `/traffic`. Required `group_by`: utm_campaign, utm_source, utm_medium or referrer_domain (not viewer_screen_size). Optional `sort_by`: registrations (default), attendees or impressions; `sort_direction`: asc/desc (default desc). No page size, cursor or post-event/date filters are documented. `data` is a list of `WebinarTrafficGroup` with nullable attribution fields and registration/attendee/impression counts.
+
+### get_analytics-webinars-webinarid-audience
+
+[`showWebinarAudience(ShowWebinarAudienceRequest): ShowWebinarAudienceResult`](https://docs.wistia.com/reference/get_analytics-webinars-webinarid-audience.md)
+
+Suffix `/audience`. Optional `per_page` 1–100 (default 25) and scalar `cursor`. No date, sort or post-event filters are documented. `data` is a list of `WebinarAudienceMember` with identity/contact/company, registration/attendance/restriction/origin, attribution/geolocation, engagement/focus rates, watch/chat/click/poll counts, nullable integer-slot attendance/focused histograms and typed chat buckets. `WebinarChatBucket` holds `rounded_player_position` and a list of chat strings. Chat lists may be omitted but not explicitly null.
+
+The envelope uses the shared typed `MediaPageInfo` wire contract. Omitted `data`/`page_info` remain null in single-response reads; explicit null is invalid. Traversal requires data and an explicit `has_next_page`; optional reverse metadata does not prevent forward traversal. `paginateWebinarAudience(request, maxPages: 1000)` provides lazy `page(cursor)`, `pages()` and `items()`, preserving webinar ID, size and initial cursor. Empty continuing pages follow `end_cursor`; final pages stop regardless of size and need no cursor. Missing/empty/repeated continuing cursors and exhausted finite bounds fail instead of looping. Other webinar operations do not expose pagination.
+
+Audience names, emails, phone numbers, company, locations, attribution, chat text and cursors are sensitive. Records, requests, results and paginator debug output hide values; decoder/transport errors sanitize messages and arguments. Direct property access and explicit serialization still expose data. Applications own consent, access control, storage, retention and logging; the client does not persist or log attendees.
+
+### get_analytics-webinars-webinarid-histograms
+
+[`showWebinarHistograms(ShowWebinarHistogramsRequest): ShowWebinarHistogramsResult`](https://docs.wistia.com/reference/get_analytics-webinars-webinarid-histograms.md)
+
+Suffix `/histograms`. Only webinarId is accepted. `data` is `WebinarHistograms` with numeric `attendees_histogram`, `chat_histogram` and `visual_focus_played_histogram` lists. Each slot represents a **10-second bucket**. Unlike per-attendee histograms, aggregate slots are non-null numbers and preserve fractions; supplied lists cannot be null.
+
 ## Failures and verification boundary
 
 Shared sanitized exceptions distinguish API, authentication, permission, rate-limit, transport and decoding failures. `rateLimit` retains supplied headers such as `Retry-After`. Reads are single-attempt, do not follow credential-bearing redirects, and never report an uncertain write outcome. See the [foundation](../foundation.md) for failure handling.
 
-Synthetic offline contracts cover all five account and seven media paths, authentication/version, exact query encoding, typed nested results/nulls/zeros, validation bounds, malformed responses and sanitized failures. Media conversion contracts also cover individual pages, empty continuing/final pages, preserved date filters/cursors and bounded traversal errors without logging visitor data. PHP 8.4 and 8.5 checks use network denial. No Wistia requests, credential provisioning, purchases, trials or destructive calls are part of this delivery. The [inventory](../rewrite/README.md) keeps other operations' implementation and source-gap status separate.
+Synthetic offline contracts cover all five account, seven media and five webinar paths, authentication/version, exact query encoding, typed nested results/nulls/zeros, validation bounds, malformed responses and sanitized failures. Media conversion contracts also cover individual pages, empty continuing/final pages, preserved date filters/cursors and bounded traversal errors without logging visitor data. PHP 8.4 and 8.5 checks use network denial. No Wistia requests, credential provisioning, purchases, trials or destructive calls are part of this delivery. The [inventory](../rewrite/README.md) keeps other operations' implementation and source-gap status separate.
