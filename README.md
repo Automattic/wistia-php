@@ -1,78 +1,135 @@
 # Wistia PHP
 
-[![Latest Version](https://img.shields.io/github/release/Automattic/wistia-php.svg?style=flat-square)](https://github.com/Automattic/wistia-php/releases)
-[![Software License](https://img.shields.io/badge/license-GPLv2-brightgreen.svg?style=flat-square)](LICENSE)
+[![Latest Release](https://img.shields.io/github/release/Automattic/wistia-php.svg?style=flat-square)](https://github.com/Automattic/wistia-php/releases)
+[![PHP](https://img.shields.io/badge/php-%5E8.4-777BB4?style=flat-square)](composer.json)
 
-A framework-independent PHP client for Wistia, undergoing a breaking rewrite.
+A framework-independent PHP client for Wistia, with typed requests and results for media management, uploads, reporting, and more.
 
-## Current development scope
+> [!IMPORTANT]
+> This branch contains the breaking rewrite targeting **2.0.0**. The examples below describe the development API, not the published 1.x package. The rewrite is still in progress: S3 copy is not implemented, and complete release acceptance is pending.
 
-P02 provides the shared client/configuration, HTTP execution, encoding, decoding and failure foundation. P03 adds [bounded pagination and optional job polling](docs/pagination.md) and the typed [background-job-status Data operation](docs/reference/data.md#get_background-job-status-backgroundjobstatusid). Construct `DataBackgroundJobStatusService` directly around `Client`. P04 adds [OAuth helpers](docs/oauth.md) for authorization URLs, explicit code exchange and refresh; applications own callbacks, correlation, persistence and renewal policy. P05 adds inbound [webhook helpers](docs/webhooks.md) that verify original bytes before typed batch parsing; applications own routing, processing, deduplication, ordering and replay protection. P06 adds 19 [media lifecycle and organization operations](docs/media.md), with typed nested results, local validation, lazy pagination and job handoff. P07 adds 24 [media customization operations](docs/customizations.md), preserving replacement, partial-update and explicit-null semantics with typed nested inputs/results. P08 adds 16 [caption and accessibility operations](docs/accessibility.md), including text formats, atomic versioned edits, speaker-profile reads and existing localization/audio-description management. P09 adds 17 [folder, sharing and subfolder operations](docs/folders.md), including lazy pagination, typed nested sharing/media records and asynchronous copy/bulk-delete job handoff. P10 adds 16 [channel, collaborator and episode operations](docs/channels.md), including typed podcast settings, publishing/scheduling and lazy pagination. P11 adds ten [webinar, collaborator and registration operations](docs/webinars.md), including UTC scheduling, nested updates, typed engagement records and filtered pagination. P12 adds nine [brand and account-branding operations](docs/brands.md), including explicit-null updates, application/inheritance options, lazy pagination, preload selections and color-picker results. P13 adds 11 [account and access-management operations](docs/account.md), including typed usage/credits/token metadata, allowed-domain pagination, invitations and experimental expiring tokens. P14 adds nine [search and review-sharing operations](docs/search-sharing.md), with typed grouped search/transcript results, metadata filters, resource URLs, bundle pagination and write-safe share links. P15 adds [non-purchasing bulk actions and jobs](docs/bulk.md), with typed resource payloads, local limits and partial-result job handoff. P17 adds all ten [Stats operations](docs/reference/stats.md), with typed account/media/event/visitor records, inclusive by-date queries and lazy offset pagination. P18 adds five [account Analytics operations](docs/reference/analytics.md), with exclusive-end date ranges, typed ranking/timeseries results and embed-location lookup. P19 adds seven [media Analytics operations](docs/reference/analytics.md#media-analytics-usage), with typed aggregate/traffic/language metrics, embed-location timeseries and cursor-paginated form conversions. P20 adds five [webinar Analytics operations](docs/reference/analytics.md#webinar-analytics-usage), with typed polls/chats/histograms and bounded audience traversal. P16 adds five [upload/import workflows](docs/reference/upload.md), with streamed files and operation-specific results; S3 copy remains unimplemented pending human confirmation of its response contract. Do not treat the [endpoint inventory](docs/rewrite/README.md) as complete installed coverage; this development branch is not a complete replacement for the published 1.x package.
+## Installation
 
-Requirements: PHP `^8.4` with `ext-curl`, Guzzle `^8.2`; development tests use PHPUnit `^12.5`. Package identity remains `automattic/wistia-php`, namespace `Automattic\Wistia`. Composer distribution is retained; no 2.0.0 release has been published by this change.
+Requires PHP **8.4+**, the **cURL extension**, and Composer. Guzzle `^8.2` is installed as a dependency.
 
-## Configuration
+To try the development API before 2.0.0 is released:
 
-After installing the package in an appropriately provisioned application:
+```sh
+composer require automattic/wistia-php:dev-main
+```
+
+This selects the moving development branch. Pin a reviewed commit when evaluating it in an application.
+
+## Quick start
+
+Set `WISTIA_API_TOKEN` through your application's secret management, then fetch a page of media:
 
 ```php
+<?php
+require 'vendor/autoload.php';
+
 use Automattic\Wistia\Client;
 use Automattic\Wistia\Configuration;
+use Automattic\Wistia\DataMediaService;
+use Automattic\Wistia\Request\Data\ListMediaRequest;
 
-$token = getenv('WISTIA_API_TOKEN'); // Application-owned secret management.
+$token = getenv('WISTIA_API_TOKEN');
 if ($token === false || $token === '') {
     throw new RuntimeException('Configure WISTIA_API_TOKEN in your application.');
 }
-$client = new Client(new Configuration(token: $token, timeout: 30.0, connectTimeout: 10.0));
+
+$client = new Client(new Configuration(token: $token));
+$media = new DataMediaService($client);
+$result = $media->listMedia(new ListMediaRequest(per_page: 25));
+
+foreach ($result->data as $item) {
+    echo $item->hashed_id, ': ', $item->name, PHP_EOL;
+}
 ```
 
-Both timeout fields accept finite seconds in the inclusive range `0.001`–`2147483.647` (portable signed 32-bit milliseconds); invalid values are rejected at construction, before transport. Defaults remain 30 total and 10 connect seconds. Construction performs no HTTP request. Credentials are attached only as Bearer headers for Data, Stats, Analytics and Upload. Modern families use `https://api.wistia.com/modern` and pinned `X-Wistia-API-Version: 2026-09`; Upload and OAuth have separate hosts/contracts and no version header. Tokenless configuration supports the OAuth helpers, not unauthenticated modern API calls.
+Construct a service around the shared `Client`, pass its named request object, and read the typed result. Request and result properties preserve Wistia's field names. The library does not load `.env` files.
 
-See [foundation contracts](docs/foundation.md) for transport injection, exact-name encoding, result/decoder boundaries, and safe error handling. Applications own OAuth callbacks, correlation and secure token persistence. Webhook verification/parsing is implemented; routing, processing, deduplication, ordering and replay protection remain application-owned.
+For multiple pages, use bounded, lazy pagination:
 
-## Breaking migration status
+```php
+$pages = $media->paginateMedia(new ListMediaRequest(per_page: 100), maxPages: 10);
 
-The legacy array constructor, magic endpoint methods, `get_client()`, `get_token()`, public transport/format/last-response fields, raw decoded-object/error-code returns and XML mode are removed. There is no compatibility layer. Configure `Configuration`, construct explicit services around `Client`, and pass their named request DTOs to receive typed results. The job-status, P06 media/tag/trim/deleted-media, P07 customization, P08 caption/accessibility P09 folder/sharing/subfolder P10 channel/collaborator/episode P11 webinar/collaborator/registration, P12 brand/account-branding, P13 account/access-management, P14 search/review-sharing, P15 non-purchasing bulk, P17 Stats, P18 account Analytics P19 media Analytics, P20 webinar Analytics and the five non-S3 P16 upload/import services are implemented. Replace `list_projects()` with `DataFoldersService::listFolders(new Request\Data\ListFoldersRequest(...))` and typed results; see the [folder migration notes](docs/folders.md). Other old resource calls remain planned replacements.
+foreach ($pages->items() as $item) {
+    echo $item->name, PHP_EOL;
+}
+```
 
-Failures now use typed exceptions under `Automattic\Wistia\Exception`. Check `remoteOutcomeUncertain` before deciding how to reconcile a state-changing operation; do not blindly replay an upload or share-link request. Requests are sent once, with redirects disabled. The default uses dedicated HTTP/1.1 cURL connections, nonrewindable streamed bodies and no environment proxies or authentication negotiation to prevent native replay. Injected transports must preserve these constraints. No live API or paid-plan behavior is verified by this foundation change.
+See [pagination and background jobs](docs/pagination.md) for cursor strategies, stopping conditions, and optional finite job polling. A queued job or accepted upload does not guarantee completed processing.
+
+## API guides
+
+| Area | Guide |
+| --- | --- |
+| Media, tags, trims, archived and deleted media | [Media management](docs/media.md) |
+| Player settings, thumbnails, captions, and engagement tools | [Customizations](docs/customizations.md) |
+| Caption edits, speaker profiles, existing localizations, and audio descriptions | [Captions and accessibility](docs/accessibility.md) |
+| Folders, subfolders, and sharing permissions | [Folders](docs/folders.md) |
+| Channels, podcasts, collaborators, and episodes | [Channels](docs/channels.md) |
+| Webinars, collaborators, and registrations | [Webinars](docs/webinars.md) |
+| Brands and account branding | [Brands](docs/brands.md) |
+| Account usage, credits, allowed domains, invitations, and access tokens | [Account and access management](docs/account.md) |
+| Search, review bundles, resource URLs, and share links | [Search and review sharing](docs/search-sharing.md) |
+| Non-purchasing bulk actions and job results | [Bulk operations](docs/bulk.md) |
+| File uploads, URL imports, thumbnails, and supplied-audio imports | [Upload and import](docs/reference/upload.md) |
+| Account, media, event, visitor, and project metrics | [Stats](docs/reference/stats.md) |
+| Account, media, and webinar analytics | [Analytics](docs/reference/analytics.md) |
+| Authorization URLs, code exchange, and explicit token refresh | [OAuth](docs/oauth.md) |
+| Signature verification and typed inbound event parsing | [Webhooks](docs/webhooks.md) |
+
+The [Data reference](docs/reference/data.md) details individual operations. The [rewrite inventory](docs/rewrite/README.md) tracks implemented coverage, exclusions, and unresolved contracts; planned entries are not installed functionality. Account permissions and plan restrictions still apply.
+
+## Configuration and failures
+
+Configure total and connection timeouts in seconds (defaults: 30 and 10):
+
+```php
+$client = new Client(new Configuration(
+    token: $token,
+    timeout: 60.0,
+    connectTimeout: 10.0,
+));
+```
+
+Client construction sends no request. API credentials use Bearer headers; Data, Stats, and Analytics use the pinned API version `2026-09`. Upload and OAuth follow their own contracts.
+
+Failures use typed exceptions under `Automattic\Wistia\Exception`, distinguishing authentication, permission, rate-limit, API, transport, and decoding errors. Remote failures expose HTTP status, available rate-limit metadata, and `remoteOutcomeUncertain`.
+
+> [!WARNING]
+> Requests are sent once, without automatic retries or redirects. If `remoteOutcomeUncertain` is true after a state-changing request, reconcile the remote state before submitting it again. A timeout does not mean the operation failed to reach Wistia.
+
+See the [foundation guide](docs/foundation.md) for transport injection, timeout limits, encoding, and safe error handling. The default transport does not discover environment proxies; injected transports must preserve the no-replay and credential-safety contracts. Applications own secret storage, OAuth callbacks and token renewal, webhook processing and replay protection, and safe logging.
+
+## Migrating from 1.x
+
+The 2.0 API is a breaking replacement with **no compatibility layer**:
+
+- Replace the array constructor with `new Client(new Configuration(...))`.
+- Replace magic endpoint calls with explicit services and named request objects. For example, `list_projects()` becomes `DataFoldersService::listFolders(new ListFoldersRequest(...))`; see the [folder migration notes](docs/folders.md).
+- Read typed results instead of raw decoded objects or error codes, and handle typed exceptions.
+- Remove uses of `get_client()`, `get_token()`, public transport/format/last-response fields, and XML mode.
+
+Use each API guide to check field names, null/update semantics, pagination, and asynchronous results before migrating a workflow.
 
 ## Tests and safety
 
-In an environment with the declared development dependencies already available:
+With the declared development dependencies available (PHPUnit `^12.5`):
 
 ```sh
 composer test
-# Equivalent default offline discovery:
+# Or run the same default offline suites directly:
 vendor/bin/phpunit
 ```
 
-Both discover `tests/Offline` and offline `tests/Contract`, load no legacy credential configuration and use controlled transports, Guzzle MockHandler and synthetic native cURL completion, not real HTTP. Foundation, OAuth, webhook, pagination, polling, job-status, P06 media, P07 customization, P08 caption/accessibility P09 folder/sharing/subfolder P10 channel/collaborator/episode P11 webinar/collaborator/registration P12 brand/account-branding P13 account/access-management P14 search/review-sharing P15 non-purchasing bulk, P17 Stats, P18 account Analytics P19 media Analytics, P20 webinar Analytics and the five non-S3 P16 upload/import contract cases are included. The PHP upload service has offline coverage; separately authorized standalone live probes established the limited [upload observations](docs/rewrite/upload-evidence.md), not completed processing or live PHP verification. The P06 PHP 8.4.26 network-denied default run passed 669 tests / 6721 assertions; full runtime/review evidence is retained in the delivery handoff. The combined P02–P05 default Composer and strict suites passed on PHP 8.4.26 and 8.5.10 with Guzzle 8.2.0 / PHPUnit 12.5.39 under OS-enforced network denial (310 tests, 4599 assertions per run). Strict runs also started with caller exception arguments ignored; the test-owned bootstrap enables capture for redaction assertions without an application/global PHP configuration change. PHP 8.4 plus a newer supported runtime and externally network-denied execution remain verification gates; syntax checks alone do not satisfy them.
+Default discovery runs only `tests/Offline` and `tests/Contract`, using synthetic responses and controlled transports. It loads no live credentials and makes no real HTTP requests. These checks do not establish live API behavior, paid-plan access, or processing completion. Limited, separately authorized [upload observations](docs/rewrite/upload-evidence.md) are documented separately.
 
-The historical live/destructive tests remain in `tests/ClientTest.php` and `tests/ApiMethodsTraitsTest.php` for provenance, excluded from default discovery. The separately named `phpunit.legacy.xml.dist` bootstrap refuses execution unless **both** `WISTIA_ENABLE_LEGACY_LIVE_TESTS=1` and `WISTIA_APPROVE_DESTRUCTIVE_TESTS=1` are set. These flags are technical gates, not permission. The legacy tests also require the original 1.x client/PHPUnit environment and are **not compatible with this rewrite**. Do not run them on this branch or supply credentials as a local check; do not exercise charge-incurring operations.
+> [!CAUTION]
+> Historical tests in `tests/ClientTest.php` and `tests/ApiMethodsTraitsTest.php` can upload data and create or delete Wistia resources. They are excluded from default discovery, separately gated by `phpunit.legacy.xml.dist`, and incompatible with the rewrite. Do not run them on this branch or supply credentials as a local check. Their opt-in flags do not grant permission for live, destructive, or chargeable operations.
 
-## Credits
+---
 
-- [Automattic](https://github.com/Automattic)
-- [Nicola Mustone](https://nicolamustone.com)
-
-## License
-
-Wistia PHP - PHP wrapper to consume Wistia API
-
-Copyright (C) 2015 Automattic
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-Please see [License File](LICENSE) for more information.
+By [Automattic](https://github.com/Automattic) and [Nicola Mustone](https://nicolamustone.com). Copyright (C) 2015 Automattic. Distributed under [GPL-2.0-or-later](LICENSE).
