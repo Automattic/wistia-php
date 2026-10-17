@@ -8,3 +8,6 @@ config.php
 
 .phpunit.cache/
 .pi/
+
+# Local credentials
+.env
