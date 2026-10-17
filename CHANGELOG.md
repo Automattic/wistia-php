@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add five typed account Analytics operations for aggregate metrics, timeseries, content rankings, embed domains and media lookup by embed URL, with local validation and offline contract coverage. ([#26](https://github.com/Automattic/wistia-php/issues/26))
+
 - Add all ten typed Stats operations with account/media/event/visitor metrics, inclusive by-date queries, filtered pagination and offline contract coverage. ([#25](https://github.com/Automattic/wistia-php/issues/25))
 
 - Add typed non-purchasing bulk actions and scoped jobs with reusable resource payloads, local input limits, job-status handoff and offline contract coverage. ([#23](https://github.com/Automattic/wistia-php/issues/23))

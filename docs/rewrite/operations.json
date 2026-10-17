@@ -15525,6 +15525,10 @@
         "documentation_target": "docs/reference/analytics.md#get_analytics-account",
         "contract_test_target": "tests/Contract/Analytics/ShowAccountAnalyticsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -15632,6 +15636,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Analytics\\ShowAccountAnalyticsTimeseriesResult",
         "documentation_target": "docs/reference/analytics.md#get_analytics-account-timeseries",
         "contract_test_target": "tests/Contract/Analytics/ShowAccountAnalyticsTimeseriesTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -15755,6 +15763,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Analytics\\ShowAccountTopContentResult",
         "documentation_target": "docs/reference/analytics.md#get_analytics-account-top-content",
         "contract_test_target": "tests/Contract/Analytics/ShowAccountTopContentTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -15946,6 +15958,10 @@
         "documentation_target": "docs/reference/analytics.md#get_analytics-account-embed-locations",
         "contract_test_target": "tests/Contract/Analytics/ShowAccountEmbedLocationsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -16100,6 +16116,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Analytics\\FindMediaByEmbedLocationResult",
         "documentation_target": "docs/reference/analytics.md#get_analytics-account-media-by-embed-location",
         "contract_test_target": "tests/Contract/Analytics/FindMediaByEmbedLocationTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
