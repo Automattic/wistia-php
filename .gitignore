@@ -7,3 +7,4 @@ vendor
 config.php
 
 .phpunit.cache/
+.pi/
