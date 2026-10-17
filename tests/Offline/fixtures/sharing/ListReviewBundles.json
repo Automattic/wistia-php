@@ -1,0 +1,9 @@
+[
+  {
+    "hashed_id": "private synthetic",
+    "name": "private synthetic",
+    "url": "https://example.invalid/private-synthetic",
+    "allow_downloads": false,
+    "cursor": "private synthetic"
+  }
+]

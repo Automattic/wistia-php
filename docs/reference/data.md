@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, P12's nine brand/account-branding operations, and P13's 11 account/access-management operations. Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, P12's nine brand/account-branding operations, P13's 11 account/access-management operations, and P14's nine [search/review-sharing operations](../search-sharing.md). Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -3748,3 +3748,293 @@ Read, update & delete anything
 
 
 **Source:** [Dismiss Desktop Install Prompt](https://docs.wistia.com/reference/post_contact-dismiss-desktop-install-prompt.md), pinned SHA-256 `7060271f88f6b1891fe92f65d3e7742efb240ce6e8710aa1ada1cfb5bc64b0cc`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DismissDesktopInstallPromptTest.php`; behavioral edges: `tests/Contract/Data/AccountBehaviorTest.php`. No live, plan-entitlement, invitation delivery, domain-enforcement or token-usability verification is claimed.
+
+## get_search
+
+**API:** `DataSearchService::search(Request\Data\SearchRequest): Result\Data\SearchResult`.
+
+**Wire:** `GET /search`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Searches across folders, subfolders, medias, channels, channel episodes, and webinars.
+Also searches through video transcripts, so media results may include transcript matches with
+timestamps when the query matches spoken content.
+
+### Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+[Expiring access tokens](https://docs.wistia.com/reference/post_expiring-token)
+created with authorizations cannot be used: search responds with a 403,
+whatever the authorizations grant.
+
+
+**Source:** [Search](https://docs.wistia.com/reference/get_search.md), pinned SHA-256 `b80f62c1ce75870157cb31afdd9c50daf9c7b6bbeec15eeb5a39f22159c0bb1d`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/SearchTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## get_resource-urls
+
+**API:** `DataResourceURLsService::resolveResourceURLs(Request\Data\ResolveResourceURLsRequest): Result\Data\ResolveResourceURLsResult`.
+
+**Wire:** `GET /resource_urls`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Resolves a resource's hashed ID and type to its canonical app URL(s) — deep
+links an authorized user can open in the Wistia UI. The URL is only returned
+when the authenticated user is allowed to view the resource.
+
+### Requires api token with one of the following permissions
+```
+Read all data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+
+**Source:** [Resolve Resource URLs](https://docs.wistia.com/reference/get_resource-urls.md), pinned SHA-256 `bcfffbb451a34b36ade5074c871fc861ff4ce7cf2602e6e935ad2fa8bae76467`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ResolveResourceURLsTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## get_review-bundles
+
+**API:** `DataReviewBundlesService::listReviewBundles(Request\Data\ListReviewBundlesRequest): Result\Data\ListReviewBundlesResult`.
+
+**Wire:** `GET /review_bundles`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Lists review bundles belonging to an account. This endpoint can also be used to
+do a batch fetch based off of the hashed id, or to find the bundles that include
+a given media or any media from a folder.
+
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming a review bundle (any permission) can also be used; it
+lists the review bundles the token names.
+
+
+
+**Source:** [List Review Bundles](https://docs.wistia.com/reference/get_review-bundles.md), pinned SHA-256 `4e10e4ea692c4ef7d9a05ebbef902cdb271c22da5bbf6f081e8eefb9a077370a`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ListReviewBundlesTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## post_review-bundles
+
+**API:** `DataReviewBundlesService::createReviewBundle(Request\Data\CreateReviewBundleRequest): Result\Data\CreateReviewBundleResult`.
+
+**Wire:** `POST /review_bundles`; success 201 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Creates a review bundle from a set of existing media, producing a single link
+that can be shared for review. The media to include are specified by their hashed
+IDs and must already belong to the account. The media can come from any folder.
+Review Bundles are limited to 25 media.
+
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and
+authorizations granting the `share` permission on every listed media can
+also be used. The new review bundle is not covered by the token that
+created it, so follow-up requests need a token whose authorizations name
+the returned hashed id.
+
+
+
+**Source:** [Create Review Bundle](https://docs.wistia.com/reference/post_review-bundles.md), pinned SHA-256 `cb539561491d6f3bfb5279a0878313080a4a1dc13f827dd1afaa4833555a7fd9`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/CreateReviewBundleTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## delete_review-bundles-reviewbundlehashedid
+
+**API:** `DataReviewBundlesService::deleteReviewBundle(Request\Data\DeleteReviewBundleRequest): Result\Data\DeleteReviewBundleResult`.
+
+**Wire:** `DELETE /review_bundles/{reviewBundleHashedId}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Permanently deletes a review bundle, identified by its hashed id. This removes
+the bundle and its shared review link; the media it contained are not deleted.
+This action cannot be undone.
+
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `destroy` permission on this review bundle can
+also be used.
+
+
+
+**Source:** [Delete Review Bundle](https://docs.wistia.com/reference/delete_review-bundles-reviewbundlehashedid.md), pinned SHA-256 `8b02df84d2eb69f95679808725c47d8770460536fa2c899ae8af5a2af21a77c1`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteReviewBundleTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## get_share-links-identifier
+
+**API:** `DataShareLinksService::resolveShareLink(Request\Data\ResolveShareLinkRequest): Result\Data\ResolveShareLinkResult`.
+
+**Wire:** `GET /share_links/{identifier}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Resolves a share link URL segment — the part after `/s/` in a share
+link like `https://example.wistia.com/s/summer-sale` — to the share
+link and the media it points to, including the media's hashed ID.
+
+The identifier may be the share link's hashed ID or its custom slug.
+Historical slugs that were later changed still resolve to the link.
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization naming the share link's media (any permission) can also be
+used. The share link of a media the token does not name is not found.
+
+
+**Source:** [Resolve share link](https://docs.wistia.com/reference/get_share-links-identifier.md), pinned SHA-256 `626959dd83cf0da00eddd78a8f24236da54156db4a71a999bdb8068c93cdc7b5`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ResolveShareLinkTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## get_medias-mediaid-share-link
+
+**API:** `DataShareLinksService::showShareLink(Request\Data\ShowShareLinkRequest): Result\Data\ShowShareLinkResult`.
+
+**Wire:** `GET /medias/{mediaId}/share_link`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Fetches the share link for a single media. If the media does not have a
+share link yet, one is created on first request with a default
+visibility derived from the parent folder.
+
+### Requires api token with one of the following permissions
+```
+Read all folder and media data
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `share` permission on this media can also be used.
+
+
+**Source:** [Show share link](https://docs.wistia.com/reference/get_medias-mediaid-share-link.md), pinned SHA-256 `25a9d4051456b53b69b35d480200d630bac10ca32bba86d0b23fece46288890a`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/ShowShareLinkTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## put_medias-mediaid-share-link
+
+**API:** `DataShareLinksService::updateShareLink(Request\Data\UpdateShareLinkRequest): Result\Data\UpdateShareLinkResult`.
+
+**Wire:** `PUT /medias/{mediaId}/share_link`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Updates the share link for a single media. If the media does not have a
+share link yet, one is created with the supplied visibility.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this media can also be used.
+
+
+**Source:** [Update share link](https://docs.wistia.com/reference/put_medias-mediaid-share-link.md), pinned SHA-256 `7fa8a3f6207e6cb0b4c57199df06a717a89b8493a3acf9fcfcd4838f78c99dd9`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/UpdateShareLinkTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## delete_medias-mediaid-share-link
+
+**API:** `DataShareLinksService::deleteShareLink(Request\Data\DeleteShareLinkRequest): Result\Data\DeleteShareLinkResult`.
+
+**Wire:** `DELETE /medias/{mediaId}/share_link`; success 200, with no documented response schema. Bearer token, modern Data host, version `2026-09`.
+
+**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+
+**Restrictions from the pinned source:**
+
+Deletes the share link for a media, revoking the URL. A new share link
+can be created later with a fresh URL by calling the show or update
+endpoint again.
+
+### Requires api token with one of the following permissions
+```
+Read, update & delete anything
+```
+
+Tokens with the "Act with a team member's permissions" permission
+(`all:delegate_to_contact_permissions` scope) can also be used. Requests
+made with such a token are authorized using the permissions of the
+contact assigned to the token.
+
+An [expiring access token](https://docs.wistia.com/reference/post_expiring-token)
+created with the `all:delegate_to_contact_permissions` scope and an
+authorization granting the `update` permission on this media can also be used.
+
+
+**Source:** [Delete share link](https://docs.wistia.com/reference/delete_medias-mediaid-share-link.md), pinned SHA-256 `302b6c780ef139b9a1606f49574828666684e54a26fb4d22acaac680351de9d0`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteShareLinkTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
