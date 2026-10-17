@@ -1,0 +1,28 @@
+# Fresh-consumer scaffold. Merge with existing service definitions in a real app.
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude: '../src/Kernel.php'
+
+    Automattic\Wistia\Configuration:
+        arguments:
+            $token: '%env(string:WISTIA_API_TOKEN)%'
+
+    Automattic\Wistia\Client:
+        arguments:
+            $configuration: '@Automattic\Wistia\Configuration'
+
+    Automattic\Wistia\DataMediaService: ~
+
+    Automattic\Wistia\WebhookVerifier:
+        arguments:
+            $secret: '%env(string:WISTIA_WEBHOOK_SECRET)%'
+
+    Automattic\Wistia\WebhookParser: ~
+
+    App\Controller\WistiaWebhookController:
+        tags: ['controller.service_arguments']
