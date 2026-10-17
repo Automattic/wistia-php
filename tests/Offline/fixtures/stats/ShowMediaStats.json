@@ -1,0 +1,18 @@
+{
+  "load_count": 12,
+  "play_count": 0,
+  "hours_watched": 1.25,
+  "play_rate": 0,
+  "engagement": 0.5,
+  "visitors": 2,
+  "actions": [
+    {
+      "type": "Call to Action",
+      "action_count": 0,
+      "impression_count": 2,
+      "rate": 0,
+      "url": null,
+      "text": "private-action"
+    }
+  ]
+}

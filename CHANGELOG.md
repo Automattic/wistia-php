@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add all ten typed Stats operations with account/media/event/visitor metrics, inclusive by-date queries, filtered pagination and offline contract coverage. ([#25](https://github.com/Automattic/wistia-php/issues/25))
+
 - Add typed non-purchasing bulk actions and scoped jobs with reusable resource payloads, local input limits, job-status handoff and offline contract coverage. ([#23](https://github.com/Automattic/wistia-php/issues/23))
 
 - Add nine typed search, resource-URL, review-bundle and share-link operations with metadata filters, bundle pagination and single-attempt handling for link-creating GET requests, covered by offline contracts. ([#22](https://github.com/Automattic/wistia-php/issues/22))
