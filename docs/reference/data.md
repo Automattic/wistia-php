@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, P12's nine brand/account-branding operations, P13's 11 account/access-management operations, and P14's nine [search/review-sharing operations](../search-sharing.md). Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, P12's nine brand/account-branding operations, P13's 11 account/access-management operations, P14's nine [search/review-sharing operations](../search-sharing.md), and P15's [non-purchasing bulk submission](../bulk.md). Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -4038,3 +4038,17 @@ authorization granting the `update` permission on this media can also be used.
 
 
 **Source:** [Delete share link](https://docs.wistia.com/reference/delete_medias-mediaid-share-link.md), pinned SHA-256 `302b6c780ef139b9a1606f49574828666684e54a26fb4d22acaac680351de9d0`. Full schemas/errors remain in the [inventory](../rewrite/operations.json). Offline contract: `tests/Contract/Data/DeleteShareLinkTest.php`; behavioral edges: `tests/Contract/Data/SharingBehaviorTest.php`. No live or plan-entitlement verification is claimed.
+
+## post_bulk
+
+**API:** `DataBulkActionsService::createBulkActions(Request\Data\CreateBulkActionsRequest): Result\Data\CreateBulkActionsResult`.
+
+**Wire:** `POST https://api.wistia.com/modern/bulk`, Bearer authentication, `X-Wistia-API-Version: 2026-09`, JSON body and no query. Only 202 JSON is success. The result exposes `message` and `backgroundJobStatus: Jobs\BackgroundJobStatus`; submission does not poll or prove every action succeeded.
+
+**Inputs:** Exactly one typed `actions` list or typed `Bulk\Job`. `Bulk\Change` factories constrain operation/resource/payload combinations and reuse the corresponding included resource contracts. Actions take target IDs except on create; caption targets are track IDs. A job takes exactly one typed scope or explicit ID list and cannot create. See the [bulk guide](../bulk.md) for all factories, parent/resource combinations, inline SRT, typed customization partial updates, metadata null semantics and examples.
+
+**Limits and restrictions:** 1–1000 actions or explicit job IDs; encoded body under 2 MB (conservative local ceiling below 2,000,000 bytes). Wistia enforces the 5000-record scoped-job limit. Folder scopes include subfolders/archived media under matching list defaults. Jobs are unavailable to external contacts. Folder/subfolder deletion also soft-deletes their media. Purchases, generation, translation and trials are excluded.
+
+Requires Read, update & delete anything or delegated team-member permissions. Expiring tokens with authorizations are forbidden here; permissions/plan access and scope size remain remote validation. Each action is authorized independently. Use the returned hashed ID with [Show Background Job Status](#get_background-job-status-backgroundjobstatusid) or finite polling to observe aggregate progress and per-action failures/created IDs. A finished job can contain failures. No automatic retries; ambiguous write failures retain uncertain-outcome reporting and sanitized shared errors/rate-limit metadata.
+
+**Source:** [Create Bulk Actions](https://docs.wistia.com/reference/post_bulk.md), pinned SHA-256 `e7f823377230d4ef9b6aff52f2a9190ba453b79652d3589ea6f20e1ef03b8022`, rechecked against first-party documentation during P15. Not marked experimental. Offline contract: `tests/Contract/Data/CreateBulkActionsTest.php`. No live API, entitlement or destructive-call verification is claimed.
