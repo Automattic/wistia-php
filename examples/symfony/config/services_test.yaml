@@ -1,4 +1,7 @@
 # Public only in the test environment, so tests can replace the client before use.
+# Override the HTTP boundary before resolving commands/services that depend on it;
+# replacing an already-initialized client would not update those existing objects.
+# Production services.yaml keeps the client private.
 services:
     Automattic\Wistia\Client:
         public: true

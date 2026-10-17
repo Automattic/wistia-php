@@ -1,2 +1,4 @@
+# Enables the test container and HTTP kernel client used by WebTestCase.
+# It does not fake Wistia HTTP: the tests must inject their controlled client.
 framework:
     test: true

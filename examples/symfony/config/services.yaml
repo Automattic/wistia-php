@@ -1,28 +1,39 @@
 # Fresh-consumer scaffold. Merge with existing service definitions in a real app.
 services:
+    # Match constructor type hints to services, and discover command attributes.
     _defaults:
         autowire: true
         autoconfigure: true
 
+    # Register application classes; Kernel is bootstrapping code, not a service.
     App\:
         resource: '../src/'
         exclude: '../src/Kernel.php'
 
+    # Scalars cannot be inferred from a class type hint. Bind the outbound token
+    # explicitly; env(string:...) delegates secret lookup to Symfony's container.
     Automattic\Wistia\Configuration:
         arguments:
             $token: '%env(string:WISTIA_API_TOKEN)%'
 
+    # @ means a service reference, not a new instance or a literal class string.
+    # Services are shared by default; constructing this client sends no request.
     Automattic\Wistia\Client:
         arguments:
             $configuration: '@Automattic\Wistia\Configuration'
 
+    # ~ needs no custom arguments: autowiring supplies the Client type hint.
     Automattic\Wistia\DataMediaService: ~
 
+    # Inbound webhook verification has a separate secret and no API dependency.
     Automattic\Wistia\WebhookVerifier:
         arguments:
             $secret: '%env(string:WISTIA_WEBHOOK_SECRET)%'
 
+    # Autowiring supplies the verifier, so parsing cannot bypass authentication.
     Automattic\Wistia\WebhookParser: ~
 
+    # The tag lets Symfony resolve the controller and inject its Request argument
+    # when the explicit route calls __invoke(). It does not authenticate requests.
     App\Controller\WistiaWebhookController:
         tags: ['controller.service_arguments']
