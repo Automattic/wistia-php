@@ -16275,6 +16275,10 @@
         "documentation_target": "docs/reference/analytics.md#get_analytics-medias-mediaid",
         "contract_test_target": "tests/Contract/Analytics/ShowMediaAnalyticsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -16397,6 +16401,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Analytics\\ShowMediaAnalyticsTimeseriesResult",
         "documentation_target": "docs/reference/analytics.md#get_analytics-medias-mediaid-timeseries",
         "contract_test_target": "tests/Contract/Analytics/ShowMediaAnalyticsTimeseriesTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -16535,6 +16543,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Analytics\\ShowMediaEmbedLocationsResult",
         "documentation_target": "docs/reference/analytics.md#get_analytics-medias-mediaid-embed-locations",
         "contract_test_target": "tests/Contract/Analytics/ShowMediaEmbedLocationsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -16716,6 +16728,10 @@
         "documentation_target": "docs/reference/analytics.md#get_analytics-medias-mediaid-embed-locations-timeseries",
         "contract_test_target": "tests/Contract/Analytics/ShowMediaEmbedLocationsTimeseriesTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -16895,6 +16911,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Analytics\\ShowMediaTrafficBreakdownResult",
         "documentation_target": "docs/reference/analytics.md#get_analytics-medias-mediaid-traffic",
         "contract_test_target": "tests/Contract/Analytics/ShowMediaTrafficBreakdownTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -17080,6 +17100,10 @@
         "documentation_target": "docs/reference/analytics.md#get_analytics-medias-mediaid-conversions",
         "contract_test_target": "tests/Contract/Analytics/ShowMediaFormConversionsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -17225,6 +17249,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Analytics\\ShowMediaLanguagesResult",
         "documentation_target": "docs/reference/analytics.md#get_analytics-medias-mediaid-languages",
         "contract_test_target": "tests/Contract/Analytics/ShowMediaLanguagesTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
