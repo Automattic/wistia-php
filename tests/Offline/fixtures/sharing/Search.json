@@ -1,0 +1,141 @@
+{
+  "data": {
+    "folders": [
+      {
+        "id": 1,
+        "name": "private synthetic",
+        "description": "private synthetic",
+        "media_count": 1,
+        "medias": {
+          "url": "https://example.invalid/private-synthetic"
+        },
+        "created": "2026-10-15T12:00:00Z",
+        "updated": "2026-10-15T12:00:00Z",
+        "hashed_id": "private synthetic",
+        "public": false,
+        "public_id": "private synthetic",
+        "anonymous_can_upload": false,
+        "anonymous_can_download": false,
+        "kind": "library",
+        "personal_library": false,
+        "cursor": "private synthetic"
+      }
+    ],
+    "subfolders": [
+      {
+        "hashed_id": "private synthetic",
+        "name": "private synthetic",
+        "description": "private synthetic",
+        "position": 1,
+        "created": "2026-10-15T12:00:00Z",
+        "updated": "2026-10-15T12:00:00Z",
+        "cursor": "private synthetic"
+      }
+    ],
+    "medias": [
+      {
+        "id": 1,
+        "name": "private synthetic",
+        "type": "Video",
+        "archived": false,
+        "created": "2026-10-15T12:00:00Z",
+        "updated": "2026-10-15T12:00:00Z",
+        "duration": 0.5,
+        "embedCode": "private synthetic",
+        "hashed_id": "private synthetic",
+        "description": "private synthetic",
+        "progress": 0.5,
+        "status": "queued",
+        "section": "private synthetic",
+        "thumbnail": {
+          "url": "https://example.invalid/private-synthetic",
+          "width": 1,
+          "height": 1
+        },
+        "protected": false,
+        "folder_hashed_id": "private synthetic",
+        "transcript_matches": [
+          {
+            "text": "private synthetic",
+            "start_time_seconds": 0.5,
+            "start_time_formatted": "private synthetic",
+            "thumbnail_url": "https://example.invalid/private-synthetic"
+          }
+        ],
+        "custom_metadata_field_values": [
+          {
+            "key": "private synthetic",
+            "field_type": "text",
+            "value": "private synthetic",
+            "updated_at": "2026-10-15T12:00:00Z",
+            "last_write": {
+              "at": "2026-10-15T12:00:00Z",
+              "source": "ui",
+              "actor": {
+                "type": "contact",
+                "id": "private synthetic",
+                "name": "private synthetic"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "channels": [
+      {
+        "id": 1,
+        "hashed_id": "private synthetic",
+        "name": "private synthetic",
+        "description": "private synthetic",
+        "media_count": 1,
+        "created": "2026-10-15T12:00:00Z",
+        "updated": "2026-10-15T12:00:00Z",
+        "live_stream_event_count": 1,
+        "auto_publish_enabled": false,
+        "podcast_enabled": false,
+        "custom_url": "private synthetic"
+      }
+    ],
+    "channel_episodes": [
+      {
+        "id": 1,
+        "hashed_id": "private synthetic",
+        "title": "private synthetic",
+        "description": "private synthetic",
+        "summary": "private synthetic",
+        "channel_hashed_id": "private synthetic",
+        "media_hashed_id": "private synthetic",
+        "live_stream_event_hashed_id": "private synthetic",
+        "published": false,
+        "created": "2026-10-15T12:00:00Z",
+        "updated": "2026-10-15T12:00:00Z",
+        "publish_at": "2026-10-15T12:00:00Z"
+      }
+    ],
+    "webinars": [
+      {
+        "id": "private synthetic",
+        "hashed_id": "private synthetic",
+        "title": "private synthetic",
+        "description": "private synthetic",
+        "scheduled_for": "2026-10-15T12:00:00Z",
+        "event_duration": 1,
+        "time_zone": "private synthetic",
+        "lifecycle_status": "pending",
+        "registration_status": "private synthetic",
+        "created_at": "2026-10-15T12:00:00Z",
+        "updated_at": "2026-10-15T12:00:00Z",
+        "audience_link": "private synthetic",
+        "host_link": "private synthetic",
+        "panelist_link": "private synthetic",
+        "thumbnail_url": "https://example.invalid/private-synthetic",
+        "folder": {
+          "id": "private synthetic",
+          "index_url": "private synthetic",
+          "url": "https://example.invalid/private-synthetic"
+        },
+        "cursor": "private synthetic"
+      }
+    ]
+  }
+}

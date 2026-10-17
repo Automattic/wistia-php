@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add nine typed search, resource-URL, review-bundle and share-link operations with metadata filters, bundle pagination and single-attempt handling for link-creating GET requests, covered by offline contracts. ([#22](https://github.com/Automattic/wistia-php/issues/22))
+
 - Add 11 typed account and access-management operations with nested usage data, exact credit balances, allowed-domain pagination, invitations and credential-safe experimental expiring tokens, covered by offline contracts. ([#21](https://github.com/Automattic/wistia-php/issues/21))
 
 - Add nine typed brand and account-branding operations with explicit-null updates, application options, lazy pagination, preload selections, color-picker results and offline contract coverage. ([#20](https://github.com/Automattic/wistia-php/issues/20))

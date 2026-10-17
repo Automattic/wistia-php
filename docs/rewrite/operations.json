@@ -12306,6 +12306,11 @@
         "documentation_target": "docs/reference/data.md#get_search",
         "contract_test_target": "tests/Contract/Data/SearchTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -12518,6 +12523,11 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ResolveResourceURLsResult",
         "documentation_target": "docs/reference/data.md#get_resource-urls",
         "contract_test_target": "tests/Contract/Data/ResolveResourceURLsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -13473,6 +13483,11 @@
         "documentation_target": "docs/reference/data.md#get_review-bundles",
         "contract_test_target": "tests/Contract/Data/ListReviewBundlesTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -13674,6 +13689,11 @@
         "documentation_target": "docs/reference/data.md#post_review-bundles",
         "contract_test_target": "tests/Contract/Data/CreateReviewBundleTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
+      },
       "request": {
         "parameters": [],
         "body_required": false,
@@ -13754,6 +13774,11 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\DeleteReviewBundleResult",
         "documentation_target": "docs/reference/data.md#delete_review-bundles-reviewbundlehashedid",
         "contract_test_target": "tests/Contract/Data/DeleteReviewBundleTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -13843,6 +13868,11 @@
         "documentation_target": "docs/reference/data.md#get_share-links-identifier",
         "contract_test_target": "tests/Contract/Data/ResolveShareLinkTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -13930,6 +13960,11 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\ShowShareLinkResult",
         "documentation_target": "docs/reference/data.md#get_medias-mediaid-share-link",
         "contract_test_target": "tests/Contract/Data/ShowShareLinkTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -14019,6 +14054,11 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\UpdateShareLinkResult",
         "documentation_target": "docs/reference/data.md#put_medias-mediaid-share-link",
         "contract_test_target": "tests/Contract/Data/UpdateShareLinkTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -14119,6 +14159,11 @@
         "result_type": "Automattic\\Wistia\\Result\\Data\\DeleteShareLinkResult",
         "documentation_target": "docs/reference/data.md#delete_medias-mediaid-share-link",
         "contract_test_target": "tests/Contract/Data/DeleteShareLinkTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 22,
+        "live_verified": false
       },
       "request": {
         "parameters": [
