@@ -1,0 +1,6 @@
+# Public only in the test environment, so tests can replace the client before use.
+services:
+    Automattic\Wistia\Client:
+        public: true
+        arguments:
+            $configuration: '@Automattic\Wistia\Configuration'

@@ -1,0 +1,4 @@
+wistia_webhook:
+    path: /webhooks/wistia
+    controller: App\Controller\WistiaWebhookController
+    methods: [POST]

@@ -1,10 +1,11 @@
 # Runnable examples
 
-These examples use the typed **2.0 development API**, not the published 1.x client. The plain-PHP CLI programs below are framework-independent; the [Laravel integration](laravel/README.md) adds consumer-owned container bindings, an Artisan command and a webhook route. Symfony integration is not included yet.
+These examples use the typed **2.0 development API**, not the published 1.x client. The plain-PHP CLI programs below are framework-independent; the [Laravel](laravel/README.md) and [Symfony](symfony/README.md) integrations add consumer-owned container bindings, commands and webhook routes.
 
 ## Framework integration
 
 - [Laravel 13 / PHP 8.4+](laravel/README.md): isolated consumer setup, configuration caching, read-only Artisan media listing, verified webhook acknowledgement and offline framework integration tests.
+- [Symfony 8.1 / PHP 8.4+](symfony/README.md): isolated consumer setup, environment-backed services, read-only console media listing, verified webhook acknowledgement and offline kernel/HTTP integration tests.
 
 ## Plain-PHP setup and safety
 

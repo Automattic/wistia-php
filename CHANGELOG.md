@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add a Symfony 8.1 integration example with environment-backed service wiring, a read-only console command, webhook verification and isolated offline framework tests. ([#55](https://github.com/Automattic/wistia-php/issues/55))
+
 - Add a Laravel 13 integration example with container bindings, a read-only Artisan command, webhook verification and isolated offline framework tests. ([#54](https://github.com/Automattic/wistia-php/issues/54))
 
 - Add runnable plain-PHP examples for media listing, uploads, URL imports, finite job polling and webhook verification, with offline example checks. ([#53](https://github.com/Automattic/wistia-php/issues/53))
