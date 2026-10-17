@@ -61,6 +61,8 @@ foreach ($pages->items() as $item) {
 
 See [pagination and background jobs](docs/pagination.md) for cursor strategies, stopping conditions, and optional finite job polling. A queued job or accepted upload does not guarantee completed processing.
 
+For complete runnable workflows, prerequisites, remote-effect warnings and offline checks, see the [examples index](examples/README.md).
+
 ## API guides
 
 | Area | Guide |
