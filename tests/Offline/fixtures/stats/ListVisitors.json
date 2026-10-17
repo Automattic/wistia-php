@@ -1,0 +1,25 @@
+[
+  {
+    "visitor_key": "visitor-key",
+    "created_at": "2024-02-29T10:00:00Z",
+    "last_active_at": "2024-03-01T12:00:00Z",
+    "last_event_key": null,
+    "identifying_event_key": null,
+    "load_count": 0,
+    "play_count": 0,
+    "visitor_identity": {
+      "name": null,
+      "email": null,
+      "org": {
+        "name": null,
+        "title": null
+      }
+    },
+    "user_agent_details": {
+      "browser": "Synthetic",
+      "browser_version": "1",
+      "platform": "offline",
+      "mobile": false
+    }
+  }
+]

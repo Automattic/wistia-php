@@ -14550,6 +14550,10 @@
         "documentation_target": "docs/reference/stats.md#get_stats-account",
         "contract_test_target": "tests/Contract/Stats/ShowCurrentAccountStatsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [],
         "body_required": false,
@@ -14618,6 +14622,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Stats\\ShowAccountStatsByDateResult",
         "documentation_target": "docs/reference/stats.md#get_stats-account-by-date",
         "contract_test_target": "tests/Contract/Stats/ShowAccountStatsByDateTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -14710,6 +14718,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Stats\\ListEventsResult",
         "documentation_target": "docs/reference/stats.md#get_stats-events",
         "contract_test_target": "tests/Contract/Stats/ListEventsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -14845,6 +14857,10 @@
         "documentation_target": "docs/reference/stats.md#get_stats-events-eventkey",
         "contract_test_target": "tests/Contract/Stats/ShowEventTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -14928,6 +14944,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Stats\\ShowMediaStatsResult",
         "documentation_target": "docs/reference/stats.md#get_stats-medias-mediaid",
         "contract_test_target": "tests/Contract/Stats/ShowMediaStatsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -15013,6 +15033,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Stats\\ShowMediaStatsByDateResult",
         "documentation_target": "docs/reference/stats.md#get_stats-medias-mediaid-by-date",
         "contract_test_target": "tests/Contract/Stats/ShowMediaStatsByDateTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -15120,6 +15144,10 @@
         "documentation_target": "docs/reference/stats.md#get_stats-medias-mediaid-engagement",
         "contract_test_target": "tests/Contract/Stats/ShowMediaEngagementTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -15205,6 +15233,10 @@
         "documentation_target": "docs/reference/stats.md#get_stats-projects-projectid",
         "contract_test_target": "tests/Contract/Stats/ShowProjectStatsTest.php"
       },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      },
       "request": {
         "parameters": [
           {
@@ -15289,6 +15321,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Stats\\ListVisitorsResult",
         "documentation_target": "docs/reference/stats.md#get_stats-visitors",
         "contract_test_target": "tests/Contract/Stats/ListVisitorsTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [
@@ -15400,6 +15436,10 @@
         "result_type": "Automattic\\Wistia\\Result\\Stats\\ShowVisitorResult",
         "documentation_target": "docs/reference/stats.md#get_stats-visitors-visitorkey",
         "contract_test_target": "tests/Contract/Stats/ShowVisitorTest.php"
+      },
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
       },
       "request": {
         "parameters": [

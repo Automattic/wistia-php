@@ -1,0 +1,52 @@
+[
+  {
+    "received_at": "2024-02-29T10:00:00Z",
+    "event_key": "event-key",
+    "visitor_key": "visitor-key",
+    "embed_url": "https://example.invalid/watch",
+    "percent_viewed": 0.75,
+    "ip": "192.0.2.1",
+    "org": "Example",
+    "country": "XX",
+    "region": "Test",
+    "city": "Sample",
+    "lat": 0,
+    "lon": -1.5,
+    "email": null,
+    "media_id": "22570",
+    "media_name": "private-media",
+    "media_url": "https://example.invalid/media",
+    "iframe_heatmap_url": "https://example.invalid/heatmap",
+    "thumbnail": {
+      "url": "https://example.invalid/image.jpg",
+      "width": 640,
+      "height": 360,
+      "fileSize": 123,
+      "contentType": "image/jpeg",
+      "type": "StillImageFile"
+    },
+    "conversion_type": 0,
+    "conversion_data": {
+      "email": "private@example.invalid",
+      "first_name": "Test",
+      "last_name": "Person",
+      "is_new_lead": false
+    },
+    "user_agent_details": {
+      "browser": "Synthetic",
+      "browser_version": "1",
+      "platform": "offline",
+      "mobile": false
+    },
+    "attributes": {
+      "private_attribute": {
+        "count": 0,
+        "enabled": false,
+        "values": [
+          null,
+          "test"
+        ]
+      }
+    }
+  }
+]
