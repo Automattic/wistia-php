@@ -1,3 +1,6 @@
+# The standard Kernel imports config/routes/*.yaml. This route name is used by
+# debug:router; path is the URL to configure with the webhook sender. POST-only
+# routing is not authentication: the controller must still verify the HMAC.
 wistia_webhook:
     path: /webhooks/wistia
     controller: App\Controller\WistiaWebhookController
