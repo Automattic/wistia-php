@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add typed non-purchasing bulk actions and scoped jobs with reusable resource payloads, local input limits, job-status handoff and offline contract coverage. ([#23](https://github.com/Automattic/wistia-php/issues/23))
+
 - Add nine typed search, resource-URL, review-bundle and share-link operations with metadata filters, bundle pagination and single-attempt handling for link-creating GET requests, covered by offline contracts. ([#22](https://github.com/Automattic/wistia-php/issues/22))
 
 - Add 11 typed account and access-management operations with nested usage data, exact credit balances, allowed-domain pagination, invitations and credential-safe experimental expiring tokens, covered by offline contracts. ([#21](https://github.com/Automattic/wistia-php/issues/21))

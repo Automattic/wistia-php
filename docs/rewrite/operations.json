@@ -14301,7 +14301,12 @@
       },
       "pagination": "none-documented",
       "asynchronous": "Returns background_job_status; use #11 fetch/poll contracts, not automatic retries.",
-      "safety_constraint": "Only documented create/update/delete/move and listed resource types; no purchase, generation, translation, trial or arbitrary endpoint dispatch. Validate discriminated payload against the matching included operation. Respect actions/job exclusivity, limits and partial failures."
+      "safety_constraint": "Only documented create/update/delete/move and listed resource types; no purchase, generation, translation, trial or arbitrary endpoint dispatch. Validate discriminated payload against the matching included operation. Respect actions/job exclusivity, limits and partial failures.",
+      "delivery": {
+        "status": "implemented-offline",
+        "owner_issue": 23,
+        "live_verified": false
+      }
     },
     {
       "id": "post_bulk-purchase",
