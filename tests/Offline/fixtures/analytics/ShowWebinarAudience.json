@@ -1,0 +1,51 @@
+{
+  "data": [
+    {
+      "first_name": "private",
+      "last_name": "private",
+      "email": "private",
+      "phone_number": "private",
+      "company": "private",
+      "job_title": "private",
+      "country": "private",
+      "registered_at": "private",
+      "attended_at": "private",
+      "attendance_status": "private",
+      "restriction_status": "private",
+      "origin_method": "private",
+      "utm_campaign": "private",
+      "utm_source": "private",
+      "utm_medium": "private",
+      "referrer_domain": "private",
+      "ip_country": "private",
+      "ip_city": "private",
+      "engagement_rate": 0.5,
+      "focused_rate": 0.5,
+      "played_time": 0,
+      "focused_played_time": 0,
+      "chat_count": 0,
+      "annotation_click_count": 0,
+      "poll_responses_count": 0,
+      "attendee_histogram": [
+        0
+      ],
+      "focused_attendee_histogram": [
+        0
+      ],
+      "chats": [
+        {
+          "rounded_player_position": 0,
+          "chats": [
+            "private"
+          ]
+        }
+      ]
+    }
+  ],
+  "page_info": {
+    "has_next_page": false,
+    "has_previous_page": false,
+    "end_cursor": null,
+    "start_cursor": null
+  }
+}

@@ -17502,7 +17502,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_analytics-webinars-webinarid-registration",
@@ -17651,7 +17655,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_analytics-webinars-webinarid-traffic",
@@ -17799,7 +17807,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_analytics-webinars-webinarid-audience",
@@ -17915,7 +17927,11 @@
           }
         }
       },
-      "pagination": "analytics-cursor"
+      "pagination": "analytics-cursor",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "get_analytics-webinars-webinarid-histograms",
@@ -18016,7 +18032,11 @@
           }
         }
       },
-      "pagination": "none-documented"
+      "pagination": "none-documented",
+      "delivery": {
+        "status": "implemented-offline",
+        "live_verified": false
+      }
     },
     {
       "id": "post_",

@@ -1,0 +1,11 @@
+[
+  {
+    "timestamp": "private",
+    "registrations": 0,
+    "impressions": 0,
+    "on_demand_registrations": 0,
+    "on_demand_impressions": 0,
+    "completion_rate": 0.5,
+    "on_demand_completion_rate": 0.5
+  }
+]

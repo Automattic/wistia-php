@@ -1,0 +1,36 @@
+{
+  "registrations": 0,
+  "imported_registrations": 0,
+  "on_demand_registrations": 0,
+  "imported_on_demand_registrations": 0,
+  "total_watch_time": 0,
+  "average_watch_time": 0,
+  "attendance": 0,
+  "chatted_attendees": 0,
+  "engagement_rate": 0.5,
+  "chats": 0,
+  "currently_watching": 0,
+  "engaged_attendees": 0,
+  "impressions": 0,
+  "on_demand_impressions": 0,
+  "on_demand_plays": 0,
+  "on_demand_engagement_rate": 0.5,
+  "event_time": 0,
+  "qa_questions": 0,
+  "poll_questions": [
+    {
+      "id": 0,
+      "poll_id": 0,
+      "text": "private",
+      "response_count": 0,
+      "options": [
+        {
+          "id": 0,
+          "text": "private",
+          "count": 0,
+          "percent": 0.5
+        }
+      ]
+    }
+  ]
+}
