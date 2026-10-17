@@ -132,4 +132,4 @@ Default discovery runs only `tests/Offline` and `tests/Contract`, using syntheti
 
 ---
 
-By [Automattic](https://github.com/Automattic) and [Nicola Mustone](https://nicolamustone.com). Copyright (C) 2015 Automattic. Distributed under [GPL-2.0-or-later](LICENSE).
+Copyright (C) 2015–2026 Automattic. Distributed under [GPL-2.0-or-later](LICENSE).
