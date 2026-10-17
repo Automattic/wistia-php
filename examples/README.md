@@ -1,8 +1,12 @@
 # Runnable examples
 
-These examples use the typed **2.0 development API**, not the published 1.x client. They are framework-independent PHP CLI programs. Laravel and Symfony integration is outside this directory's current scope.
+These examples use the typed **2.0 development API**, not the published 1.x client. The plain-PHP CLI programs below are framework-independent; the [Laravel integration](laravel/README.md) adds consumer-owned container bindings, an Artisan command and a webhook route. Symfony integration is not included yet.
 
-## Setup and safety
+## Framework integration
+
+- [Laravel 13 / PHP 8.4+](laravel/README.md): isolated consumer setup, configuration caching, read-only Artisan media listing, verified webhook acknowledgement and offline framework integration tests.
+
+## Plain-PHP setup and safety
 
 Use a reviewed checkout of this repository with PHP 8.4+, ext-curl and the declared Composer dependencies already provisioned (see [installation](../README.md#installation)). Run commands below from the repository root. Each entry loads `vendor/autoload.php` relative to its own file; no working-directory edits or snippet assembly are needed.
 
