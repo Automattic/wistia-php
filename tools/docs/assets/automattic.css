@@ -1,0 +1,85 @@
+/* Automattic's a8c palette, from automattic.com. Keep the upstream docs layout. */
+:root {
+    --primary-color-hue: 198;
+    --primary-color: #0277a8;
+    --primary-color-darken: #00425b;
+    --primary-color-darker: #00425b;
+    --primary-color-darkest: #202428;
+    --primary-color-lighten: #c4e2f5;
+    --primary-color-lighter: #ebf4fa;
+    --text-color: #202428;
+    --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --letter-spacing--primary: 0.01em;
+    --font-secondary: var(--font-primary);
+    --font-monospace: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+body { margin: 0; }
+/* Contain phpDocumentor's floated columns so the footer follows the whole page. */
+main.phpdocumentor { display: flow-root; }
+a { overflow-wrap: anywhere; }
+a:focus-visible, input:focus-visible, label:focus-visible, summary:focus-visible {
+    outline: 3px solid #0277a8;
+    outline-offset: 4px;
+}
+.a8c-masthead {
+    background: #00425b;
+    color: #fff;
+    padding: 22px max(24px, calc((100vw - 1600px) / 2));
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+.a8c-masthead a { color: #fff; text-decoration: none; }
+.a8c-masthead img { width: 210px; height: auto; display: block; }
+.a8c-masthead span { border-left: 1px solid #90b1bd; padding-left: 24px; font-size: 15px; }
+.a8c-status { padding: 12px 24px; background: #ebf4fa; color: #00425b; font-size: 14px; }
+.a8c-status a { color: #00425b; }
+.a8c-footer {
+    border-top: 1px solid #c3c4c7;
+    padding: 28px 24px;
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 24px;
+    font-size: 14px;
+    color: #40464d;
+}
+.a8c-footer a { color: #0277a8; }
+.a8c-skip { position: absolute; top: -100px; left: 16px; z-index: 100; background: white; padding: 12px; }
+.a8c-skip:focus { top: 12px; }
+.phpdocumentor-header { padding-top: 24px; padding-bottom: 24px; }
+.phpdocumentor-title { font-size: 26px; letter-spacing: -0.03em; }
+.phpdocumentor-title__link { color: #00425b; }
+.phpdocumentor-content { min-width: 0; }
+.phpdocumentor-content pre { max-width: 100%; overflow-x: auto; }
+.phpdocumentor-content table { display: block; max-width: 100%; overflow-x: auto; }
+/* Narrative guides use a reading measure; API reference layouts stay upstream-owned. */
+.phpdocumentor-content > .section { max-width: 85ch; }
+.a8c-table { max-width: 100%; overflow-x: auto; }
+.phpdocumentor-content .section .a8c-table table { display: table; width: 100%; border-collapse: collapse; font-size: 15px; }
+.phpdocumentor-content .section :is(th, td) { padding: 10px 14px; border-bottom: 1px solid #c4e2f5; text-align: left; vertical-align: top; min-width: 140px; white-space: normal; }
+.phpdocumentor-content .section th { background: #ebf4fa; font-weight: 600; }
+.phpdocumentor-content :is(h1, h2, h3, h4) { scroll-margin-top: 24px; }
+.a8c-nav-section { margin-bottom: 24px; }
+.phpdocumentor .a8c-nav-section > h2 { font-size: 15px; margin: 0 0 8px; color: #00425b; }
+.phpdocumentor .phpdocumentor-sidebar .a8c-nav-list { list-style: none; margin: 0; padding: 0; }
+.phpdocumentor .phpdocumentor-sidebar .a8c-nav-list > li { white-space: normal; overflow: visible; padding: 0; }
+.a8c-nav-list a, .a8c-nav-group > summary { display: block; padding: 6px 10px; font-size: 15px; line-height: 1.4; border-left: 2px solid transparent; }
+.a8c-nav-list a { text-decoration: none; }
+.a8c-nav-list a:hover { background: #ebf4fa; }
+.a8c-nav-list a[aria-current="page"] { background: #ebf4fa; border-left-color: #0277a8; font-weight: 600; }
+.a8c-nav-group > summary { cursor: pointer; list-style: none; }
+.a8c-nav-group > summary::-webkit-details-marker { display: none; }
+.a8c-nav-group > summary::before { content: "+"; display: inline-block; width: 18px; color: #0277a8; }
+.a8c-nav-group[open] > summary::before { content: "−"; }
+.phpdocumentor .phpdocumentor-sidebar .a8c-nav-group > .a8c-nav-list { margin-left: 18px; border-left: 1px solid #c4e2f5; }
+@media (max-width: 999px) {
+    .a8c-masthead { gap: 16px; padding: 20px; }
+    .a8c-masthead img { width: 180px; }
+    .a8c-masthead span { border: 0; padding: 0; }
+    .phpdocumentor-header { flex-wrap: wrap; gap: 16px; }
+    .phpdocumentor-title { font-size: 23px; }
+    .a8c-footer { margin-top: 24px; }
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor configVersion="3" xmlns="https://www.phpdoc.org">
+    <title>Wistia PHP · Automattic</title>
+    <paths>
+        <output>build/site</output>
+        <cache>build/phpdoc-cache</cache>
+    </paths>
+    <version number="2.0-dev">
+        <api>
+            <source dsn="."><path>src</path></source>
+            <visibility>public</visibility>
+            <include-source>false</include-source>
+        </api>
+        <guide format="md">
+            <source dsn="."><path>build/guides</path></source>
+            <output>guides</output>
+        </guide>
+    </version>
+    <template name="default" />
+</phpdocumentor>

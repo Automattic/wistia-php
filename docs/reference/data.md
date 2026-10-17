@@ -1,6 +1,6 @@
 # Implemented Data API reference
 
-This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, P12's nine brand/account-branding operations, P13's 11 account/access-management operations, P14's nine [search/review-sharing operations](../search-sharing.md), and P15's [non-purchasing bulk submission](../bulk.md). Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](../media.md) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
+This page covers P03's job-status operation, P06's 19 media lifecycle, tags, trims and deleted-media operations, P07's 24 customization operations, P08's 16 captions/accessibility operations, P09's 17 folder/sharing/subfolder operations, P10's 16 channel/collaborator/episode operations, P11's ten webinar/collaborator/registration operations, P12's nine brand/account-branding operations, P13's 11 account/access-management operations, P14's nine [search/review-sharing operations](https://wistia-php.space.fast/guides/how-to/search-sharing.html), and P15's [non-purchasing bulk submission](https://wistia-php.space.fast/guides/how-to/bulk.html). Other Data mappings in the [inventory](../rewrite/operations.json) remain planned; this page does not claim full Data API coverage. See the [media guide](https://wistia-php.space.fast/guides/how-to/media.html) for usage, result conventions, pagination, polling and shared restrictions. Construct services with the shared `Client` directly, not a client accessor or magic dispatch.
 
 ## get_background-job-status-backgroundjobstatusid
 
@@ -29,7 +29,7 @@ Bulk content has required `summary: Jobs\BulkSummary` (`total`, `succeeded`, `fa
 
 Requires a token with **Read all data**, or delegated team-member permissions authorized for the assigned contact. An expiring `all:delegate_to_contact_permissions` token must cover the job's record (media/folder/channel/webinar); any permission on that record suffices. An account job is covered by any token for that account. Jobs on other records, including bulk operations, are not found with those restricted authorizations. No account/feature entitlement or live access is implied.
 
-401 produces `AuthenticationException`; 404/500 produce shared `ApiException`. Other statuses retain the [shared failure contract](../foundation.md#results-and-failures), including 429/rate-limit metadata and sanitized transport/decoding failures. Only the documented 200 success is allowed. Status reads are read-only, are sent once and never retried; they do not replay writes or cancel jobs. Failures do not prove that the original asynchronous operation did nothing.
+401 produces `AuthenticationException`; 404/500 produce shared `ApiException`. Other statuses retain the [shared failure contract](https://wistia-php.space.fast/guides/how-to/errors.html), including 429/rate-limit metadata and sanitized transport/decoding failures. Only the documented 200 success is allowed. Status reads are read-only, are sent once and never retried; they do not replay writes or cancel jobs. Failures do not prove that the original asynchronous operation did nothing.
 
 ### Runnable synthetic service example
 
@@ -59,7 +59,7 @@ if ($job->hashedId !== 'synthetic-job' || $result->termination !== PollingTermin
 }
 ```
 
-See [pagination and polling](../pagination.md#optional-finite-polling) for bounded traversal, termination and consumer responsibilities. Consumers own safe handling of job/action data, reconciliation, persistence and orchestration. Stopping polling never cancels remote work.
+See [pagination and polling](https://wistia-php.space.fast/guides/how-to/jobs.html) for bounded traversal, termination and consumer responsibilities. Consumers own safe handling of job/action data, reconciliation, persistence and orchestration. Stopping polling never cancels remote work.
 
 ### Evidence
 
@@ -724,9 +724,9 @@ folder.
 
 ## Customization operation conventions
 
-The [usage guide](../customizations.md#nested-input-and-results) documents sharing-list replacement/download coupling, narrative-derived option validation, gradient pairs, and the maintainer-approved image-CTA `altText` interpretation. The inventory preserves the upstream narrative/closed-schema discrepancy; this is not live-verified behavior.
+The [usage guide](https://wistia-php.space.fast/guides/how-to/customizations.html) explains partial updates, sharing-list replacement/download coupling and result-value handling. The inventory retains narrative-derived option validation, gradient pairs and the maintainer-approved image-CTA `altText` interpretation, including the upstream narrative/closed-schema discrepancy; this is not live-verified behavior.
 
-P07 implements the following 24 operations. See [media customizations](../customizations.md) for runnable usage, replacement versus partial-update/null semantics, nested input/result records, provider rules and migration. Every method accepts its named request with a nonempty raw `mediaId` encoded once as a path segment. All use Bearer authentication and the `2026-09` version, no query or pagination. Bodies use JSON and exact wire names; results expose `status` and typed `data`, except schema-less deletion which exposes only `status`. Shared sanitized failures, rate-limit information and single-attempt uncertain-write handling apply. These methods are not marked experimental by the pinned sources; all live and plan/provider behavior remains unverified.
+P07 implements the following 24 operations. See [media customizations](https://wistia-php.space.fast/guides/how-to/customizations.html) for usage, replacement versus partial-update/null semantics, typed inputs/results and provider rules. Every method accepts its named request with a nonempty raw `mediaId` encoded once as a path segment. All use Bearer authentication and the `2026-09` version, no query or pagination. Bodies use JSON and exact wire names; results expose `status` and typed `data`, except schema-less deletion which exposes only `status`. Shared sanitized failures, rate-limit information and single-attempt uncertain-write handling apply. These methods are not marked experimental by the pinned sources; all live and plan/provider behavior remains unverified.
 
 ## get_medias-mediaid-customizations
 
@@ -1396,7 +1396,7 @@ authorization granting the `edit` permission on this media can also be used.
 
 ## Captions and accessibility
 
-P08 adds 16 operations. See the [usage guide](../accessibility.md) for caption formats, exact versus fuzzy matches, atomic versioned edits, pagination, existing-order status, permissions and migration. Each method accepts its named request and returns its named result with `status` and typed `data`. Caption create/replace/delete have no source-defined success schema; their results retain status with `data=null`, without asserting a response-body shape. All use Bearer authentication, version `2026-09`, single-attempt shared execution and sanitized errors. None is marked experimental by the pinned sources. Live behavior and plan entitlement remain unverified.
+P08 adds 16 operations. See the [usage guide](https://wistia-php.space.fast/guides/how-to/accessibility.html) for caption formats, exact versus fuzzy matches, atomic versioned edits, pagination, existing-order status, permissions and migration. Each method accepts its named request and returns its named result with `status` and typed `data`. Caption create/replace/delete have no source-defined success schema; their results retain status with `data=null`, without asserting a response-body shape. All use Bearer authentication, version `2026-09`, single-attempt shared execution and sanitized errors. None is marked experimental by the pinned sources. Live behavior and plan entitlement remain unverified.
 
 ## get_medias-mediahashedid-captions
 
@@ -1816,7 +1816,7 @@ used.
 
 ## Folders, sharing and subfolders
 
-P09 implements the following 17 operations with typed nested results and offline synthetic contracts. See the [usage guide](../folders.md) for inputs, pagination, job handoff and safety restrictions. No live verification is claimed.
+P09 implements the following 17 operations with typed nested results and offline synthetic contracts. See the [usage guide](https://wistia-php.space.fast/guides/how-to/folders.html) for inputs, pagination, job handoff and safety restrictions. No live verification is claimed.
 
 ## get_folders
 
@@ -2300,7 +2300,7 @@ used.
 
 ## Channels, collaborators and episodes
 
-P10 implements these 16 operations offline. See the [channel guide](../channels.md) for inputs/results, scheduling, null semantics, pagination and safety. All requests use the modern Data host and version `2026-09`; all success bodies are JSON. No live access or plan entitlement is verified.
+P10 implements these 16 operations offline. See the [channel guide](https://wistia-php.space.fast/guides/how-to/channels.html) for inputs/results, scheduling, null semantics, pagination and safety. All requests use the modern Data host and version `2026-09`; all success bodies are JSON. No live access or plan entitlement is verified.
 
 ## get_channels
 
@@ -2766,7 +2766,7 @@ can also be used.
 
 # Webinars, collaborators and registrations
 
-P11 implements these ten operations with typed requests/results and synthetic offline contracts. See the [webinar guide](../webinars.md) for usage, scheduling, nested updates, pagination, permissions and migration. Live API and paid-plan behavior remain unverified.
+P11 implements these ten operations with typed requests/results and synthetic offline contracts. See the [webinar guide](https://wistia-php.space.fast/guides/how-to/webinars.html) for usage, scheduling, nested updates, pagination, permissions and migration. Live API and paid-plan behavior remain unverified.
 
 ## get_webinars
 
@@ -3094,7 +3094,7 @@ the brands the token names.
 
 **Wire:** `POST /brands`; success 201 JSON. Bearer token, modern Data host and version `2026-09`.
 
-Request JSON uses the retained `DataCreateBrandBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+Request JSON uses the retained `DataCreateBrandBodyApplicationJson` schema; see the typed request and [branding guide](https://wistia-php.space.fast/guides/how-to/brands.html) for inputs, null/omission and nested logo/gradient types.
 
 **Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
 
@@ -3171,7 +3171,7 @@ authorization naming this brand (any permission) can also be used.
 
 Path/query inputs: `brandId` (path).
 
-Request JSON uses the retained `DataCreateBrandBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+Request JSON uses the retained `DataCreateBrandBodyApplicationJson` schema; see the typed request and [branding guide](https://wistia-php.space.fast/guides/how-to/brands.html) for inputs, null/omission and nested logo/gradient types.
 
 **Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
 
@@ -3248,7 +3248,7 @@ used.
 
 Path/query inputs: `brandId` (path).
 
-Request JSON uses the retained `DataApplyBrandBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+Request JSON uses the retained `DataApplyBrandBodyApplicationJson` schema; see the typed request and [branding guide](https://wistia-php.space.fast/guides/how-to/brands.html) for inputs, null/omission and nested logo/gradient types.
 
 **Result:** `data` is a typed `Brands\Brand` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
 
@@ -3338,7 +3338,7 @@ own account.
 
 **Wire:** `PUT /brand_preload`; success 200 JSON. Bearer token, modern Data host and version `2026-09`.
 
-Request JSON uses the retained `DataUpdateBrandPreloadBodyApplicationJson` schema; see the typed request and [branding guide](../brands.md) for inputs, null/omission and nested logo/gradient types.
+Request JSON uses the retained `DataUpdateBrandPreloadBodyApplicationJson` schema; see the typed request and [branding guide](https://wistia-php.space.fast/guides/how-to/brands.html) for inputs, null/omission and nested logo/gradient types.
 
 **Result:** `data` is a typed `Brands\BrandPreload` record; `status` retains HTTP status. Nested fields are typed and validated; `presentFields` retains omission information.
 
@@ -3423,7 +3423,7 @@ own account.
 
 **Wire:** `GET /account`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
 
 **Restrictions from the pinned source:**
 
@@ -3453,7 +3453,7 @@ created with authorizations cannot be used: this endpoint responds with a
 
 **Wire:** `GET /account_usage`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
 
 **Restrictions from the pinned source:**
 
@@ -3487,7 +3487,7 @@ created with authorizations cannot be used: this endpoint responds with a
 
 **Wire:** `GET /credits/balance`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
 
 **Restrictions from the pinned source:**
 
@@ -3524,7 +3524,7 @@ created with authorizations cannot be used: this endpoint responds with a
 
 **Wire:** `GET /token`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
 
 **Restrictions from the pinned source:**
 
@@ -3547,7 +3547,7 @@ its scopes and expiry, not the API token or contact that created it.
 
 **Experimental:** this API is under development and can change at any time.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataCreateExpiringAccessTokenBodyApplicationJson`.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataCreateExpiringAccessTokenBodyApplicationJson`.
 
 **Restrictions from the pinned source:**
 
@@ -3579,7 +3579,7 @@ contact assigned to the token.
 
 **Wire:** `GET /allowed_domains`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `page` (query), `per_page` (query), `cursor` (query), `sort_by` (query), `sort_direction` (query).
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `page` (query), `per_page` (query), `cursor` (query), `sort_by` (query), `sort_direction` (query).
 
 **Restrictions from the pinned source:**
 
@@ -3609,7 +3609,7 @@ also be used. Such a token without that permission receives an empty list.
 
 **Wire:** `POST /allowed_domains`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataCreateAllowedDomainBodyApplicationJson`.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataCreateAllowedDomainBodyApplicationJson`.
 
 **Restrictions from the pinned source:**
 
@@ -3639,7 +3639,7 @@ also be used.
 
 **Wire:** `GET /allowed_domains/{domain}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `domain` (path).
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `domain` (path).
 
 **Restrictions from the pinned source:**
 
@@ -3669,7 +3669,7 @@ also be used.
 
 **Wire:** `DELETE /allowed_domains/{domain}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `domain` (path).
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. Inputs: `domain` (path).
 
 **Restrictions from the pinned source:**
 
@@ -3699,7 +3699,7 @@ also be used.
 
 **Wire:** `POST /contacts`; success 201 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataInviteContactsBodyApplicationJson`.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling. JSON body schema: `DataInviteContactsBodyApplicationJson`.
 
 **Restrictions from the pinned source:**
 
@@ -3726,7 +3726,7 @@ Read, update & delete anything
 
 **Wire:** `POST /contact/dismiss_desktop_install_prompt`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [account guide](../account.md) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
+**Inputs and results:** see the [account guide](https://wistia-php.space.fast/guides/how-to/account.html) for typed request fields, nested `Account\*` records in `data`, `status`, nullable/omitted fields, domain pagination and credential handling.
 
 **Restrictions from the pinned source:**
 
@@ -3755,7 +3755,7 @@ Read, update & delete anything
 
 **Wire:** `GET /search`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -3786,7 +3786,7 @@ whatever the authorizations grant.
 
 **Wire:** `GET /resource_urls`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -3813,7 +3813,7 @@ contact assigned to the token.
 
 **Wire:** `GET /review_bundles`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -3847,7 +3847,7 @@ lists the review bundles the token names.
 
 **Wire:** `POST /review_bundles`; success 201 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -3884,7 +3884,7 @@ the returned hashed id.
 
 **Wire:** `DELETE /review_bundles/{reviewBundleHashedId}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -3918,7 +3918,7 @@ also be used.
 
 **Wire:** `GET /share_links/{identifier}`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -3953,7 +3953,7 @@ used. The share link of a media the token does not name is not found.
 
 **Wire:** `GET /medias/{mediaId}/share_link`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -3984,7 +3984,7 @@ authorization granting the `share` permission on this media can also be used.
 
 **Wire:** `PUT /medias/{mediaId}/share_link`; success 200 JSON. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -4014,7 +4014,7 @@ authorization granting the `update` permission on this media can also be used.
 
 **Wire:** `DELETE /medias/{mediaId}/share_link`; success 200, with no documented response schema. Bearer token, modern Data host, version `2026-09`.
 
-**Inputs and results:** see the [search and review-sharing guide](../search-sharing.md) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
+**Inputs and results:** see the [search and review-sharing guide](https://wistia-php.space.fast/guides/how-to/search-sharing.html) for request fields, typed nested `Sharing\*` records, omission/null semantics, pagination and share-link write safety.
 
 **Restrictions from the pinned source:**
 
@@ -4045,7 +4045,7 @@ authorization granting the `update` permission on this media can also be used.
 
 **Wire:** `POST https://api.wistia.com/modern/bulk`, Bearer authentication, `X-Wistia-API-Version: 2026-09`, JSON body and no query. Only 202 JSON is success. The result exposes `message` and `backgroundJobStatus: Jobs\BackgroundJobStatus`; submission does not poll or prove every action succeeded.
 
-**Inputs:** Exactly one typed `actions` list or typed `Bulk\Job`. `Bulk\Change` factories constrain operation/resource/payload combinations and reuse the corresponding included resource contracts. Actions take target IDs except on create; caption targets are track IDs. A job takes exactly one typed scope or explicit ID list and cannot create. See the [bulk guide](../bulk.md) for all factories, parent/resource combinations, inline SRT, typed customization partial updates, metadata null semantics and examples.
+**Inputs:** Exactly one typed `actions` list or typed `Bulk\Job`. `Bulk\Change` factories constrain operation/resource/payload combinations and reuse the corresponding included resource contracts. Actions take target IDs except on create; caption targets are track IDs. A job takes exactly one typed scope or explicit ID list and cannot create. See the [bulk guide](https://wistia-php.space.fast/guides/how-to/bulk.html) for all factories, parent/resource combinations, inline SRT, typed customization partial updates, metadata null semantics and examples.
 
 **Limits and restrictions:** 1–1000 actions or explicit job IDs; encoded body under 2 MB (conservative local ceiling below 2,000,000 bytes). Wistia enforces the 5000-record scoped-job limit. Folder scopes include subfolders/archived media under matching list defaults. Jobs are unavailable to external contacts. Folder/subfolder deletion also soft-deletes their media. Purchases, generation, translation and trials are excluded.
 
