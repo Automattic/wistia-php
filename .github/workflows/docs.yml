@@ -1,0 +1,79 @@
+name: Documentation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Serialize production publishes so an older build cannot replace a newer site.
+concurrency:
+  group: docs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, dom, xml
+          coverage: none
+      - name: Install verified documentation generator
+        run: php tools/docs/install.php
+      - name: Generate documentation
+        run: php tools/docs/build.php
+      - name: Check links, navigation, branding and publish boundaries
+        run: php tools/docs/check.php
+      - name: Check PHP documentation fragments and offline tutorial
+        run: php tools/docs/check-examples.php
+      - name: Check repository documentation links
+        run: php tools/docs/check-repository-links.php
+      - uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: build/site/
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: documentation
+          path: build/site/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install pinned Spacefast CLI
+        run: npm install --global spacefast@0.4.1
+      - name: Require deployment credentials
+        env:
+          SPACEFAST_TOKEN: ${{ secrets.SPACEFAST_TOKEN }}
+        run: test -n "$SPACEFAST_TOKEN" || { echo 'Configure the SPACEFAST_TOKEN repository secret.' >&2; exit 1; }
+      - name: Skip superseded main revisions
+        id: current
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq '.object.sha')
+          if [ "$latest" = "$GITHUB_SHA" ]; then
+            echo 'publish=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'Skipping an older revision; a newer main build will publish.'
+          fi
+      - name: Publish generated files to the linked Space
+        if: steps.current.outputs.publish == 'true'
+        env:
+          SPACEFAST_TOKEN: ${{ secrets.SPACEFAST_TOKEN }}
+        run: |
+          sf publish build/site --prebuilt --space "$(node -p 'require("./.spacefast/space.json").space')" --wait --json

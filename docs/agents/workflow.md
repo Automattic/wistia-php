@@ -29,7 +29,7 @@ Current verification sources are [composer.json](../../composer.json), [phpunit.
 
 Historical [legacy tests](../../tests/ClientTest.php) create/delete Wistia resources and upload data. They are excluded from default discovery and separately gated by [phpunit.legacy.xml.dist](../../phpunit.legacy.xml.dist) and a bootstrap requiring explicit live/destructive opt-in flags. They require their original client/runtime and are incompatible with the rewrite. Flags do not grant approval. Do not run them casually, install dependencies, or configure credentials under ordinary safe-check authority. Live/destructive/chargeable operations need the applicable separate approval.
 
-Safe inspection includes `git diff --check`, PHP syntax checks and checking documentation links. No repository-local CI definition exists. Do not describe static checks, authored-but-unrun tests or synthetic transport diagnostics as PHPUnit, network-denied runtime or live API verification.
+Safe inspection includes `git diff --check`, PHP syntax checks and checking documentation links. The [documentation workflow](../../.github/workflows/docs.yml) builds and checks the public 2.0 site on pull requests and publishes successful `main` builds to the linked Spacefast Space. It is not library-test CI and is not a required branch-protection check. The maintainer approved this site's public hosting and automatic publication; other deployments retain their separate approval gates. See [documentation tooling](../../tools/docs/README.md) for the build, publish boundary and credential handling. Do not describe static checks, authored-but-unrun tests or synthetic transport diagnostics as PHPUnit, network-denied runtime or live API verification.
 
 ## Releases and changelog
 

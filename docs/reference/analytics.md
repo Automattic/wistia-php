@@ -224,6 +224,6 @@ Suffix `/histograms`. Only webinarId is accepted. `data` is `WebinarHistograms` 
 
 ## Failures and verification boundary
 
-Shared sanitized exceptions distinguish API, authentication, permission, rate-limit, transport and decoding failures. `rateLimit` retains supplied headers such as `Retry-After`. Reads are single-attempt, do not follow credential-bearing redirects, and never report an uncertain write outcome. See the [foundation](../foundation.md) for failure handling.
+Shared sanitized exceptions distinguish API, authentication, permission, rate-limit, transport and decoding failures. `rateLimit` retains supplied headers such as `Retry-After`. Reads are single-attempt, do not follow credential-bearing redirects, and never report an uncertain write outcome. See the [foundation](https://wistia-php.space.fast/guides/reference/configuration.html) for failure handling.
 
 Synthetic offline contracts cover all five account, seven media and five webinar paths, authentication/version, exact query encoding, typed nested results/nulls/zeros, validation bounds, malformed responses and sanitized failures. Media conversion contracts also cover individual pages, empty continuing/final pages, preserved date filters/cursors and bounded traversal errors without logging visitor data. PHP 8.4 and 8.5 checks use network denial. No Wistia requests, credential provisioning, purchases, trials or destructive calls are part of this delivery. The [inventory](../rewrite/README.md) keeps other operations' implementation and source-gap status separate.

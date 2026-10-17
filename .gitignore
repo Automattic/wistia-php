@@ -11,3 +11,12 @@ config.php
 
 # Local credentials
 .env
+
+# Documentation tooling, staging, generated site and local hosting credentials
+.tools/
+build/
+.spacefast/state.json
+phpdoc.xml
+/.spacefast-*
+.spacefast/.spacefast-*
+.spacefast/.space-link-*.tmp
