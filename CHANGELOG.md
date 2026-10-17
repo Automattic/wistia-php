@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Add a Laravel 13 integration example with container bindings, a read-only Artisan command, webhook verification and isolated offline framework tests. ([#54](https://github.com/Automattic/wistia-php/issues/54))
+
 - Add runnable plain-PHP examples for media listing, uploads, URL imports, finite job polling and webhook verification, with offline example checks. ([#53](https://github.com/Automattic/wistia-php/issues/53))
 
 - Add five typed upload/import workflows with streamed local files, signed-URL-safe encoding and operation-specific acceptance results; S3 copy remains pending response-contract confirmation. ([#24](https://github.com/Automattic/wistia-php/issues/24))
