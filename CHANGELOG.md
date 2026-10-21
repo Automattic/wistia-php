@@ -2,7 +2,13 @@
 
 Notable changes are recorded here using Semantic Versioning. Unreleased notes describe the next release, not a published package; verified earlier releases are listed under Published history.
 
-## 2.0.0 (Unreleased)
+## Unreleased
+
+No unreleased changes.
+
+<a id="200-unreleased"></a>
+
+## 2.0.0 - 2026-10-21
 
 ### Breaking changes
 
@@ -29,6 +35,7 @@ Notable changes are recorded here using Semantic Versioning. Unreleased notes de
 
 ### Changed
 
+- Remove the personal author entry from Composer metadata at the maintainer's request.
 - Run only credential-free offline foundation, helper and contract suites by default using PHPUnit `^12.5`; keep historical live/destructive tests separately gated and incompatible with the rewrite. ([#10](https://github.com/Automattic/wistia-php/issues/10))
 - Retain exact endpoint field names, signed-URL encoding and omission/null distinctions rather than applying global request/response conversions. ([#10](https://github.com/Automattic/wistia-php/issues/10))
 

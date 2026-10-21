@@ -15,12 +15,6 @@
             "name": "Automattic",
             "email": "info@automattic.com",
             "homepage": "https://automattic.com"
-        },
-        {
-            "name": "Nicola Mustone",
-            "email": "nicola@automattic.com",
-            "homepage": "https://nicolamustone.com",
-            "role": "Developer"
         }
     ],
     "require": {
