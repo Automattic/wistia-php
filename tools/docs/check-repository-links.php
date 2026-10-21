@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 chdir(dirname(__DIR__, 2));
-$files = ['README.md', 'AGENTS.md', 'CHANGELOG.md'];
+$files = ['README.md', 'CONTRIBUTING.md', 'AGENTS.md', 'CHANGELOG.md'];
 foreach (['docs', 'examples', 'tools/docs'] as $directory) {
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS)) as $entry) {
         if ($entry->getExtension() === 'md') {
