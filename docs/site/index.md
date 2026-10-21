@@ -32,6 +32,6 @@ A token's scope does not guarantee feature or plan access. A queued job or accep
 
 ## Development status
 
-The implemented service families are listed in [Services and operations](reference/services.md). S3 copy is not implemented. Caption purchases, generated translations/localizations, audio-description orders and account trials are not exposed.
+The implemented service families are listed in [Services and operations](reference/services.md). S3 copy requires Wistia-assisted bucket/IAM setup. Caption purchases, generated translations/localizations, audio-description orders and account trials are not exposed.
 
 Contract checks use synthetic responses; they do not guarantee live behavior, plan entitlement or production processing. Keep the development version pinned to a reviewed commit when evaluating it. No 2.0 release is implied by this site.
