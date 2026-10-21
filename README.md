@@ -13,6 +13,8 @@ Automattic's framework-independent PHP client for Wistia, with typed requests an
 **[Read the Wistia PHP documentation →](https://wistia-php.space.fast/)**
 
 - [Install the development client and make your first API call](https://wistia-php.space.fast/guides/tutorials/first-api-call.html)
+- [Migrate from the 1.x client](https://wistia-php.space.fast/guides/how-to/migrate-from-1x.html)
+- [Review coverage and verification limits](https://wistia-php.space.fast/guides/reference/coverage.html)
 - [Find a workflow guide](https://wistia-php.space.fast/#find-the-right-guide)
 - [Browse the PHP API reference](https://wistia-php.space.fast/api.html)
 - [Use the plain-PHP, Laravel or Symfony examples](https://wistia-php.space.fast/#find-the-right-guide)

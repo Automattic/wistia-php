@@ -14,6 +14,7 @@ You need **PHP 8.4+**, the **cURL extension**, Composer and a Wistia account wit
 
 | I want to… | Read |
 | --- | --- |
+| Move an existing 1.x integration to the development API | [Migrate from 1.x](how-to/migrate-from-1x.md) |
 | List, update or organize videos | [Manage media](how-to/media.md) and [work with folders](how-to/folders.md) |
 | Send a file or import a URL | [Upload and import](how-to/uploads.md) |
 | Change player settings or captions | [Customize a player](how-to/customizations.md) and [manage captions](how-to/accessibility.md) |
@@ -34,4 +35,4 @@ A token's scope does not guarantee feature or plan access. A queued job or accep
 
 The implemented service families are listed in [Services and operations](reference/services.md). S3 copy requires Wistia-assisted bucket/IAM setup. Caption purchases, generated translations/localizations, audio-description orders and account trials are not exposed.
 
-Contract checks use synthetic responses; they do not guarantee live behavior, plan entitlement or production processing. Keep the development version pinned to a reviewed commit when evaluating it. No 2.0 release is implied by this site.
+[Coverage and limitations](reference/coverage.md) describes the included surface, exclusions and limited live observations. Contract checks use synthetic responses; they do not guarantee live behavior, plan entitlement or production processing. Keep the development version pinned to a reviewed commit when evaluating it. No 2.0 release is implied by this site.

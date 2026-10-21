@@ -18501,7 +18501,8 @@
         "thumbnail-url"
       ],
       "source": "https://docs.wistia.com/reference/update-thumbnails-via-upload-api.md",
-      "unresolved": "Upstream documentation still omits the response and retains the conflicting URL example. Maintainer approved implementation from the recorded live 201 empty-body and POST/lowercase-url observations; no upstream correction or final whole-ticket acceptance is claimed.",
+      "unresolved": "Upstream documentation still omits the response and retains the conflicting URL example. Maintainer approved implementation from the recorded live 201 empty-body and POST/lowercase-url observations; no upstream correction is claimed.",
+      "implementation_resolution": {"status": "resolved", "authority": "Maintainer-approved standalone live thumbnail-file and POST/lowercase-url observations; implemented and integrated in PR #50.", "evidence": "docs/rewrite/upload-evidence.md"},
       "affected_owner_issue": 24
     },
     {
@@ -18511,6 +18512,7 @@
       ],
       "source": "https://docs.wistia.com/reference/upload-via-s3-copy.md",
       "unresolved": "Published guide still omits response status/body schema. Maintainer approved implementation from relayed human-support confirmation: normal 200 standard Upload media plus account_id; error Content-Type/body are unreliable. See upload-evidence.md. Original source gap retained; S3 has not been live-verified.",
+      "implementation_resolution": {"status": "resolved", "authority": "Maintainer-relayed Wistia human-support confirmation and implementation approval; integrated in PR #61.", "evidence": "docs/rewrite/upload-evidence.md"},
       "affected_owner_issue": 24
     },
     {
@@ -18520,6 +18522,7 @@
       ],
       "source": "https://docs.wistia.com/reference/getting-started-with-the-upload-api-1.md",
       "unresolved": "Upstream documentation still omits the localization response and has conflicting general host prose. Maintainer approved implementation from the recorded upload-v2 201 empty-body observation; other host and processing completion remain untested.",
+      "implementation_resolution": {"status": "resolved", "authority": "Maintainer-approved standalone upload-v2 201 empty-body observation; implemented and integrated in PR #50.", "evidence": "docs/rewrite/upload-evidence.md"},
       "affected_owner_issue": 24
     }
   ],

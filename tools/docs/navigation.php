@@ -9,6 +9,7 @@ function docsNavigation(): array
         'Getting started' => [
             'index' => 'Overview',
             'tutorials/first-api-call' => 'Your first API call',
+            'how-to/migrate-from-1x' => 'Migrate from 1.x',
         ],
         'How-to guides' => [
             'Read and write safely' => [
@@ -38,6 +39,7 @@ function docsNavigation(): array
         'Reference' => [
             '@api' => 'PHP API reference',
             'reference/services' => 'Services and operations',
+            'reference/coverage' => 'Coverage and limitations',
             'reference/configuration' => 'Configuration',
             'reference/errors' => 'Exceptions and rate limits',
         ],
