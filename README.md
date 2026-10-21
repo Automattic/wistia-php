@@ -33,20 +33,9 @@ The website covers the 2.0 API; do not combine its examples with the 1.x package
 
 Your application owns credentials, secret storage and callback/webhook routes. The library does not load `.env` files, automatically retry requests or follow redirects. Purchases, generated translation/dubbing and account trials are excluded. Offline contract coverage does not establish live API behavior or plan entitlement; see the coverage guide for the exact verification limits.
 
-## Development
+## Contributing
 
-With the declared development dependencies provisioned:
-
-```sh
-composer test
-```
-
-Default discovery runs only offline foundation, helper and contract suites using synthetic responses. It loads no live credentials and does not establish Wistia account access, plan entitlement or processing completion.
-
-> [!CAUTION]
-> Historical legacy tests can upload files and create or delete Wistia resources. They are excluded from default discovery, separately gated and incompatible with the rewrite. Do not run them as ordinary checks or supply credentials for local verification.
-
-Maintainers: [documentation build and publishing](tools/docs/README.md), [rewrite contracts and coverage](docs/rewrite/README.md), and [agent guidance](AGENTS.md). Website sources live in `docs/site/`; they are retained for reproducible builds, not as a second user documentation site.
+See [Contributing to Wistia PHP](CONTRIBUTING.md) for local setup, testing and pull-request guidance.
 
 ---
 
