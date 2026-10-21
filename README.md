@@ -3,23 +3,23 @@
 [![Latest Release](https://img.shields.io/github/release/Automattic/wistia-php.svg?style=flat-square)](https://github.com/Automattic/wistia-php/releases)
 [![PHP](https://img.shields.io/badge/php-%5E8.4-777BB4?style=flat-square)](composer.json)
 
-Automattic's framework-independent PHP client for Wistia, with typed requests and results for content management, uploads, reporting and webhooks.
+A framework-independent PHP client for Wistia, with typed requests and results for content management, uploads, reporting and webhooks.
 
 > [!IMPORTANT]
-> This branch contains the breaking rewrite targeting **2.0.0**, not the published 1.x API. It requires PHP **8.4+**, the **cURL extension** and Composer. The rewrite is unreleased; complete release acceptance remains pending. There is no legacy compatibility layer.
+> Wistia PHP **2.0** requires PHP **8.4+**, the **cURL extension** and Composer. It is a breaking rewrite of 1.x with no legacy compatibility layer; follow the migration guide when upgrading.
 
 ## Documentation
 
 **[Read the Wistia PHP documentation →](https://wistia-php.space.fast/)**
 
-- [Install the development client and make your first API call](https://wistia-php.space.fast/guides/tutorials/first-api-call.html)
+- [Install the client and make your first API call](https://wistia-php.space.fast/guides/tutorials/first-api-call.html)
 - [Migrate from the 1.x client](https://wistia-php.space.fast/guides/how-to/migrate-from-1x.html)
 - [Review coverage and verification limits](https://wistia-php.space.fast/guides/reference/coverage.html)
 - [Find a workflow guide](https://wistia-php.space.fast/#find-the-right-guide)
 - [Browse the PHP API reference](https://wistia-php.space.fast/api.html)
 - [Use the plain-PHP, Laravel or Symfony examples](https://wistia-php.space.fast/#find-the-right-guide)
 
-The website covers the 2.0 development API. Follow its installation instructions rather than combining these examples with the released 1.x package. Your application owns credentials and secret storage; the library does not load `.env` files.
+The website covers the 2.0 API. Follow its installation instructions rather than combining these examples with the 1.x package. Your application owns credentials and secret storage; the library does not load `.env` files.
 
 ## Development
 

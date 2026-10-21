@@ -21,23 +21,10 @@ a:focus-visible, input:focus-visible, label:focus-visible, summary:focus-visible
     outline: 3px solid #0277a8;
     outline-offset: 4px;
 }
-.a8c-masthead {
-    background: #00425b;
-    color: #fff;
-    padding: 22px max(24px, calc((100vw - 1600px) / 2));
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
-}
-.a8c-masthead a { color: #fff; text-decoration: none; }
-.a8c-masthead img { width: 210px; height: auto; display: block; }
-.a8c-masthead span { border-left: 1px solid #90b1bd; padding-left: 24px; font-size: 15px; }
-.a8c-status { padding: 12px 24px; background: #ebf4fa; color: #00425b; font-size: 14px; }
-.a8c-status a { color: #00425b; }
+.a8c-version { color: #40464d; font-size: 14px; font-weight: 400; letter-spacing: normal; }
 .a8c-footer {
     border-top: 1px solid #c3c4c7;
-    padding: 28px 24px;
+    padding-block: 28px;
     margin-top: 48px;
     display: flex;
     flex-wrap: wrap;
@@ -47,12 +34,24 @@ a:focus-visible, input:focus-visible, label:focus-visible, summary:focus-visible
     color: #40464d;
 }
 .a8c-footer a { color: #0277a8; }
+/* Keep the fixed back-to-top control clear of footer text near the viewport edge. */
+@media (max-width: 1500px) {
+    .a8c-footer { padding-inline-end: 80px; }
+}
 .a8c-skip { position: absolute; top: -100px; left: 16px; z-index: 100; background: white; padding: 12px; }
 .a8c-skip:focus { top: 12px; }
-.phpdocumentor-header { padding-top: 24px; padding-bottom: 24px; }
-.phpdocumentor-title { font-size: 26px; letter-spacing: -0.03em; }
-.phpdocumentor-title__link { color: #00425b; }
+.phpdocumentor-header.phpdocumentor-section { padding: 24px var(--spacing-sm); align-items: center; gap: 24px; }
+.phpdocumentor-title { font-size: 26px; letter-spacing: -0.03em; width: auto; border: 0; gap: 12px; flex-wrap: wrap; }
+.phpdocumentor-title__link, .phpdocumentor-title__link:hover { color: #00425b; transform: none; font-weight: 600; }
+@media (min-width: 550px) {
+    .phpdocumentor-header.phpdocumentor-section { padding-inline: var(--spacing-lg); }
+}
+@media (min-width: 1200px) {
+    .phpdocumentor-header.phpdocumentor-section { padding-inline: 0; }
+}
 .phpdocumentor-content { min-width: 0; }
+/* Long inline method names may wrap; preformatted examples retain their own scroll area. */
+.phpdocumentor-content :is(p, li) > code { overflow-wrap: anywhere; }
 .phpdocumentor-content pre { max-width: 100%; overflow-x: auto; }
 .phpdocumentor-content table { display: block; max-width: 100%; overflow-x: auto; }
 /* Narrative guides use a reading measure; API reference layouts stay upstream-owned. */
@@ -76,9 +75,6 @@ a:focus-visible, input:focus-visible, label:focus-visible, summary:focus-visible
 .a8c-nav-group[open] > summary::before { content: "−"; }
 .phpdocumentor .phpdocumentor-sidebar .a8c-nav-group > .a8c-nav-list { margin-left: 18px; border-left: 1px solid #c4e2f5; }
 @media (max-width: 999px) {
-    .a8c-masthead { gap: 16px; padding: 20px; }
-    .a8c-masthead img { width: 180px; }
-    .a8c-masthead span { border: 0; padding: 0; }
     .phpdocumentor-header { flex-wrap: wrap; gap: 16px; }
     .phpdocumentor-title { font-size: 23px; }
     .a8c-footer { margin-top: 24px; }

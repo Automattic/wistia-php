@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Prepare the documentation for 2.0.0 with footer-only publisher credit, centered body-width headers/footers and release installation guidance.
+
 - Add a 1.x migration guide, public coverage and verification limits, and repeatable offline inventory-to-implementation checks. ([#29](https://github.com/Automattic/wistia-php/issues/29))
 
 - Add a Symfony 8.1 integration example with environment-backed service wiring, a read-only console command, webhook verification and isolated offline framework tests. ([#55](https://github.com/Automattic/wistia-php/issues/55))

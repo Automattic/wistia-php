@@ -2,7 +2,7 @@
 
 Choose a service by task, then follow its link for the generated method, request and result reference. Pass a configured `Client` to services; webhook verification/parsing are local helpers and do not use it.
 
-The directory describes implemented services in the 2.0 development API, not a promise of complete Wistia API coverage. Permissions, account features and plan restrictions still apply. Use the **PHP API reference** sidebar entry to browse every generated class.
+The directory describes implemented services in Wistia PHP 2.0, not a promise of complete Wistia API coverage. Permissions, account features and plan restrictions still apply. Use the **PHP API reference** sidebar entry to browse every generated class.
 
 ## Content management
 

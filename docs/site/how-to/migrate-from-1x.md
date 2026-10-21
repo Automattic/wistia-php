@@ -1,10 +1,10 @@
 # Migrate from the 1.x client
 
-The 2.0 development client is a breaking rewrite. There is no compatibility layer for magic methods, generic endpoint calls or raw-object/error-code results. Migrate in a branch of your application and keep the existing integration available until your checks pass.
+Wistia PHP 2.0 is a breaking rewrite. There is no compatibility layer for magic methods, generic endpoint calls or raw-object/error-code results. Migrate in a branch of your application and keep the existing integration available until your checks pass.
 
 ## Prepare the application
 
-Use PHP 8.4+, ext-curl and Composer. The package remains `automattic/wistia-php`; [install the development version](../tutorials/first-api-call.md#install-the-development-package) and pin the reviewed revision you test. This guide does not announce a 2.0 release.
+Use PHP 8.4+, ext-curl and Composer. The package remains `automattic/wistia-php`; [install version 2.x](../tutorials/first-api-call.md#install-the-package) and keep your application's Composer lock file under version control.
 
 Find calls to `new Client(['token' => …])`, magic methods such as `list_medias()` and `create_project()`, and generic `get()`/`post()`/`put()`/`delete()` dispatch. Also find consumers of `last_response_code`, numeric return codes and raw response objects. Replace these call sites deliberately rather than renaming methods globally.
 
@@ -50,7 +50,7 @@ For runnable repository examples with bounded traversal, uploads, imports, polli
 
 ## Map the remaining operations
 
-| Old integration pattern | Development API replacement |
+| Old integration pattern | 2.0 replacement |
 | --- | --- |
 | `list_medias`, `show_media`, `update_media`, `delete_media`, `copy_media` | `DataMediaService` methods and their `Request\Data` types; use [media](media.md) and the generated service reference for exact inputs and results |
 | `list_projects`, `show_project`, project writes and sharing | `DataFoldersService` and `DataFolderSharingsService`; follow [folders and sharing](folders.md) |

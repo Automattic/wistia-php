@@ -1,6 +1,6 @@
 # Runnable examples
 
-These examples use the typed **2.0 development API**, not the published 1.x client. The plain-PHP CLI programs below are framework-independent; the [Laravel](laravel/README.md) and [Symfony](symfony/README.md) integrations add consumer-owned container bindings, commands and webhook routes.
+These examples use the typed **2.0 API**, not the 1.x client. The plain-PHP CLI programs below are framework-independent; the [Laravel](laravel/README.md) and [Symfony](symfony/README.md) integrations add consumer-owned container bindings, commands and webhook routes.
 
 ## Framework integration
 
@@ -9,7 +9,7 @@ These examples use the typed **2.0 development API**, not the published 1.x clie
 
 ## Plain-PHP setup and safety
 
-Use a reviewed checkout of this repository with PHP 8.4+, ext-curl and the declared Composer dependencies already provisioned (see [installation](https://wistia-php.space.fast/guides/tutorials/first-api-call.html#install-the-development-package)). Run commands below from the repository root. Each entry loads `vendor/autoload.php` relative to its own file; no working-directory edits or snippet assembly are needed.
+Use a reviewed checkout of this repository with PHP 8.4+, ext-curl and the declared Composer dependencies already provisioned (see [installation](https://wistia-php.space.fast/guides/tutorials/first-api-call.html#install-the-package)). Run commands below from the repository root. Each entry loads `vendor/autoload.php` relative to its own file; no working-directory edits or snippet assembly are needed.
 
 Provide `WISTIA_API_TOKEN` through your application's environment/secret manager for API examples. No script loads `.env`. Never commit credentials or put tokens or signed URLs in CLI arguments. Use an account/token with permission for the selected operation. Account permissions and plan limits still apply.
 

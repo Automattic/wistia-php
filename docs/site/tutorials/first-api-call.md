@@ -1,18 +1,18 @@
 # Make your first API call
 
-In this tutorial, you will install the 2.0 development client and print the number of media records on one page. The call is read-only: it does not upload, change or delete anything.
+In this tutorial, you will install Wistia PHP 2.0 and print the number of media records on one page. The call is read-only: it does not upload, change or delete anything.
 
 You need PHP 8.4+, the cURL extension, Composer and a Wistia API token allowed to read folder and media data. This tutorial assumes you can run PHP scripts from a terminal.
 
-## Install the development package
+## Install the package
 
 Run this in your application's directory:
 
 ```sh
-composer require automattic/wistia-php:dev-main
+composer require 'automattic/wistia-php:^2.0'
 ```
 
-The 2.0 API is not released yet. `dev-main` follows the moving development branch; pin a reviewed commit when evaluating it in an application. Composer installs Guzzle as a dependency.
+The `^2.0` constraint selects compatible 2.x releases. Composer installs Guzzle as a dependency. Commit your application's lock file to reproduce its resolved versions.
 
 ## Configure your token
 
