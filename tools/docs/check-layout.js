@@ -25,6 +25,9 @@
         }
     }
     if (document.documentElement.scrollWidth > viewport + 1) throw new Error('Horizontal page overflow.');
+    const sidebarLinks = [...main.querySelectorAll('.phpdocumentor-sidebar .a8c-nav-list a')];
+    const sidebarInset = Math.min(...sidebarLinks.map(link => parseFloat(getComputedStyle(link).paddingLeft)));
+    if (sidebarLinks.length === 0 || sidebarInset < 10) throw new Error(`Sidebar links touch their left border: minimum padding ${sidebarInset}px.`);
     return {url: location.href, viewport: innerWidth, availableWidth: viewport, contentBottom: bottom, footerTop: box.top,
-        containerLeft: content.left, containerWidth: content.width, headerWidth: header.getBoundingClientRect().width, footerWidth: box.width};
+        containerLeft: content.left, containerWidth: content.width, headerWidth: header.getBoundingClientRect().width, footerWidth: box.width, sidebarInset};
 })();
