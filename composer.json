@@ -9,7 +9,7 @@
         "video"
     ],
     "homepage": "http://github.com/Automattic/wistia-php",
-    "license": "GPLv2",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Automattic",
