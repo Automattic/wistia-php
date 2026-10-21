@@ -1,6 +1,6 @@
 # Upload and import reference
 
-Five workflows from [#24](https://github.com/Automattic/wistia-php/issues/24) are implemented. **S3 copy remains unimplemented pending human confirmation of its response contract.** See the [evidence record](../rewrite/upload-evidence.md) for the maintainer-approved thumbnail/localization observations and their limits. This is partial P16 delivery, not completion of the rewrite.
+All six workflows from [#24](https://github.com/Automattic/wistia-php/issues/24) have implementations and offline contract coverage. See the [evidence record](../rewrite/upload-evidence.md) for the maintainer-approved thumbnail/localization observations, human-confirmed S3 response contract and their limits. This does not establish live PHP-service verification, tracker acceptance or completion of the rewrite.
 
 ## Usage
 
@@ -70,7 +70,13 @@ Use an existing supplied audio file and a hyphenated IETF language tag such as `
 
 ## s3-copy
 
-`copyFromS3` is **not implemented**. Wistia's [S3 guide](https://docs.wistia.com/reference/upload-via-s3-copy.md) requires Wistia-assisted bucket setup and read permissions on both sides; it documents the request but not the response. A relayed automated-agent answer suggests 201 JSON media, but human confirmation is pending. No S3/AWS operation or success fixture is fabricated. S3 is still required #24 scope, not excluded from the final library.
+`copyFromS3(CopyFromS3Request): CopyFromS3Result` sends form POST to `https://upload.wistia.com/s3_copy`. The request accepts required `bucket` (plain bucket name, not ARN/URL) and `source_file` (object key without a leading slash), optional `region` and optional `UploadOptions`. Omitted region uses Wistia's `us-east-1` default; supply the bucket's actual region when different. Pass the original object key without pre-encoding; spaces, plus signs, percent escapes and nested paths are preserved after form decoding. Keys need no file extension. Local syntax guards reject empty names/keys, bucket ARNs/URLs/paths, leading-slash keys, control characters and malformed region identifiers; they do not establish AWS naming eligibility or object availability.
+
+Wistia's [S3 guide](https://docs.wistia.com/reference/upload-via-s3-copy.md) requires Wistia-assisted setup and `GetObject`/`GetObjectVersion` read permissions on both sides. Applications arrange this separately; the client does not configure IAM or call AWS directly.
+
+Maintainer-relayed human support confirmed normal success as **200 JSON standard Upload media**, including `account_id`; the result exposes typed `Upload\Media` in `data` and HTTP `status`. This is not a Data Media or job result and does not prove processing completion. The undocumented `create_media=false` mode and its internal 201 shape are unsupported and never sent. Other 2xx statuses remain uncertain decode failures, not guessed success shapes.
+
+Non-2xx responses use the shared sanitized status-based exceptions regardless of Content-Type or body. Support confirmed top-level `code`/`detail` JSON under `text/plain; charset=utf-8`, empty 400/403/500 bodies and auth-service bodies for 401. The client does not expose remote error bodies or require JSON parsing to classify failures. These cases have offline coverage; no S3/AWS call was made.
 
 ## Failures, restrictions and migration
 

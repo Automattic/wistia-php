@@ -18406,7 +18406,9 @@
         }
       },
       "result_contract": "Undocumented response status/body; do not assume the root upload schema. Result type is a name target only, not a settled shape; authoritative clarification is required before implementation fixtures/decoder finalization.",
-      "restrictions": "Requires prerequisite Wistia support/IAM setup on both sides, GetObject/GetObjectVersion access. No setup or AWS calls performed here.",
+      "restrictions": "Requires prerequisite Wistia support/IAM setup on both sides, GetObject/GetObjectVersion access. No setup or AWS calls performed here. Undocumented create_media=false mode is not exposed or sent.",
+      "implementation_contract": "Maintainer-relayed Wistia human support confirmed normal success: 200 application/json;charset=utf-8, standard Upload media plus account_id. Uses existing Upload Media decoder and open-field account_id projection. Non-2xx use sanitized status-based errors regardless of header or body: top-level code/detail JSON may arrive as text/plain; malformed form (400), presign/URL validation (500) and internal-mode audit failure (403) may be empty; 401 carries auth-service body. Internal create_media=false 201 shape is unsupported. No live S3 probe.",
+      "delivery": {"status": "implemented-offline", "live_verified": false},
       "live_verified": false
     },
     {
@@ -18508,7 +18510,7 @@
         "s3-copy"
       ],
       "source": "https://docs.wistia.com/reference/upload-via-s3-copy.md",
-      "unresolved": "No response status/body schema.",
+      "unresolved": "Published guide still omits response status/body schema. Maintainer approved implementation from relayed human-support confirmation: normal 200 standard Upload media plus account_id; error Content-Type/body are unreliable. See upload-evidence.md. Original source gap retained; S3 has not been live-verified.",
       "affected_owner_issue": 24
     },
     {

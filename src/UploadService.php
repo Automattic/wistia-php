@@ -5,8 +5,8 @@ namespace Automattic\Wistia;
 
 use Automattic\Wistia\Encoding\{Body, Query};
 use Automattic\Wistia\Http\{ApiFamily, EmptyDecoder, HttpMethod, Request, RequestSafety, ResponseDecoder};
-use Automattic\Wistia\Request\Upload\{UploadFileRequest, ImportUrlRequest, UploadThumbnailFileRequest, ImportThumbnailUrlRequest, ImportLocalizationAudioRequest};
-use Automattic\Wistia\Result\Upload\{UploadFileResult, ImportUrlResult, UploadThumbnailFileResult, ImportThumbnailUrlResult, ImportLocalizationAudioResult};
+use Automattic\Wistia\Request\Upload\{UploadFileRequest, ImportUrlRequest, CopyFromS3Request, UploadThumbnailFileRequest, ImportThumbnailUrlRequest, ImportLocalizationAudioRequest};
+use Automattic\Wistia\Result\Upload\{UploadFileResult, ImportUrlResult, CopyFromS3Result, UploadThumbnailFileResult, ImportThumbnailUrlResult, ImportLocalizationAudioResult};
 use Automattic\Wistia\Result\Result;
 use Automattic\Wistia\Upload\LocalFile;
 use Psr\Http\Message\StreamInterface;
@@ -29,6 +29,16 @@ final readonly class UploadService
         return $this->client->execute(new Request(ApiFamily::Upload, HttpMethod::Post, '/',
             RequestSafety::MayChangeRemoteState, [200], body: self::form($fields)),
             new Upload\Decoder(ImportUrlResult::class))->result;
+    }
+
+    public function copyFromS3(#[\SensitiveParameter] CopyFromS3Request $request): CopyFromS3Result
+    {
+        $fields = ['bucket' => $request->bucket, 'source_file' => $request->source_file]
+            + ($request->options?->fields() ?? []);
+        if ($request->region !== null) { $fields['region'] = $request->region; }
+        return $this->client->execute(new Request(ApiFamily::Upload, HttpMethod::Post, '/s3_copy',
+            RequestSafety::MayChangeRemoteState, [200], body: self::form($fields)),
+            new Upload\Decoder(CopyFromS3Result::class))->result;
     }
 
     public function uploadThumbnailFile(#[\SensitiveParameter] UploadThumbnailFileRequest $request): UploadThumbnailFileResult

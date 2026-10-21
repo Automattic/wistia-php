@@ -18,7 +18,7 @@ The directory describes implemented services in the 2.0 development API, not a p
 | [DataSpeakersService](../../../src/DataSpeakersService.php) | Read speaker profiles | [Accessibility](../how-to/accessibility.md) |
 | [DataLocalizationsService](../../../src/DataLocalizationsService.php) | Read/delete existing localizations | [Accessibility](../how-to/accessibility.md) |
 | [DataExtendedAudioDescriptionsService](../../../src/DataExtendedAudioDescriptionsService.php) | Read/delete existing descriptions and read existing order status | [Accessibility](../how-to/accessibility.md) |
-| [UploadService](../../../src/UploadService.php) | Upload/import files, thumbnail file/URL updates and supplied localization audio imports | [Uploads](../how-to/uploads.md) |
+| [UploadService](../../../src/UploadService.php) | Upload/import files, S3 copy, thumbnail file/URL updates and supplied localization audio imports | [Uploads](../how-to/uploads.md) |
 
 ## Organization and publishing
 
@@ -68,6 +68,6 @@ The directory describes implemented services in the 2.0 development API, not a p
 
 ## Coverage boundaries
 
-S3 copy is not implemented. The client does not expose purchases of captions/localizations/audio descriptions, generated translation/dubbing, or account trials. Reading credits or an existing order is not a purchase operation.
+S3 copy requires Wistia-assisted bucket/IAM setup. The client does not expose purchases of captions/localizations/audio descriptions, generated translation/dubbing, or account trials. Reading credits or an existing order is not a purchase operation.
 
 Generated class documentation reflects the code; it does not establish live feature access. Wistia enforces resource permissions, plan availability and remote processing rules when a request runs.

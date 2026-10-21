@@ -6,7 +6,7 @@ namespace Automattic\Wistia\Tests\Contract\Upload;
 use Automattic\Wistia\{Client, Configuration, UploadService};
 use Automattic\Wistia\Exception\{ApiException, AuthenticationException, DecodeException, PermissionException, RateLimitException, TransportException, WistiaException};
 use Automattic\Wistia\Http\TransportResponse;
-use Automattic\Wistia\Request\Upload\{UploadFileRequest, ImportUrlRequest, UploadThumbnailFileRequest, ImportThumbnailUrlRequest, ImportLocalizationAudioRequest};
+use Automattic\Wistia\Request\Upload\{UploadFileRequest, ImportUrlRequest, CopyFromS3Request, UploadThumbnailFileRequest, ImportThumbnailUrlRequest, ImportLocalizationAudioRequest};
 use Automattic\Wistia\Upload\LocalFile;
 use Automattic\Wistia\Tests\Offline\{ExceptionAssertions, RecordingTransport};
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -16,7 +16,7 @@ final class UploadFailuresTest extends TestCase
 {
     public static function workflows(): iterable
     {
-        foreach (['uploadFile', 'importUrl', 'uploadThumbnailFile', 'importThumbnailUrl', 'importLocalizationAudio'] as $method) { yield $method => [$method]; }
+        foreach (['uploadFile', 'importUrl', 'copyFromS3', 'uploadThumbnailFile', 'importThumbnailUrl', 'importLocalizationAudio'] as $method) { yield $method => [$method]; }
     }
     private function invoke(#[\SensitiveParameter] UploadService $service, string $method): mixed
     {
@@ -27,6 +27,7 @@ final class UploadFailuresTest extends TestCase
             $request = match ($method) {
                 'uploadFile' => new UploadFileRequest($file),
                 'importUrl' => new ImportUrlRequest('https://example.invalid/video.mp4?signature=fixture-secret'),
+                'copyFromS3' => new CopyFromS3Request('example-bucket', 'fixture-secret.mp4'),
                 'uploadThumbnailFile' => new UploadThumbnailFileRequest('media123', $file),
                 'importThumbnailUrl' => new ImportThumbnailUrlRequest('media123', 'https://example.invalid/thumb.jpg?signature=fixture-secret'),
                 'importLocalizationAudio' => new ImportLocalizationAudioRequest('media123', 'fr', 'https://example.invalid/audio.mp3?signature=fixture-secret'),
@@ -70,10 +71,11 @@ final class UploadFailuresTest extends TestCase
     public static function invalidResponses(): iterable
     {
         foreach (self::workflows() as [$method]) {
-            $empty = !in_array($method, ['uploadFile', 'importUrl'], true);
+            $empty = !in_array($method, ['uploadFile', 'importUrl', 'copyFromS3'], true);
             yield "$method-wrong-status" => [$method, $empty ? 200 : 201, 'application/json', $empty ? '' : '{}'];
             yield "$method-wrong-body" => [$method, $empty ? 201 : 200, 'application/json', $empty ? '{}' : '{"progress":2}'];
             if (!$empty) {
+                yield "$method-empty-body" => [$method, 200, 'application/json', ''];
                 yield "$method-wrong-type" => [$method, 200, 'text/html', '{}'];
                 yield "$method-malformed" => [$method, 200, 'application/json', '{'];
                 yield "$method-wrong-shape" => [$method, 200, 'application/json', '[]'];

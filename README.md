@@ -6,7 +6,7 @@
 Automattic's framework-independent PHP client for Wistia, with typed requests and results for content management, uploads, reporting and webhooks.
 
 > [!IMPORTANT]
-> This branch contains the breaking rewrite targeting **2.0.0**, not the published 1.x API. It requires PHP **8.4+**, the **cURL extension** and Composer. The rewrite is unreleased; S3 copy and complete release acceptance remain pending. There is no legacy compatibility layer.
+> This branch contains the breaking rewrite targeting **2.0.0**, not the published 1.x API. It requires PHP **8.4+**, the **cURL extension** and Composer. The rewrite is unreleased; complete release acceptance remains pending. There is no legacy compatibility layer.
 
 ## Documentation
 
