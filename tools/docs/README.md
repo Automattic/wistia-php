@@ -67,7 +67,10 @@ agent-browser eval --stdin < tools/docs/check-layout.js
 ```
 
 This checks that the header and footer match the centered body container, that the
-footer follows both documentation columns and that the page has no horizontal overflow. In particular, wide-screen checks catch float layout
+footer follows both documentation columns, that the page has no horizontal overflow,
+and that sidebar link labels retain at least 10px of padding inside their left borders.
+Check the inset in normal, hover and keyboard-focus states so upstream template rules
+cannot collapse it. In particular, wide-screen checks catch float layout
 problems that can remain hidden at narrower desktop sizes.
 
 The default phpDocumentor template loads syntax-highlighting, icons and API search

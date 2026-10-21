@@ -66,6 +66,8 @@ a:focus-visible, input:focus-visible, label:focus-visible, summary:focus-visible
 .phpdocumentor .phpdocumentor-sidebar .a8c-nav-list { list-style: none; margin: 0; padding: 0; }
 .phpdocumentor .phpdocumentor-sidebar .a8c-nav-list > li { white-space: normal; overflow: visible; padding: 0; }
 .a8c-nav-list a, .a8c-nav-group > summary { display: block; padding: 6px 10px; font-size: 15px; line-height: 1.4; border-left: 2px solid transparent; }
+/* Outrank the template's sidebar link padding reset, including its hover rule. */
+.phpdocumentor .phpdocumentor-sidebar .a8c-nav-list a { padding-left: 10px; }
 .a8c-nav-list a { text-decoration: none; }
 .a8c-nav-list a:hover { background: #ebf4fa; }
 .a8c-nav-list a[aria-current="page"] { background: #ebf4fa; border-left-color: #0277a8; font-weight: 600; }

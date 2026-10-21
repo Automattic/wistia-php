@@ -4,6 +4,8 @@ Notable changes are recorded here using Semantic Versioning. This changelog begi
 
 ## Unreleased
 
+- Keep documentation sidebar labels padded away from their left borders, including hover and focus states.
+
 - Prepare the documentation for 2.0.0 with footer-only publisher credit, centered body-width headers/footers and release installation guidance.
 
 - Add a 1.x migration guide, public coverage and verification limits, and repeatable offline inventory-to-implementation checks. ([#29](https://github.com/Automattic/wistia-php/issues/29))
