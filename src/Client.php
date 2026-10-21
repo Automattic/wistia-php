@@ -6,7 +6,7 @@ namespace Automattic\Wistia;
 use Automattic\Wistia\Exception\{ApiException, AuthenticationException, DecodeException, PermissionException, RateLimitException, TransportException};
 use Automattic\Wistia\Http\{ApiFamily, GuzzleTransport, RateLimitInfo, Request, Response, ResponseDecoder, Transport, TransportRequest};
 
-/** Shared execution foundation. Endpoint services are delivered by subsequent tickets. */
+/** Shared request execution with authentication, decoding and sanitized failures. */
 final class Client
 {
     private Transport $transport;

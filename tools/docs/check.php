@@ -23,7 +23,7 @@ foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($site, Fil
         continue;
     }
     $html = file_get_contents($entry->getPathname());
-    foreach (['a8c-masthead', 'assets/automattic-favicon.png', '2.0 development', 'Unreleased', 'a8c-footer', 'Hosted at', 'https://spacefast.com/', 'https://automattic.com/'] as $required) {
+    foreach (['phpdocumentor-header', 'assets/wistia-php.svg', 'a8c-version', '2.0.0', 'a8c-footer', 'Hosted at', 'https://spacefast.com/', 'https://automattic.com/'] as $required) {
         if (!str_contains($html, $required)) {
             $errors[] = $relative . ': missing ' . $required;
         }
@@ -35,6 +35,16 @@ foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($site, Fil
     $dom->loadHTML($html);
     $documents[$relative] = $dom;
     $xpath = new DOMXPath($dom);
+    if (preg_match('~Unreleased|2\.0 development|:dev-main|2\.0-dev|subsequent tickets~i', $html)) {
+        $errors[] = $relative . ': development-release copy in 2.0.0 documentation';
+    }
+    $credits = $xpath->query('//a[@href="https://automattic.com/"]');
+    if ($credits->length !== 1 || $xpath->query('//footer//a[@href="https://automattic.com/"]')->length !== 1
+        || stripos($dom->getElementsByTagName('title')->item(0)?->textContent ?? '', 'Automattic') !== false
+        || stripos($dom->getElementsByTagName('header')->item(0)?->textContent ?? '', 'Automattic') !== false
+        || str_contains($html, 'assets/automattic-logo-white.svg') || str_contains($html, 'assets/automattic-favicon.png')) {
+        $errors[] = $relative . ': publisher branding must appear only in the footer (technical identifiers are preserved)';
+    }
     if ($xpath->query('//aside/nav[@aria-label="Documentation"]')->length !== 1
         || $xpath->query('//aside/nav//a[not(parent::li)]')->length !== 0
         || $xpath->query('//aside//section[contains(@class,"phpdocumentor-sidebar__category")]')->length !== 0) {
@@ -92,6 +102,11 @@ foreach (['index.html', 'api.html', 'classes/Automattic-Wistia-Client.html',
     'classes/Automattic-Wistia-DataMediaService.html', ...array_keys(require __DIR__ . '/legacy.php')] as $required) {
     if (!isset($documents[$required])) {
         $errors[] = 'Missing required page: ' . $required;
+    }
+}
+foreach (['install-the-package', 'install-the-development-package'] as $anchor) {
+    if (!isset($ids['guides/tutorials/first-api-call.html'][$anchor])) {
+        $errors[] = 'Installation guide is missing current/legacy anchor: ' . $anchor;
     }
 }
 $expectedSources = [];

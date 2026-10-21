@@ -1,6 +1,6 @@
 # Laravel integration
 
-This example targets **Laravel 13.x on PHP 8.4+** (with ext-curl and Laravel's required extensions), using the typed Wistia **2.0 development API**, not the published 1.x client. Laravel 13 allows Guzzle 8; Laravel 12's Guzzle 7 requirement conflicts with this library. No Laravel dependency is added to the library itself.
+This example targets **Laravel 13.x on PHP 8.4+** (with ext-curl and Laravel's required extensions), using the typed Wistia **2.0 API**, not the 1.x client. Laravel 13 allows Guzzle 8; Laravel 12's Guzzle 7 requirement conflicts with this library. No Laravel dependency is added to the library itself.
 
 The example provides a container-bound client and services, a read-only Artisan command, and a webhook endpoint that verifies and acknowledges an envelope **without processing its events**. It does not implement a production webhook pipeline.
 

@@ -2,7 +2,7 @@
 
 Use these programs when you want a complete CLI entry point rather than assembling documentation snippets.
 
-You need a reviewed repository checkout, PHP 8.4+, cURL and the library's Composer dependencies. Run the commands below from that checkout's root. They use the 2.0 development API.
+You need a reviewed repository checkout, PHP 8.4+, cURL and the library's Composer dependencies. Run the commands below from that checkout's root. They use the Wistia PHP 2.0 API.
 
 ## Configure inputs privately
 

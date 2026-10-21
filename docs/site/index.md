@@ -1,12 +1,12 @@
 # Wistia PHP
 
-Use Automattic's PHP client to manage Wistia content, upload files, read reports and handle webhooks from a server-side application.
+Use the Wistia PHP client to manage Wistia content, upload files, read reports and handle webhooks from a server-side application.
 
-These docs are for PHP developers who know Composer and are new to this client. They cover the **unreleased 2.0 development API**. The published 1.x package has a different interface; do not use these examples with it.
+These docs are for PHP developers who know Composer and are new to this client. They cover **Wistia PHP 2.0.0**. Version 1.x has a different interface; follow the migration guide when upgrading.
 
 ## Start with a working read
 
-[Make your first API call](tutorials/first-api-call.md). Install the development package, configure a token and list one page of media without changing your account.
+[Make your first API call](tutorials/first-api-call.md). Install the package, configure a token and list one page of media without changing your account.
 
 You need **PHP 8.4+**, the **cURL extension**, Composer and a Wistia account with permission for the operation you choose. Guzzle is installed with the library. Your application owns secret storage; the client does not load `.env` files.
 
@@ -14,7 +14,7 @@ You need **PHP 8.4+**, the **cURL extension**, Composer and a Wistia account wit
 
 | I want to… | Read |
 | --- | --- |
-| Move an existing 1.x integration to the development API | [Migrate from 1.x](how-to/migrate-from-1x.md) |
+| Upgrade an existing 1.x integration | [Migrate from 1.x](how-to/migrate-from-1x.md) |
 | List, update or organize videos | [Manage media](how-to/media.md) and [work with folders](how-to/folders.md) |
 | Send a file or import a URL | [Upload and import](how-to/uploads.md) |
 | Change player settings or captions | [Customize a player](how-to/customizations.md) and [manage captions](how-to/accessibility.md) |
@@ -31,8 +31,8 @@ The client sends typed requests and decodes typed results. It makes **one attemp
 
 A token's scope does not guarantee feature or plan access. A queued job or accepted upload does not mean processing has completed. Read the relevant guide before running a write, deleting content or changing access.
 
-## Development status
+## Coverage and compatibility
 
 The implemented service families are listed in [Services and operations](reference/services.md). S3 copy requires Wistia-assisted bucket/IAM setup. Caption purchases, generated translations/localizations, audio-description orders and account trials are not exposed.
 
-[Coverage and limitations](reference/coverage.md) describes the included surface, exclusions and limited live observations. Contract checks use synthetic responses; they do not guarantee live behavior, plan entitlement or production processing. Keep the development version pinned to a reviewed commit when evaluating it. No 2.0 release is implied by this site.
+[Coverage and limitations](reference/coverage.md) describes the included surface, exclusions and limited live observations. Contract checks use synthetic responses; they do not guarantee live behavior, plan entitlement or production processing. Use a locked Composer dependency set in your application and review the migration guide before upgrading from 1.x.

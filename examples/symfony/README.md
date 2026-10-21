@@ -1,6 +1,6 @@
 # Symfony integration
 
-This example targets **Symfony 8.1.x on PHP 8.4+**, with ext-curl and Symfony's required extensions. It uses the typed Wistia **2.0 development API**, not the published 1.x package. Symfony is installed only in a separate consumer application; the library's Composer dependencies remain unchanged.
+This example targets **Symfony 8.1.x on PHP 8.4+**, with ext-curl and Symfony's required extensions. It uses the typed Wistia **2.0 API**, not the 1.x package. Symfony is installed only in a separate consumer application; the library's Composer dependencies remain unchanged.
 
 It supplies container bindings, a read-only console command, and a webhook route that verifies original bytes and acknowledges valid envelopes **without processing events**. Durable production webhook handling is application-owned.
 

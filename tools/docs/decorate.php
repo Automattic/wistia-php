@@ -9,8 +9,8 @@ if (!is_file($site . 'graphs/classes.svg') && is_file($site . 'graphs/classes.ht
     unlink($site . 'graphs/classes.html');
 }
 mkdir($site . 'assets');
-foreach (glob(__DIR__ . '/assets/*') as $asset) {
-    copy($asset, $site . 'assets/' . basename($asset));
+foreach (['automattic.css', 'wistia-php.svg'] as $asset) {
+    copy(__DIR__ . '/assets/' . $asset, $site . 'assets/' . $asset);
 }
 
 // Lead with the installation/quick-start guide, keeping the API index addressable.
@@ -51,11 +51,9 @@ function docsRenderNavigation(string $current): string
 
 $masthead = <<<'HTML'
 <a class="a8c-skip" href="#docs-content">Skip to content</a>
-<div class="a8c-masthead"><a href="https://automattic.com/" aria-label="Automattic"><img src="assets/automattic-logo-white.svg" alt="Automattic" width="210" height="16"></a><span>Wistia PHP documentation</span></div>
-<div class="a8c-status"><strong>2.0 development · Unreleased</strong> — PHP 8.4+. These docs describe <a href="https://github.com/Automattic/wistia-php">the development API</a>, not the published 1.x package.</div>
 HTML;
 $footer = <<<'HTML'
-<footer class="a8c-footer"><span>© 2015–2026 <a href="https://automattic.com/">Automattic</a> · <a href="https://github.com/Automattic/wistia-php/blob/main/LICENSE">GPL-2.0-or-later</a></span><span>Generated with <a href="https://www.phpdoc.org/">phpDocumentor</a> · Hosted at <a href="https://spacefast.com/">Spacefast</a></span></footer>
+<footer class="a8c-footer phpdocumentor-section"><span>© 2015–2026 <a href="https://automattic.com/">Automattic</a> · <a href="https://github.com/Automattic/wistia-php/blob/main/LICENSE">GPL-2.0-or-later</a></span><span>Generated with <a href="https://www.phpdoc.org/">phpDocumentor</a> · Hosted at <a href="https://spacefast.com/">Spacefast</a></span></footer>
 HTML;
 
 $entries = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($site, FilesystemIterator::SKIP_DOTS));
@@ -73,13 +71,20 @@ foreach ($entries as $entry) {
     if ($relative === 'api.html') {
         $html = str_replace('namespaces/default.html#packages', 'api.html#packages', $html);
     }
+    if ($relative === 'guides/tutorials/first-api-call.html') {
+        // phpDocumentor drops raw Markdown anchors; preserve previously shared installation links here.
+        $html = str_replace('<h2>Install the package</h2>',
+            '<h2><span id="install-the-development-package" aria-hidden="true"></span>Install the package</h2>', $html);
+    }
     // Give guide pages meaningful browser/search titles instead of the identical project title.
     if (preg_match('~<section class="section [^"]*"[^>]*>\s*<h1>(.*?)</h1>~s', $html, $heading)) {
         $heading = trim(strip_tags($heading[1]));
-        $title = ($heading === 'Wistia PHP' ? '' : $heading . ' · ') . 'Wistia PHP · Automattic';
+        $title = ($heading === 'Wistia PHP' ? '' : $heading . ' · ') . 'Wistia PHP';
         $html = preg_replace('~<title>.*?</title>~s', '<title>' . $title . '</title>', $html, 1);
     } elseif (preg_match('~<h2 class="phpdocumentor-content__title">(.*?)</h2>~s', $html, $heading)) {
-        $title = trim(strip_tags($heading[1])) . ' · Wistia PHP · Automattic';
+        // Keep the publisher's root namespace visible as API data, not as page branding.
+        $label = $relative === 'namespaces/automattic.html' ? 'Namespace reference' : trim(strip_tags($heading[1]));
+        $title = $label . ' · Wistia PHP';
         $html = preg_replace('~<title>.*?</title>~s', '<title>' . $title . '</title>', $html, 1);
     }
     // The template's mobile top menu has no items; the separate sidebar menu is functional.
@@ -87,10 +92,11 @@ foreach ($entries as $entry) {
     $html = str_replace('type="search"', 'type="search" aria-label="Search PHP API reference"', $html);
     // Remove default phpDocumentor favicons rather than presenting its logo as ours.
     $html = preg_replace('~<link[^>]+(?:rel="icon"|rel="apple-touch-icon")[^>]*>\s*~', '', $html);
-    $html = str_replace('</head>', '<link rel="icon" type="image/png" sizes="32x32" href="assets/automattic-favicon.png"><link rel="stylesheet" href="assets/automattic.css"></head>', $html);
+    $html = str_replace('</head>', '<link rel="icon" type="image/svg+xml" href="assets/wistia-php.svg"><link rel="stylesheet" href="assets/automattic.css"></head>', $html);
     $html = str_replace('<body id="top">', '<body id="top">' . $masthead, $html);
     $html = str_replace('<main class="phpdocumentor">', '<main class="phpdocumentor" id="docs-content" tabindex="-1">', $html);
     $html = str_replace('<a href="" class="phpdocumentor-title__link">', '<a href="index.html" class="phpdocumentor-title__link">', $html);
+    $html = preg_replace('~(<h1 class="phpdocumentor-title">.*?)(</h1>)~s', '$1<span class="a8c-version">2.0.0</span>$2', $html, 1);
     // Replace the default taxonomy sidebar rather than mixing it into the reading navigation.
     $html = preg_replace_callback('~(<aside class="phpdocumentor-column -three phpdocumentor-sidebar">).*?(</aside>)~s',
         static fn (array $match): string => $match[1] . docsRenderNavigation($relative) . $match[2], $html);

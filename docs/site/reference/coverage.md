@@ -1,6 +1,6 @@
 # Coverage and verification limits
 
-The unreleased 2.0 development client covers the included server-side Data, Upload, Stats and Analytics surface recorded in the repository's contract inventory. [Services and operations](services.md) lists the implemented service families; generated PHP reference describes their methods and types.
+Wistia PHP 2.0 covers the included server-side Data, Upload, Stats and Analytics surface recorded in the repository's contract inventory. [Services and operations](services.md) lists the implemented service families; generated PHP reference describes their methods and types.
 
 ## Included surface
 
