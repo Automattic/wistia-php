@@ -3,10 +3,20 @@
 [![Latest Release](https://img.shields.io/github/release/Automattic/wistia-php.svg?style=flat-square)](https://github.com/Automattic/wistia-php/releases)
 [![PHP](https://img.shields.io/badge/php-%5E8.4-777BB4?style=flat-square)](composer.json)
 
-A framework-independent PHP client for Wistia, with typed requests and results for content management, uploads, reporting and webhooks.
+A framework-independent PHP client for Wistia's server-side Data, Upload, Stats and Analytics APIs, with typed requests/results, OAuth helpers and webhook verification.
 
 > [!IMPORTANT]
-> Wistia PHP **2.0** requires PHP **8.4+**, the **cURL extension** and Composer. It is a breaking rewrite of 1.x with no legacy compatibility layer; follow the migration guide when upgrading.
+> **2.0.0 is a breaking rewrite of 1.x**, with no legacy compatibility layer. Read the [migration guide](https://wistia-php.space.fast/guides/how-to/migrate-from-1x.html) before upgrading and the [2.0.0 release notes](CHANGELOG.md#200-unreleased) for an overview of the changes.
+
+## Installation
+
+Requires **PHP 8.4+**, the **cURL extension** and Composer:
+
+```sh
+composer require 'automattic/wistia-php:^2.0'
+```
+
+Composer installs Guzzle as a dependency. Keep your application's lock file under version control to reproduce the resolved versions.
 
 ## Documentation
 
@@ -19,7 +29,9 @@ A framework-independent PHP client for Wistia, with typed requests and results f
 - [Browse the PHP API reference](https://wistia-php.space.fast/api.html)
 - [Use the plain-PHP, Laravel or Symfony examples](https://wistia-php.space.fast/#find-the-right-guide)
 
-The website covers the 2.0 API. Follow its installation instructions rather than combining these examples with the 1.x package. Your application owns credentials and secret storage; the library does not load `.env` files.
+The website covers the 2.0 API; do not combine its examples with the 1.x package. Framework integrations are optional examples, not library dependencies.
+
+Your application owns credentials, secret storage and callback/webhook routes. The library does not load `.env` files, automatically retry requests or follow redirects. Purchases, generated translation/dubbing and account trials are excluded. Offline contract coverage does not establish live API behavior or plan entitlement; see the coverage guide for the exact verification limits.
 
 ## Development
 

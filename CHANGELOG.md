@@ -1,61 +1,49 @@
 # Changelog
 
-Notable changes are recorded here using Semantic Versioning. This changelog begins with repository revival; it does not reconstruct unverified historical release notes.
+Notable changes are recorded here using Semantic Versioning. Unreleased notes describe the next release, not a published package; verified earlier releases are listed under Published history.
 
-## Unreleased
+## 2.0.0 (Unreleased)
 
-- Keep documentation sidebar labels padded away from their left borders, including hover and focus states.
+### Breaking changes
 
-- Prepare the documentation for 2.0.0 with footer-only publisher credit, centered body-width headers/footers and release installation guidance.
+- Replace the legacy magic client, generic endpoint dispatch and raw-object/integer-error returns with explicit services, typed requests/results and exceptions; no compatibility layer is provided. ([#10](https://github.com/Automattic/wistia-php/issues/10))
+- Require PHP `^8.4`, `ext-curl` and Guzzle `^8.2`, including when an application injects its own transport. ([#10](https://github.com/Automattic/wistia-php/issues/10))
+- Use Bearer authentication and the modern `2026-09` contract for Data, Stats and Analytics, while retaining separate Upload/OAuth hosts, encoding and wire names. ([#8](https://github.com/Automattic/wistia-php/issues/8))
 
-- Add a 1.x migration guide, public coverage and verification limits, and repeatable offline inventory-to-implementation checks. ([#29](https://github.com/Automattic/wistia-php/issues/29))
+### Added
 
-- Add a Symfony 8.1 integration example with environment-backed service wiring, a read-only console command, webhook verification and isolated offline framework tests. ([#55](https://github.com/Automattic/wistia-php/issues/55))
+- Add media lifecycle, tags, trims and deleted-media operations with typed nested results, validation, pagination and asynchronous job handoff. ([#14](https://github.com/Automattic/wistia-php/issues/14))
+- Add player-customization operations with typed inputs/results, replacement and partial-update semantics, and explicit-null handling. ([#15](https://github.com/Automattic/wistia-php/issues/15))
+- Add caption text formats and versioned edits, speaker profiles, and management of existing localizations and audio descriptions without purchasing or generating them. ([#16](https://github.com/Automattic/wistia-php/issues/16))
+- Add folder/sharing/subfolder management, channel/episode publishing and webinar/registration workflows. ([#17](https://github.com/Automattic/wistia-php/issues/17), [#18](https://github.com/Automattic/wistia-php/issues/18), [#19](https://github.com/Automattic/wistia-php/issues/19))
+- Add brands, account branding, usage/credit reads, allowed domains, contact invitations and explicitly experimental expiring tokens. ([#20](https://github.com/Automattic/wistia-php/issues/20), [#21](https://github.com/Automattic/wistia-php/issues/21))
+- Add search, resource URLs, review bundles and share-link workflows with typed results and write-safe execution. ([#22](https://github.com/Automattic/wistia-php/issues/22))
+- Add non-purchasing bulk actions and jobs with local limits and observable partial results. ([#23](https://github.com/Automattic/wistia-php/issues/23))
+- Add six Upload workflows: streamed local files, direct URLs, thumbnail files/URLs, S3 copy and supplied localization audio, with operation-specific results. ([#24](https://github.com/Automattic/wistia-php/issues/24))
+- Add all ten Stats operations and 17 account, media and webinar Analytics operations, with typed metrics, filters and endpoint-specific pagination. ([#25](https://github.com/Automattic/wistia-php/issues/25), [#26](https://github.com/Automattic/wistia-php/issues/26), [#27](https://github.com/Automattic/wistia-php/issues/27), [#28](https://github.com/Automattic/wistia-php/issues/28))
+- Add bounded offset/cursor pagination and finite background-job polling with completion, reported failure, partial failure and exhaustion outcomes. ([#11](https://github.com/Automattic/wistia-php/issues/11))
+- Add OAuth authorization-URL, code-exchange and explicit refresh helpers with application-owned callbacks and token persistence. ([#12](https://github.com/Automattic/wistia-php/issues/12))
+- Add original-body SHA-256 webhook signature verification and typed batch parsing, retaining unknown event payloads and application-owned processing responsibilities. ([#13](https://github.com/Automattic/wistia-php/issues/13))
+- Add runnable plain-PHP, Laravel 13 and Symfony 8.1 integration examples with offline checks. ([#53](https://github.com/Automattic/wistia-php/issues/53), [#54](https://github.com/Automattic/wistia-php/issues/54), [#55](https://github.com/Automattic/wistia-php/issues/55))
+- Add a documentation site, a 1.x migration guide, explicit coverage/exclusion records and repeatable inventory-to-implementation checks. ([#29](https://github.com/Automattic/wistia-php/issues/29), [#60](https://github.com/Automattic/wistia-php/pull/60))
 
-- Add a Laravel 13 integration example with container bindings, a read-only Artisan command, webhook verification and isolated offline framework tests. ([#54](https://github.com/Automattic/wistia-php/issues/54))
+### Changed
 
-- Add runnable plain-PHP examples for media listing, uploads, URL imports, finite job polling and webhook verification, with offline example checks. ([#53](https://github.com/Automattic/wistia-php/issues/53))
+- Run only credential-free offline foundation, helper and contract suites by default using PHPUnit `^12.5`; keep historical live/destructive tests separately gated and incompatible with the rewrite. ([#10](https://github.com/Automattic/wistia-php/issues/10))
+- Retain exact endpoint field names, signed-URL encoding and omission/null distinctions rather than applying global request/response conversions. ([#10](https://github.com/Automattic/wistia-php/issues/10))
 
-- Add six typed upload/import workflows, including S3 copy, with streamed local files, signed-URL-safe encoding and operation-specific acceptance results. ([#24](https://github.com/Automattic/wistia-php/issues/24))
+### Fixed
 
-- Add five typed webinar Analytics operations for aggregate metrics, registration series, traffic, audience pagination and engagement histograms, with local validation and offline contract coverage. ([#28](https://github.com/Automattic/wistia-php/issues/28))
+- Correct Composer's license identifier to `GPL-2.0-or-later`, matching the existing license grant.
+- Validate portable timeout bounds and discard rate-limit integers exceeding native integer limits. ([#10](https://github.com/Automattic/wistia-php/issues/10))
+- Present release-oriented documentation with footer-only publisher credit, centered headers/footers and padded sidebar labels. ([#63](https://github.com/Automattic/wistia-php/pull/63), [#64](https://github.com/Automattic/wistia-php/pull/64))
 
-- Add seven typed media Analytics operations for aggregate metrics, timeseries, embed locations, traffic, languages and cursor-paginated form conversions, with local validation and offline contract coverage. ([#27](https://github.com/Automattic/wistia-php/issues/27))
+### Security
 
-- Add five typed account Analytics operations for aggregate metrics, timeseries, content rankings, embed domains and media lookup by embed URL, with local validation and offline contract coverage. ([#26](https://github.com/Automattic/wistia-php/issues/26))
+- Use a single-attempt default transport without automatic retries, redirects or environment-proxy fallback, and expose uncertain remote outcomes for ambiguous writes. ([#10](https://github.com/Automattic/wistia-php/issues/10))
+- Keep credentials, signed URLs and raw remote failures out of library-generated error context while preserving typed failure distinctions and supplied rate-limit hints. ([#10](https://github.com/Automattic/wistia-php/issues/10))
 
-- Add all ten typed Stats operations with account/media/event/visitor metrics, inclusive by-date queries, filtered pagination and offline contract coverage. ([#25](https://github.com/Automattic/wistia-php/issues/25))
-
-- Add typed non-purchasing bulk actions and scoped jobs with reusable resource payloads, local input limits, job-status handoff and offline contract coverage. ([#23](https://github.com/Automattic/wistia-php/issues/23))
-
-- Add nine typed search, resource-URL, review-bundle and share-link operations with metadata filters, bundle pagination and single-attempt handling for link-creating GET requests, covered by offline contracts. ([#22](https://github.com/Automattic/wistia-php/issues/22))
-
-- Add 11 typed account and access-management operations with nested usage data, exact credit balances, allowed-domain pagination, invitations and credential-safe experimental expiring tokens, covered by offline contracts. ([#21](https://github.com/Automattic/wistia-php/issues/21))
-
-- Add nine typed brand and account-branding operations with explicit-null updates, application options, lazy pagination, preload selections, color-picker results and offline contract coverage. ([#20](https://github.com/Automattic/wistia-php/issues/20))
-
-- Add ten typed webinar, collaborator and registration operations with UTC schedule validation, nested updates, filtered pagination and offline contract coverage. ([#19](https://github.com/Automattic/wistia-php/issues/19))
-
-- Add 16 typed channel, collaborator and episode operations with podcast settings, publishing/scheduling, lazy pagination and offline contract coverage. ([#18](https://github.com/Automattic/wistia-php/issues/18))
-
-- Add 17 typed folder, sharing and subfolder operations with nested results, lazy pagination, asynchronous copy/bulk-delete job handoff and offline contract coverage. ([#17](https://github.com/Automattic/wistia-php/issues/17))
-
-- Add 16 typed caption, speaker, existing-localization and audio-description operations with text formats, atomic versioned edits, lazy pagination and offline contract coverage; purchases and generation remain excluded. ([#16](https://github.com/Automattic/wistia-php/issues/16))
-
-- Add 24 typed media customization operations with nested inputs/results, replacement and partial-update/null semantics, and offline contract coverage. ([#15](https://github.com/Automattic/wistia-php/issues/15))
-
-- Add 19 typed media lifecycle, tag, trim and deleted-media operations with nested results, local validation, lazy pagination, job handoff and move partial-error handling. ([#14](https://github.com/Automattic/wistia-php/issues/14))
-
-- Add raw-body SHA-256 webhook verification and verified typed batch parsing, retaining unknown payloads and sanitized local failures; document application-owned routing, processing, deduplication and ordering. ([#13](https://github.com/Automattic/wistia-php/issues/13))
-- Add typed OAuth authorization-URL, code-exchange and explicit refresh helpers with sanitized token/grant failures and application-owned callback/persistence boundaries. ([#12](https://github.com/Automattic/wistia-php/issues/12))
-- Add bounded offset, Data-cursor (including webinar registrations), and Analytics-cursor traversal with lazy/individual-page access, preserved filters/order, and cycle/exhaustion errors. ([#11](https://github.com/Automattic/wistia-php/issues/11))
-- Add typed background-job status reads and finite optional polling that exposes failed/partial bulk outcomes; stopping local polling never cancels remote work. Offline Contract tests join default discovery without enabling legacy tests. ([#11](https://github.com/Automattic/wistia-php/issues/11))
-- **Breaking:** Replace the legacy magic client with the typed shared execution/configuration foundation; require PHP `^8.4`, Guzzle `^8.2` and PHPUnit `^12.5`, with no compatibility layer. ([#10](https://github.com/Automattic/wistia-php/issues/10))
-- **Breaking:** Require `ext-curl` (including injected-transport installations) to preserve finite native connect/total timeouts and prevent low-level replay. The default uses fresh HTTP/1.1 connections and nonrewindable streamed bodies, rejects Guzzle recovery redispatch, and disables environment proxies and authentication/Expect negotiation.
-- Reject timeout values outside the portable inclusive `0.001`–`2147483.647` second range at configuration construction; discard rate-limit integers that exceed native `PHP_INT_MAX` while retaining the ten-digit header cap. Offline redaction tests now enable argument capture in their own bootstrap.
-- Add exact-name JSON/form/query primitives, sanitized typed failures with rate-limit information, single-attempt safe transport defaults, and isolated offline test discovery. ([#10](https://github.com/Automattic/wistia-php/issues/10))
-
-- Establish maintainer and agent workflow guidance for the library's revival. No library API or dependency changes are included.
+Read the [migration guide](https://wistia-php.space.fast/guides/how-to/migrate-from-1x.html) before upgrading from 1.x. [Coverage and verification limits](https://wistia-php.space.fast/guides/reference/coverage.html) distinguish offline checks, limited standalone live observations and unverified live API/plan behavior; purchases, generated translation/dubbing and account trials remain excluded.
 
 ## Published history
 
