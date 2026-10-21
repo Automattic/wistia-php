@@ -250,6 +250,13 @@ function inventoryErrors(array $inventory): array
         if (empty($gap['unresolved']) || empty($gap['source']) || ($gap['affected_owner_issue'] ?? null) !== 24) {
             $errors[] = 'source-contract gap lacks evidence/owner';
         }
+        if (isset($gap['implementation_resolution'])) {
+            $resolution = $gap['implementation_resolution'];
+            if (($resolution['status'] ?? '') !== 'resolved' || empty($resolution['authority'])
+                || ($resolution['evidence'] ?? '') !== 'docs/rewrite/upload-evidence.md') {
+                $errors[] = 'implementation resolution lacks explicit status/authority/evidence';
+            }
+        }
     }
     return $errors;
 }
@@ -274,6 +281,7 @@ function selfTest(array $inventory): void
         'missing result' => [static function (array &$d): void { $d['operations'][0]['responses'] = []; }, 'missing success result mapping'],
         'missing upload workflow' => [static function (array &$d): void { array_pop($d['upload_workflows']); }, 'upload workflow set'],
         'hidden source gap' => [static function (array &$d): void { $d['contract_gaps'] = []; }, 'gaps must remain visible'],
+        'unsupported resolution' => [static function (array &$d): void { $d['contract_gaps'][0]['implementation_resolution'] = ['status' => 'resolved']; }, 'resolution lacks explicit status/authority/evidence'],
         'excluded route alias' => [static function (array &$d): void { $d['operations'][0]['http']['method'] = 'POST'; $d['operations'][0]['http']['path'] = '/bulk/purchase'; }, 'unsafe exclusion disposition'],
         'hidden experimental status' => [static function (array &$d): void { foreach ($d['operations'] as &$o) { if ($o['id'] === 'post_expiring-token') { $o['experimental'] = false; } } }, 'experimental operation must remain visible'],
         'legacy Upload credential field' => [static function (array &$d): void { $d['upload_workflows'][0]['request']['fields']['api_password'] = ['type' => 'string']; }, 'credential-bearing workflow input'],
@@ -317,14 +325,19 @@ try {
     }
     echo "PASS accounting: 167 catalog operations; 161 included, 6 excluded; 6 upload workflows.\n";
     echo "PASS mapping consistency: unique methods, sources, path inputs, schema references, exclusions and version/auth targets.\n";
+    $unresolved = [];
     foreach ($inventory['contract_gaps'] as $gap) {
-        echo "UNRESOLVED {$gap['id']} (#{$gap['affected_owner_issue']}): {$gap['unresolved']}\n";
+        $resolved = ($gap['implementation_resolution']['status'] ?? '') === 'resolved';
+        if (!$resolved) { $unresolved[] = $gap['id']; }
+        echo ($resolved ? 'SOURCE GAP (implementation resolved)' : 'UNRESOLVED')
+            . " {$gap['id']} (#{$gap['affected_owner_issue']}): {$gap['unresolved']}\n";
     }
-    echo "Contract completeness: PARTIAL. No endpoint implementation, endpoint tests, live verification, or acceptance is asserted.\n";
+    echo 'Implementation contract completeness: ' . ($unresolved === [] ? 'COMPLETE' : 'PARTIAL')
+        . ". Published-source gaps remain visible; no test execution, live verification or acceptance is asserted.\n";
     if (in_array('--self-test', $args, true)) {
         selfTest($inventory);
     }
-    if (in_array('--require-complete', $args, true) && $inventory['contract_gaps'] !== []) {
+    if (in_array('--require-complete', $args, true) && $unresolved !== []) {
         exit(1);
     }
 } catch (Throwable $error) {

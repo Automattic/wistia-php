@@ -87,41 +87,43 @@ foreach ($files as $file) {
     }
 }
 
-// Exercise the actual tutorial code with only its environment/autoloader/transport seams replaced.
-$tutorial = file_get_contents('docs/site/tutorials/first-api-call.md');
-preg_match('~```php\n(.*?)\n```~s', $tutorial, $match);
-$code = $match[1];
-$replacements = [
-    "require 'vendor/autoload.php';" => '',
-    "\$token = getenv('WISTIA_API_TOKEN');" => "\$token = 'docs-fixture-token';",
-    '$client = new Client(new Configuration(token: $token));' => '$client = new Client(new Configuration(token: $token), $transport);',
-];
-foreach ($replacements as $from => $to) {
-    if (substr_count($code, $from) !== 1) {
-        throw new RuntimeException('Tutorial seam changed; review its offline smoke check.');
-    }
-    $code = str_replace($from, $to, $code);
-}
-$transport = new class implements Automattic\Wistia\Http\Transport {
-    public int $calls = 0;
-    public function send(#[SensitiveParameter] Automattic\Wistia\Http\TransportRequest $request): Automattic\Wistia\Http\TransportResponse
-    {
-        if (++$this->calls !== 1 || $request->method !== Automattic\Wistia\Http\HttpMethod::Get->value) {
-            throw new RuntimeException('Tutorial must make one read-only call.');
+// Exercise both complete consumer reads with only environment/autoloader/transport seams replaced.
+foreach (['docs/site/tutorials/first-api-call.md', 'docs/site/how-to/migrate-from-1x.md'] as $consumerPage) {
+    $tutorial = file_get_contents($consumerPage);
+    preg_match('~```php\n(.*?)\n```~s', $tutorial, $match);
+    $code = $match[1];
+    $replacements = [
+        "require 'vendor/autoload.php';" => '',
+        "\$token = getenv('WISTIA_API_TOKEN');" => "\$token = 'docs-fixture-token';",
+        '$client = new Client(new Configuration(token: $token));' => '$client = new Client(new Configuration(token: $token), $transport);',
+    ];
+    foreach ($replacements as $from => $to) {
+        if (substr_count($code, $from) !== 1) {
+            throw new RuntimeException('Tutorial seam changed; review its offline smoke check.');
         }
-        return new Automattic\Wistia\Http\TransportResponse(200, ['Content-Type' => ['application/json']],
-            '[{"folder":null,"hashed_id":"fixture-media","name":"Fixture"}]');
+        $code = str_replace($from, $to, $code);
     }
-};
-ob_start();
-try {
-    eval(substr($code, strlen('<?php')));
-    $output = ob_get_contents();
-} finally {
-    ob_end_clean();
-}
-if ($transport->calls !== 1 || $output !== 'Media records on this page: 1' . PHP_EOL) {
-    throw new RuntimeException('Tutorial output does not match the documented outcome.');
+    $transport = new class implements Automattic\Wistia\Http\Transport {
+        public int $calls = 0;
+        public function send(#[SensitiveParameter] Automattic\Wistia\Http\TransportRequest $request): Automattic\Wistia\Http\TransportResponse
+        {
+            if (++$this->calls !== 1 || $request->method !== Automattic\Wistia\Http\HttpMethod::Get->value) {
+                throw new RuntimeException('Tutorial must make one read-only call.');
+            }
+            return new Automattic\Wistia\Http\TransportResponse(200, ['Content-Type' => ['application/json']],
+                '[{"folder":null,"hashed_id":"fixture-media","name":"Fixture"}]');
+        }
+    };
+    ob_start();
+    try {
+        eval(substr($code, strlen('<?php')));
+        $output = ob_get_contents();
+    } finally {
+        ob_end_clean();
+    }
+    if ($transport->calls !== 1 || $output !== 'Media records on this page: 1' . PHP_EOL) {
+        throw new RuntimeException($consumerPage . ': output does not match the documented outcome.');
+    }
 }
 $directory = file_get_contents('docs/site/reference/services.md');
 foreach (glob('src/*Service.php') as $service) {
@@ -130,4 +132,4 @@ foreach (glob('src/*Service.php') as $service) {
     }
 }
 echo 'Checked ' . $count . " PHP fragments: syntax, imports, known service methods and constructor names.\n";
-echo "Tutorial executed with one synthetic read and expected output; all services indexed. No Wistia calls.\n";
+echo "Tutorial and migration examples each executed with one synthetic read and expected output; all services indexed. No Wistia calls.\n";

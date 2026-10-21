@@ -48,7 +48,7 @@ pages with canonical links and static refreshes, without copying historical pros
 `check.php` checks rendered HTML links/anchors, page/navigation parity, sidebar structure,
 branding and allowed publish-file types. `check-examples.php` parses the public PHP
 fragments, checks imported symbols, known service methods and constructor argument names,
-and executes the actual first-call tutorial through an injected synthetic transport.
+and executes the actual first-call tutorial and migration read through injected synthetic transports.
 It uses a source-only autoloader, no Composer setup hooks or real environment credentials.
 Other snippets are statically checked, not executed against Wistia. Neither check contacts
 external documentation. The service directory is checked against every implemented service.
