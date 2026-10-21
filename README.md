@@ -6,7 +6,7 @@
 A framework-independent PHP client for Wistia's server-side Data, Upload, Stats and Analytics APIs, with typed requests/results, OAuth helpers and webhook verification.
 
 > [!IMPORTANT]
-> **2.0.0 is a breaking rewrite of 1.x**, with no legacy compatibility layer. Read the [migration guide](https://wistia-php.space.fast/guides/how-to/migrate-from-1x.html) before upgrading and the [2.0.0 release notes](CHANGELOG.md#200-unreleased) for an overview of the changes.
+> **2.0.0 is a breaking rewrite of 1.x**, with no legacy compatibility layer. Read the [migration guide](https://wistia-php.space.fast/guides/how-to/migrate-from-1x.html) before upgrading and the [2.0.0 release notes](CHANGELOG.md#200---2026-10-21) for an overview of the changes.
 
 ## Installation
 

@@ -37,7 +37,7 @@ Adopt Semantic Versioning for this single library. Published tags/releases are t
 
 Implementation adds an Unreleased entry for notable user-facing changes; review checks the entry and impact. Documentation-only/internal changes may need no release-impact label, with a reason. On delivery PRs, use one highest applicable impact: patch for backward-compatible fixes, minor for backward-compatible functionality, major for incompatible public changes. Labels classify changes; they never authorize a version bump or publication.
 
-The planned breaking rewrite targets 2.0.0. Setup does not bump a version, tag, or release. Release preparation must reconcile aggregate changes with this policy and obtain explicit release approval. Preserve published history; do not invent historical changes or dates from version-looking tags. No new prerelease exception is established; resolve one before using it.
+The breaking rewrite's initial major version is 2.0.0. Setup does not bump a version, tag, or release. Release preparation must reconcile aggregate changes with this policy and obtain explicit release approval. Preserve published history; do not invent historical changes or dates from version-looking tags. No new prerelease exception is established; resolve one before using it.
 
 ## Documentation upkeep
 
